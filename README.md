@@ -1,4 +1,4 @@
-# intership
+# internship
 
 A new Flutter project.
 
