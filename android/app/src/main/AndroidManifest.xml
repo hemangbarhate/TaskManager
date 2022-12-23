@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.taskmanager">
+    package="com.example.intership">
    <application
-        android:label="taskmanager"
+        android:label="intership"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
