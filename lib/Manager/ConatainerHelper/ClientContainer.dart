@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intership/not_usable/Button.dart';
 
-import '../constant/color.dart';
+import '../../constant/color.dart';
 
-class HomeContainer extends StatefulWidget {
+class ClientContainer extends StatefulWidget {
   final Color fontColor;
   final Color backgrondColor;
-  const HomeContainer(
+  const ClientContainer(
       {Key? key, required this.fontColor, required this.backgrondColor})
       : super(key: key);
 
   @override
-  _HomeContainerState createState() => _HomeContainerState();
+  _ClientContainerState createState() => _ClientContainerState();
 }
 
-class _HomeContainerState extends State<HomeContainer> {
+class _ClientContainerState extends State<ClientContainer> {
   @override
   Widget build(BuildContext context) {
     return Padding(

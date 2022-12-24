@@ -1,9 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intership/Manager/ConatainerHelper/ManagerContainer.dart';
 import 'package:intership/Manager/profile.dart';
 import 'package:intership/constant/color.dart';
-import 'package:intership/not_usable/homeContainer.dart';
+import 'package:intership/Manager/ConatainerHelper/ClientContainer.dart';
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
 
 class ViewTask extends StatefulWidget {
@@ -87,25 +88,40 @@ class _ViewTaskState extends State<ViewTask> {
                     SingleChildScrollView(
                       child: Column(
                        children: const <Widget> [
-                         HomeContainer(
+                         ClientContainer(
                            fontColor: greyColor,
                            backgrondColor: greyColor,
-                         )
-                         ,
-                         HomeContainer(
-                           fontColor: greyColor,
-                           backgrondColor: redColor,
                          ),
-                         HomeContainer(
+                         ClientContainer(
                            fontColor: greyColor,
-                           backgrondColor: blueColor,
+                           backgrondColor: greyColor,
+                         ),
+                         ClientContainer(
+                           fontColor: greyColor,
+                           backgrondColor: greyColor,
                          )
                        ],
                       ),
                     ),
-                    Center(
-                      child: Text("Operator "),
-                    ),
+        SingleChildScrollView(
+          child: Column(
+            children: const <Widget> [
+              ManagerContainer(
+                fontColor: greyColor,
+                backgrondColor: blueColor,
+              ),
+              ManagerContainer(
+                fontColor: greyColor,
+                backgrondColor: redColor,
+              ),
+              ManagerContainer(
+                fontColor: greyColor,
+                backgrondColor: blueColor,
+              ),
+
+            ],
+          ),
+        ),
                   ],
                 ))
               ],
