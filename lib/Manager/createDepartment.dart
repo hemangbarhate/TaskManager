@@ -12,6 +12,7 @@ class _CreateDeptState extends State<CreateDept> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: greyColor.withOpacity(0.1),
       appBar: AppBar(
         backgroundColor: Colors.grey[200],
         shadowColor: Colors.white,

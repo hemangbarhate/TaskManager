@@ -20,6 +20,7 @@ class _ViewTaskState extends State<ViewTask> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+          backgroundColor: greyColor.withOpacity(0.1),
           appBar: AppBar(
                 backgroundColor:  Colors.grey[200],
                 shadowColor: Colors.white,
@@ -90,15 +91,15 @@ class _ViewTaskState extends State<ViewTask> {
                        children: const <Widget> [
                          ClientContainer(
                            fontColor: greyColor,
-                           backgrondColor: greyColor,
+                           backgrondColor: greenColor,
                          ),
                          ClientContainer(
                            fontColor: greyColor,
-                           backgrondColor: greyColor,
+                           backgrondColor: greenColor,
                          ),
                          ClientContainer(
                            fontColor: greyColor,
-                           backgrondColor: greyColor,
+                           backgrondColor: greenColor,
                          )
                        ],
                       ),
