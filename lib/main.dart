@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intership/constant/color.dart';
-import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intership/Manager/managerHome.dart';
+import '';
 
 import 'not_usable/sevices/homepage.dart';
 const kPrimaryColor = Color(0xFF6F35A5);
@@ -48,13 +46,13 @@ class MyApp extends StatelessWidget {
               borderSide: BorderSide.none,
             ),
           )),
-      home: Homepage(),
+      home: home_manager(),
     );
   }
 }
-//
-//
-//
+
+
+
 // void main() {
 //   runApp(const MyApp());
 // }

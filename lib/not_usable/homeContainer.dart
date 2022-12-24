@@ -4,15 +4,11 @@ import 'package:intership/not_usable/Button.dart';
 import '../constant/color.dart';
 
 class HomeContainer extends StatefulWidget {
-  final Color runtimeColor;
-  final Color openColor;
-  final Color UdateColor;
-  final Color BdateColor;
-  final Color urgentColor;
-  final Color addlinkColor;
   final Color fontColor;
   final Color backgrondColor;
-  const HomeContainer({Key? key, required this.runtimeColor, required this.openColor, required this.UdateColor, required this.BdateColor, required this.urgentColor, required this.addlinkColor, required this.fontColor, required this.backgrondColor}) : super(key: key);
+  const HomeContainer(
+      {Key? key, required this.fontColor, required this.backgrondColor})
+      : super(key: key);
 
   @override
   _HomeContainerState createState() => _HomeContainerState();
@@ -27,8 +23,8 @@ class _HomeContainerState extends State<HomeContainer> {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           gradient: LinearGradient(colors: [
-            widget.backgrondColor.withOpacity(0.98),
-            widget.backgrondColor.withOpacity(0.98),
+            widget.backgrondColor.withOpacity(0.2),
+            widget.backgrondColor.withOpacity(0.2),
           ], begin: Alignment.topLeft, end: Alignment.bottomRight),
           border: Border.all(
             color: Color(0x282019).withOpacity(0.2),
@@ -36,9 +32,10 @@ class _HomeContainerState extends State<HomeContainer> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(
-              left: 8.0, right: 2, top: 2, bottom: 5),
+          padding:
+              const EdgeInsets.only(left: 8.0, right: 2, top: 2, bottom: 15),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(6.0),
@@ -47,95 +44,144 @@ class _HomeContainerState extends State<HomeContainer> {
                     children: <Widget>[
                       CircleAvatar(
                           radius: 20,
-                          backgroundColor:
-                          Color(0xFED457).withOpacity(0.8)),
+                          backgroundColor: widget.fontColor.withOpacity(0.9)),
                       const SizedBox(
                         width: 15,
                       ),
                       Text(
                         "Client name",
                         style: TextStyle(
-                          // #FED457
+                            // #FED457
                             fontWeight: FontWeight.w600,
-                            // color: Color(0xFED457),
                             color: widget.fontColor.withOpacity(0.9),
                             fontSize: 20),
                       ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 4,
-                      ),
-                      IconButton(
-                          icon: Icon(
-                            Icons.delete,
-                            color: widget.fontColor.withOpacity(0.8),
-                            size: 30,
-                          ),
-                          onPressed: () => {
-                            print("Delete")
-                          }),
                     ],
                   ),
                 ]),
               ),
               Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Tasks Name : ABC XYZ ",
+                  style: TextStyle(
+                      // #FED457
+                      fontWeight: FontWeight.w600,
+                      // color: Color(0xFED457),
+                      color: widget.fontColor.withOpacity(0.9),
+                      fontSize: 15),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Project Name :  abc xyz ",
+                  style: TextStyle(
+                    // #FED457
+                      fontWeight: FontWeight.w600,
+                      // color: Color(0xFED457),
+                      color: widget.fontColor.withOpacity(0.9),
+                      fontSize: 14),
+                ),
+              ),
+              Padding(
                 padding: const EdgeInsets.all(10),
                 child: Container(
                   child: Text(
-                    "now theres a best way to achieve this, its ListTile."
-                        " it has leading property for left side, and title and subtitle, and then for right side widgets it has trailing property.",
-                    style: TextStyle(
-                        color: widget.fontColor.withOpacity(0.8)),
+                    "Description : \n   now theres a best way to achieve this, its ListTile."
+                    "it has leading property for left side, and title and subtitle,"
+
+                        "it has leading property for left side, and title and subtitle,"
+                        "it has leading property for left side, and title and subtitle,"
+                    " it has leading property for left side, and title and subtitle, and then for right side widgets it has trailing property.",
+                    style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
                   ),
                 ),
               ),
               SizedBox(
                 height: 10,
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    GlowingButton(
-                      color1: widget.runtimeColor.withOpacity(0.8),
-                      color2: widget.runtimeColor.withOpacity(0.8),
-                      buttonString: 'RunTime',
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget> [
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      // width: 150,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            widget.fontColor.withOpacity(0.7),
+                            widget.fontColor.withOpacity(0.7)
+                            // Colors.teal[200],
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(5, 5),
+                            blurRadius: 10,
+                          )
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(
+                          'Set Priority',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
                     ),
-                    GlowingButton(
-                      color1: widget.openColor.withOpacity(0.8),
-                      color2: widget.openColor.withOpacity(0.8),
-                      buttonString: 'Open',
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      // width: 150,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            widget.fontColor.withOpacity(0.7),
+                            widget.fontColor.withOpacity(0.7)
+                            // Colors.teal[200],
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(5, 5),
+                            blurRadius: 10,
+                          )
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(
+                          'Assign Operator',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
                     ),
-                    GlowingButton(
-                        color1: widget.UdateColor.withOpacity(0.8),
-                        color2: widget.UdateColor.withOpacity(0.8),
-                        buttonString: '11-11-22'),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    GlowingButton(
-                      color1: widget.BdateColor.withOpacity(0.8),
-                      color2: widget.BdateColor.withOpacity(0.8),
-                      buttonString: '11-11-22',
-                    ),
-                    GlowingButton(
-                      color1: widget.urgentColor.withOpacity(0.8),
-                      color2: widget.urgentColor.withOpacity(0.8),
-                      buttonString: 'Urgent',
-                    ),
-                    GlowingButton(
-                      color1: widget.addlinkColor.withOpacity(0.9),
-                      color2: widget.addlinkColor.withOpacity(0.9),
-                      buttonString: 'AddLink',
-                    ),
-                  ],
-                ),
-              )
+
             ],
           ),
         ),
