@@ -26,7 +26,7 @@ class _ViewTaskState extends State<ViewTask> {
                 shadowColor: Colors.white,
                 title: const Center(
                     child: Text(
-                      "Tasks",
+                      "Tasks 1",
                       style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold, color: Colors.black),
                     )),
                 elevation: 0.0,
