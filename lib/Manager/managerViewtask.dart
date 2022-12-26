@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intership/Manager/ConatainerHelper/ManagerContainer.dart';
-import 'package:intership/Manager/profile.dart';
+import 'package:intership/Manager/managerProfile.dart';
 import 'package:intership/constant/color.dart';
 import 'package:intership/Manager/ConatainerHelper/ClientContainer.dart';
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
@@ -104,7 +104,7 @@ class _ViewTaskState extends State<ViewTask> {
                        ],
                       ),
                     ),
-        SingleChildScrollView(
+                    SingleChildScrollView(
           child: Column(
             children: const <Widget> [
               ManagerContainer(

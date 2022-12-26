@@ -1,5 +1,9 @@
+
 import 'package:flutter/material.dart';
+import 'package:intership/Manager/ConatainerHelper/ManagerContainer.dart';
+import 'package:intership/Manager/managerProfile.dart';
 import 'package:intership/constant/color.dart';
+import 'package:intership/Manager/ConatainerHelper/ClientContainer.dart';
 
 class CreateDept extends StatefulWidget {
   const CreateDept({Key? key}) : super(key: key);
@@ -11,31 +15,119 @@ class CreateDept extends StatefulWidget {
 class _CreateDeptState extends State<CreateDept> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: greyColor.withOpacity(0.1),
-      appBar: AppBar(
-        backgroundColor: Colors.grey[200],
-        shadowColor: Colors.white,
-        title:  Container(
-            child: const Text(
-              "Add Department",
-              style: TextStyle(
-                  fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
-            )),
-        elevation: 0.0,
-        leading: Builder(builder: (BuildContext context) {
-          return Padding(
-            padding: const EdgeInsets.only(left: 15.0),
-            child: IconButton(
-                icon: Image.asset("assets/images/bigmouth_icon.png"),
-                iconSize: 70,
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                }),
-          );
-        }),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+          backgroundColor: greyColor.withOpacity(0.1),
+          appBar: AppBar(
+            backgroundColor:  Colors.grey[200],
+            shadowColor: Colors.white,
+            title: const Center(
+                child: Text(
+                  "Add Tasks Helper",
+                  style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold, color: Colors.black),
+                )),
+            elevation: 0.0,
+            leading: Builder(builder: (BuildContext context) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: IconButton(
+                    icon: Image.asset("assets/images/bigmouth_icon.png"),
+                    iconSize: 70,
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    }),
+              );
+            }),
 
-      ),
+            actions: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 18.0),
+                child: IconButton(
+                    icon:  Icon(
+                      Icons.circle_sharp,
+                      size: 40,
+                      color: greyColor.withOpacity(0.9),
+                    ),
+                    onPressed: () => {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManagerProfile()))
+                    }),
+              )
+            ],
+          ),
+          body: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Container(
+                  height: 45,
+                  width: 350,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(25.0)),
+                  child: TabBar(
+                    indicator: BoxDecoration(
+                        color: Colors.grey[500],
+                        borderRadius: BorderRadius.circular(25.0)),
+                    labelColor: Colors.white,
+                    unselectedLabelColor: Colors.black,
+                    tabs: const [
+                      Tab(
+                        text: 'Department',
+                      ),
+                      Tab(
+                        text: 'Resources',
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                    child: TabBarView(
+                      children: [
+                        Container(child: Center(child: Text("Add Department")),),
+                        Container(child: Center(child: Text("Add Resources")),)
+                        // SingleChildScrollView(
+                        //   child: Column(
+                        //     children: const <Widget> [
+                        //       ClientContainer(
+                        //         fontColor: greyColor,
+                        //         backgrondColor: greenColor,
+                        //       ),
+                        //       ClientContainer(
+                        //         fontColor: greyColor,
+                        //         backgrondColor: greenColor,
+                        //       ),
+                        //       ClientContainer(
+                        //         fontColor: greyColor,
+                        //         backgrondColor: greenColor,
+                        //       )
+                        //     ],
+                        //   ),
+                        // ),
+                        // SingleChildScrollView(
+                        //   child: Column(
+                        //     children: const <Widget> [
+                        //       ManagerContainer(
+                        //         fontColor: greyColor,
+                        //         backgrondColor: blueColor,
+                        //       ),
+                        //       ManagerContainer(
+                        //         fontColor: greyColor,
+                        //         backgrondColor: redColor,
+                        //       ),
+                        //       ManagerContainer(
+                        //         fontColor: greyColor,
+                        //         backgrondColor: blueColor,
+                        //       ),
+                        //
+                        //     ],
+                        //   ),
+                        // ),
+                      ],
+                    ))
+              ],
+            ),
+          )),
     );
   }
 }
