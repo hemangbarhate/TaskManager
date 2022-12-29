@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:intership/Manager/AddDepatmentOpearator.dart';
 import 'package:intership/Manager/ConatainerHelper/ManagerContainer.dart';
 import 'package:intership/Manager/managerProfile.dart';
 import 'package:intership/constant/color.dart';
@@ -58,7 +59,9 @@ class _CreateDeptState extends State<CreateDept> {
           body: Padding(
             padding: EdgeInsets.all(8.0),
             child: Column(
-              children: [
+              // mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
                 Container(
                   height: 45,
                   width: 350,
@@ -73,10 +76,10 @@ class _CreateDeptState extends State<CreateDept> {
                     unselectedLabelColor: Colors.black,
                     tabs: const [
                       Tab(
-                        text: 'Department',
+                        text: 'View Department',
                       ),
                       Tab(
-                        text: 'Resources',
+                        text: 'View Operator',
                       )
                     ],
                   ),
@@ -84,50 +87,99 @@ class _CreateDeptState extends State<CreateDept> {
                 Expanded(
                     child: TabBarView(
                       children: [
-                        Container(child: Center(child: Text("Add Department")),),
-                        Container(child: Center(child: Text("Add Resources")),)
-                        // SingleChildScrollView(
-                        //   child: Column(
-                        //     children: const <Widget> [
-                        //       ClientContainer(
-                        //         fontColor: greyColor,
-                        //         backgrondColor: greenColor,
-                        //       ),
-                        //       ClientContainer(
-                        //         fontColor: greyColor,
-                        //         backgrondColor: greenColor,
-                        //       ),
-                        //       ClientContainer(
-                        //         fontColor: greyColor,
-                        //         backgrondColor: greenColor,
-                        //       )
-                        //     ],
-                        //   ),
-                        // ),
-                        // SingleChildScrollView(
-                        //   child: Column(
-                        //     children: const <Widget> [
-                        //       ManagerContainer(
-                        //         fontColor: greyColor,
-                        //         backgrondColor: blueColor,
-                        //       ),
-                        //       ManagerContainer(
-                        //         fontColor: greyColor,
-                        //         backgrondColor: redColor,
-                        //       ),
-                        //       ManagerContainer(
-                        //         fontColor: greyColor,
-                        //         backgrondColor: blueColor,
-                        //       ),
-                        //
-                        //     ],
-                        //   ),
-                        // ),
+                       SingleChildScrollView(
+                         child: Column(
+                           children: <Widget>[
+                             Padding(
+                               padding: const EdgeInsets.all(8.0),
+                               child: ListTile(
+                                 title: Text("App development"),
+                                 subtitle: Text("10 Operaotr"),
+                                 leading: CircleAvatar(
+                                   child: Text(''),
+                                 ),
+                               ),
+                             ),
+                             Padding(
+                               padding: const EdgeInsets.all(8.0),
+                               child: ListTile(
+                                 title: Text("Web development"),
+                                 subtitle: Text("10 Operaotr"),
+                                 leading: CircleAvatar(
+                                   child: Text(''),
+                                 ),
+                               ),
+                             ),
+                             Padding(
+                               padding: const EdgeInsets.all(8.0),
+                               child: ListTile(
+                                 title: Text("Web_App development"),
+                                 subtitle: Text("10 Operaotr"),
+                                 leading: CircleAvatar(
+                                   child: Text(''),
+                                 ),
+                               ),
+                             ),
+                             Padding(
+                               padding: const EdgeInsets.all(8.0),
+                               child: ListTile(
+                                 title: Text("Robo development"),
+                                 subtitle: Text("10 Operaotr"),
+                                 leading: CircleAvatar(
+                                   child: Text(''),
+                                 ),
+                               ),
+                             ),
+                           ],
+                         ),
+                       ),
+                        SingleChildScrollView(
+                          child: Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListTile(
+                                  title: Text("Operator 1"),
+                                  subtitle: Text("Department"),
+                                  leading: CircleAvatar(
+                                    child: Text(''),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListTile(
+                                  title: Text("Operator 2"),
+                                  subtitle: Text("Department"),
+                                  leading: CircleAvatar(
+                                    child: Text(''),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListTile(
+                                  title: Text("Operator 3"),
+                                  subtitle: Text("Department"),
+                                  leading: CircleAvatar(
+                                    child: Text(''),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
-                    ))
+                    )),
               ],
             ),
-          )),
+          ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddDepatmentOpearator()));
+          },
+          child: Icon(Icons.add),
+        ),),
     );
   }
 }

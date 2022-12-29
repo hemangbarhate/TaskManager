@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intership/Manager/assignTask.dart';
 import 'package:intership/not_usable/Button.dart';
 
 import '../../constant/color.dart';
@@ -105,8 +106,47 @@ class _ClientContainerState extends State<ClientContainer> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget> [
+                  // GestureDetector(
+                  //   onTap: () {},
+                  //   child: Container(
+                  //     // width: 150,
+                  //     height: 50,
+                  //     decoration: BoxDecoration(
+                  //       gradient: LinearGradient(
+                  //         colors: [
+                  //           widget.fontColor.withOpacity(0.7),
+                  //           widget.fontColor.withOpacity(0.7)
+                  //           // Colors.teal[200],
+                  //         ],
+                  //         begin: Alignment.topLeft,
+                  //         end: Alignment.bottomRight,
+                  //       ),
+                  //       borderRadius: BorderRadius.circular(20),
+                  //       boxShadow: [
+                  //         BoxShadow(
+                  //           color: Colors.black12,
+                  //           offset: Offset(5, 5),
+                  //           blurRadius: 10,
+                  //         )
+                  //       ],
+                  //     ),
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.all(15.0),
+                  //       child: Text(
+                  //         'Set Priority',
+                  //         style: TextStyle(
+                  //           color: Colors.white,
+                  //           fontSize: 13,
+                  //           fontWeight: FontWeight.w400,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => AssignTask()));
+                    },
                     child: Container(
                       // width: 150,
                       height: 50,
@@ -132,44 +172,7 @@ class _ClientContainerState extends State<ClientContainer> {
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: Text(
-                          'Set Priority',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      // width: 150,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            widget.fontColor.withOpacity(0.7),
-                            widget.fontColor.withOpacity(0.7)
-                            // Colors.teal[200],
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(5, 5),
-                            blurRadius: 10,
-                          )
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Text(
-                          'Assign Operator',
+                          'Assign Task',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 13,

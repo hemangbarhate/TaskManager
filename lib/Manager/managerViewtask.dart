@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intership/Manager/AddDepatmentOpearator.dart';
 import 'package:intership/Manager/ConatainerHelper/ManagerContainer.dart';
+import 'package:intership/Manager/Createtasks.dart';
 import 'package:intership/Manager/managerProfile.dart';
 import 'package:intership/constant/color.dart';
 import 'package:intership/Manager/ConatainerHelper/ClientContainer.dart';
@@ -60,6 +62,7 @@ class _ViewTaskState extends State<ViewTask> {
           body: Padding(
             padding: EdgeInsets.all(8.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Container(
                   height: 45,
@@ -124,10 +127,30 @@ class _ViewTaskState extends State<ViewTask> {
           ),
         ),
                   ],
-                ))
+                )),
+
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: FloatingActionButton(
+                //     onPressed: () {
+                //       Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddDepatmentOpearator()));
+                //     },
+                //     child: Icon(Icons.add),
+                //   ),
+                // ),
               ],
             ),
-          )),
+          ),
+      floatingActionButton: FloatingActionButton(
+        // foregroundColor: Colors.blueAccent,
+        backgroundColor: greyColor.withOpacity(0.6),
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateTasks()));
+        },
+        child: Icon(Icons.add),
+      ),
+      ),
+
     );
   }
 }
