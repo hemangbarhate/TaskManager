@@ -1,13 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:intership/Manager/AddDepatmentOpearator.dart';
 import 'package:intership/Manager/ConatainerHelper/ManagerContainer.dart';
-import 'package:intership/Manager/Createtasks.dart';
+import 'package:intership/Manager/createTask.dart';
 import 'package:intership/Manager/managerProfile.dart';
 import 'package:intership/constant/color.dart';
 import 'package:intership/Manager/ConatainerHelper/ClientContainer.dart';
-import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
 
 class ViewTask extends StatefulWidget {
   const ViewTask({Key? key}) : super(key: key);
@@ -28,7 +26,7 @@ class _ViewTaskState extends State<ViewTask> {
                 shadowColor: Colors.white,
                 title: const Center(
                     child: Text(
-                      "Tasks 1",
+                      "Tasks",
                       style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold, color: Colors.black),
                     )),
                 elevation: 0.0,
@@ -72,7 +70,7 @@ class _ViewTaskState extends State<ViewTask> {
                       borderRadius: BorderRadius.circular(25.0)),
                   child: TabBar(
                     indicator: BoxDecoration(
-                        color: Colors.grey[500],
+                        color: Colors.grey[700],
                         borderRadius: BorderRadius.circular(25.0)),
                     labelColor: Colors.white,
                     unselectedLabelColor: Colors.black,
@@ -145,7 +143,7 @@ class _ViewTaskState extends State<ViewTask> {
         // foregroundColor: Colors.blueAccent,
         backgroundColor: greyColor.withOpacity(0.6),
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateTasks()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateTask()));
         },
         child: Icon(Icons.add),
       ),

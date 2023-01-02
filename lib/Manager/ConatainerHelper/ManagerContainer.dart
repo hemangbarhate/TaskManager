@@ -23,8 +23,8 @@ class _ManagerContainerState extends State<ManagerContainer> {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           gradient: LinearGradient(colors: [
-            widget.backgrondColor.withOpacity(0.2),
-            widget.backgrondColor.withOpacity(0.2),
+            widget.backgrondColor.withOpacity(0.5),
+            widget.backgrondColor.withOpacity(0.5),
           ], begin: Alignment.topLeft, end: Alignment.bottomRight),
           border: Border.all(
             color: const Color(0x282019).withOpacity(0.2),

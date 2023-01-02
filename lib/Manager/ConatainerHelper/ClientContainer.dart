@@ -19,13 +19,13 @@ class _ClientContainerState extends State<ClientContainer> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 25),
+      padding: const EdgeInsets.only(top: 25, right: 05, left: 05),
       child: Container(
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           gradient: LinearGradient(colors: [
-            widget.backgrondColor.withOpacity(0.2),
-            widget.backgrondColor.withOpacity(0.2),
+            widget.backgrondColor.withOpacity(0.5),
+            widget.backgrondColor.withOpacity(0.5),
           ], begin: Alignment.topLeft, end: Alignment.bottomRight),
           border: Border.all(
             color: Color(0x282019).withOpacity(0.2),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intership/Manager/loginPage.dart';
 import 'package:intership/Manager/managerHome.dart';
 import 'package:intership/Operator/operatorHome.dart';
 import '';
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
               borderSide: BorderSide.none,
             ),
           )),
-      home: home_manager(),
+      home: ManagerLoginPage(),
     );
   }
 }
