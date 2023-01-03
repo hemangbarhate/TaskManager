@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intership/constant/ApI.dart';
 // import 'package:superadmin/constant.dart';
@@ -12,18 +14,21 @@ class ViewManager extends StatefulWidget {
 
 class _ViewManagerState extends State<ViewManager> {
 
+  @override
+  void initState() {
+    getManager();
+    super.initState();
+  }
   List<Managermodel> managerlist = [];
   Future<List<Managermodel>> getManager () async{
     Session _session = Session();
-    final response = await _session.get(getmanagerlist);
+    final response = await _session.get2(getmanagerlist);
     print(response['data']);
 
-    // for(Map<String,dynamic> i in response['data']){
-    //   managerlist.add(Managermodel.fromJson(i));
-    //   setState(() {
-    //     managerlist
-    //   });
-    // }
+    for(dynamic i in response){
+      print(i);
+      managerlist.add(Managermodel.fromJson(i));
+    }
     print(managerlist);
     return managerlist;
   }
@@ -53,27 +58,27 @@ class _ViewManagerState extends State<ViewManager> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: FutureBuilder(
-                future: getManager(), builder: (BuildContext context, AsyncSnapshot<List<Managermodel>> snapshot) {
-                  if(!snapshot.hasData){
-                    return Container(
-                      height: 50,
-                        width: 50,
-                        child: CircularProgressIndicator());
-                  }
-                  else{
-                  return ListView.builder(
-                    itemCount: managerlist.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Column(
-
-                      );
-                    },
-
-                  );
-                  }
-              },
-              )
+        // child: FutureBuilder(
+        //         future: getManager(), builder: (BuildContext context, AsyncSnapshot<List<Managermodel>> snapshot) {
+        //           if(!snapshot.hasData){
+        //             return Container(
+        //               height: 50,
+        //                 width: 50,
+        //                 child: CircularProgressIndicator());
+        //           }
+        //           else{
+        //           return ListView.builder(
+        //             itemCount: managerlist.length,
+        //             itemBuilder: (BuildContext context, int index) {
+        //               return Column(
+        //
+        //               );
+        //             },
+        //
+        //           );
+        //           }
+        //       },
+        //       )
       ),
     );
   }

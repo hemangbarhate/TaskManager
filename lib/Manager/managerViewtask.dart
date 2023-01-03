@@ -17,19 +17,19 @@ class ViewTask extends StatefulWidget {
   @override
   _ViewTaskState createState() => _ViewTaskState();
 }
-Future<dynamic> getData () async{
-  Session _session = Session();
-  final response = await _session.get(managergetassignedtask);
-  print(response['data']);
-
-  // for(Map<String,dynamic> i in response['data']){
-  //   managerlist.add(Managermodel.fromJson(i));
-  //   setState(() {
-  //     managerlist
-  //   });
-  // }
-  return response;
-}
+// Future<dynamic> getData () async{
+//   Session _session = Session();
+//   final response = await _session.get(managergetassignedtask);
+//   print(response['data']);
+//
+//   // for(Map<String,dynamic> i in response['data']){
+//   //   managerlist.add(Managermodel.fromJson(i));
+//   //   setState(() {
+//   //     managerlist
+//   //   });
+//   // }
+//   return response;
+// }
 class _ViewTaskState extends State<ViewTask> {
 
   @override
@@ -186,16 +186,16 @@ class _ViewTaskState extends State<ViewTask> {
           // foregroundColor: Colors.blueAccent,
           backgroundColor: yellowColor.withOpacity(0.9),
           onPressed: () {
-            getData().then((response) {
-                if (response['success']) {
-                  print("The request was successful. Do something with the data here");
-                  print(response);
-                } else {
-                  print("// There was an error. Display the error message to the user.");
-                  print(response['error']);
-                }
-
-            });
+            // getData().then((response) {
+            //     if (response['success']) {
+            //       print("The request was successful. Do something with the data here");
+            //       print(response);
+            //     } else {
+            //       print("// There was an error. Display the error message to the user.");
+            //       print(response['error']);
+            //     }
+            //
+            // });
 
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateTask()));
           },
