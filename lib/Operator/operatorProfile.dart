@@ -21,7 +21,7 @@ class _OperatorProfileState extends State<OperatorProfile> {
         shadowColor: Colors.white,
         title: Container(
             child: const Text(
-          "Oprator Profile",
+          "Operator Profile",
           style: TextStyle(
               fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
         )),
@@ -37,6 +37,7 @@ class _OperatorProfileState extends State<OperatorProfile> {
                 }),
           );
         }),
+
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -44,6 +45,30 @@ class _OperatorProfileState extends State<OperatorProfile> {
         children: <Widget>[
           Center(
             child: Container(
+              height: MediaQuery.of(context).size.height / 1.4,
+              width: MediaQuery.of(context).size.width / 1.09,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    whiteColor.withOpacity(0.9),
+                    whiteColor.withOpacity(0.9)
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    offset: Offset(8, 8),
+                    blurRadius: 10,
+                  )
+                ],
+              ),
               child: Column(
                 children: <Widget>[
                   Padding(
@@ -254,31 +279,6 @@ class _OperatorProfileState extends State<OperatorProfile> {
                     ),
                   ),
                   // ),
-                ],
-              ),
-              // color: Colors.white,
-              height: MediaQuery.of(context).size.height / 1.4,
-              width: MediaQuery.of(context).size.width / 1.09,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    whiteColor.withOpacity(0.9),
-                    whiteColor.withOpacity(0.9)
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: Colors.black,
-                  width: 1,
-                ),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black12,
-                    offset: Offset(8, 8),
-                    blurRadius: 10,
-                  )
                 ],
               ),
             ),

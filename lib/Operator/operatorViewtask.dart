@@ -18,12 +18,14 @@ class OperatorVIewTasks extends StatefulWidget {
 class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
+    return
+      // DefaultTabController(
+      // length: 2,
+      // child:
+      Scaffold(
           backgroundColor: greyColor.withOpacity(0.1),
           appBar: AppBar(
-            backgroundColor: Colors.grey[200],
+            backgroundColor: Colors.white,
             shadowColor: Colors.white,
             title: const Center(
                 child: Text(
@@ -47,98 +49,140 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
             }),
             actions: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(right: 18.0),
-                child: IconButton(
-                    icon: Icon(
-                      Icons.circle_sharp,
-                      size: 40,
-                      color: greyColor.withOpacity(0.9),
+                  padding:  EdgeInsets.only(right: 18.0),
+                  child: Container(
+                    height: 25,
+                    child: CircleAvatar(
+
+                        child:
+                        Image.asset("assets/images/download.png")
                     ),
-                    onPressed: () => {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => OperatorProfile()))
-                        }),
+                  )
               )
             ],
           ),
           body: Padding(
             padding: EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Container(
-                  height: 45,
-                  width: 390,
-                  decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(25.0)),
-                  child: TabBar(
-                    indicator: BoxDecoration(
-                        color: Colors.grey[500],
-                        borderRadius: BorderRadius.circular(25.0)),
-                    labelColor: Colors.white,
-                    unselectedLabelColor: Colors.black,
-                    tabs: const [
-                      Tab(
-                        text: 'Assigned Tasks',
+            // child: SingleChildScrollView(
+              // children:  [
+              child:   SingleChildScrollView(
+                  child: Column(
+                    children: const <Widget>[
+                      ClientContainer(
+                        fontColor: greyColor,
+                        backgrondColor: orangeColor, first: greyColor,
+                        second: greenColor,third: greenColor,
+                        forth: redColor,
+                        fifth: redColor,
+                        sixth: greyColor,
                       ),
-                      Tab(
-                        text: 'ReAssigned Tasks',
-                      )
+                      ClientContainer(
+                        fontColor: greyColor,
+                        backgrondColor: greenColor,
+                        first: yellowColor,
+                        second: blackColor,
+                        third: greenColor,
+                        forth: redColor,
+                        fifth: redColor,
+                        sixth: yellowColor,
+                      ),
+                      ClientContainer(
+                        fontColor: greyColor,
+                        backgrondColor: yellowColor
+                        ,first: greyColor,
+                        second: greenColor,third: greenColor,
+                        forth: redColor,
+                        fifth: redColor,
+                        sixth: greyColor,
+                      ),
+                      ClientContainer(
+                        fontColor: yellowColor,
+                        backgrondColor: blueColor
+                        ,first: greyColor,
+                        second: greenColor,third: greenColor,
+                        forth: redColor,
+                        fifth: redColor,
+                        sixth: greyColor,
+                      ),
+                      SizedBox(height: 30,),
                     ],
                   ),
                 ),
-                Expanded(
-                    child: TabBarView(
-                  children: [
-                    SingleChildScrollView(
-                      child: Column(
-                        children: const <Widget>[
-                          AssignedContainer(
-                            fontColor: greyColor,
-                            backgrondColor: greenColor,
-                          ),
-                          AssignedContainer(
-                            fontColor: greyColor,
-                            backgrondColor: blueColor,
-                          ),
-                          AssignedContainer(
-                            fontColor: greyColor,
-                            backgrondColor: greenColor,
-                          ),
-                          AssignedContainer(
-                            fontColor: greyColor,
-                            backgrondColor: blueColor,
-                          )
-                        ],
-                      ),
-                    ),
-                    SingleChildScrollView(
-                      child: Column(
-                        children: const <Widget>[
-                          ReassignedContainer(
-                            fontColor: greyColor,
-                            backgrondColor: redColor,
-                          ),
-                          ReassignedContainer(
-                            fontColor: greyColor,
-                            backgrondColor: blueColor,
-                          ),
-                          ReassignedContainer(
-                            fontColor: greyColor,
-                            backgrondColor: redColor,
-                          ),
-                          ReassignedContainer(
-                            fontColor: greyColor,
-                            backgrondColor: redColor,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ))
-              ],
-            ),
-          )),
+                // Container(
+                //   height: 45,
+                //   width: 390,
+                //   decoration: BoxDecoration(
+                //       color: Colors.grey[300],
+                //       borderRadius: BorderRadius.circular(25.0)),
+                //   child: TabBar(
+                //     indicator: BoxDecoration(
+                //         color: Colors.grey[500],
+                //         borderRadius: BorderRadius.circular(25.0)),
+                //     labelColor: Colors.white,
+                //     unselectedLabelColor: Colors.black,
+                //     tabs: const [
+                //       Tab(
+                //         text: 'Assigned Tasks',
+                //       ),
+                //       Tab(
+                //         text: 'ReAssigned Tasks',
+                //       )
+                //     ],
+                //   ),
+                // ),
+                // Expanded(
+                //     child: TabBarView(
+                //   children: [
+                //     SingleChildScrollView(
+                //       child: Column(
+                //         children: const <Widget>[
+                //           AssignedContainer(
+                //             fontColor: greyColor,
+                //             backgrondColor: greenColor,
+                //           ),
+                //           AssignedContainer(
+                //             fontColor: greyColor,
+                //             backgrondColor: blueColor,
+                //           ),
+                //           AssignedContainer(
+                //             fontColor: greyColor,
+                //             backgrondColor: greenColor,
+                //           ),
+                //           AssignedContainer(
+                //             fontColor: greyColor,
+                //             backgrondColor: blueColor,
+                //           )
+                //         ],
+                //       ),
+                //     ),
+                //     SingleChildScrollView(
+                //       child: Column(
+                //         children: const <Widget>[
+                //           ReassignedContainer(
+                //             fontColor: greyColor,
+                //             backgrondColor: redColor,
+                //           ),
+                //           ReassignedContainer(
+                //             fontColor: greyColor,
+                //             backgrondColor: blueColor,
+                //           ),
+                //           ReassignedContainer(
+                //             fontColor: greyColor,
+                //             backgrondColor: redColor,
+                //           ),
+                //           ReassignedContainer(
+                //             fontColor: greyColor,
+                //             backgrondColor: redColor,
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ],
+                // ))
+              // ],
+            // ),
+          // )
+      ),
     );
   }
 }
