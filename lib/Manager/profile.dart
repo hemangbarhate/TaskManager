@@ -59,7 +59,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                   // ),
                   height: 45,
                   width: 250,
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       "Dhiraj Darakhe ",
                       style: TextStyle(fontSize: 18),
@@ -93,8 +93,8 @@ class _ManagerProfileState extends State<ManagerProfile> {
                   ),
                   height: 45,
                   width: 350,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         "📱 :    7218724337 ",
                         style: TextStyle(fontSize: 17),
@@ -111,7 +111,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                   ),
                   height: 45,
                   width: 350,
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       "📧 : dhirajdarakhe03@gmail.com ",
                       style: TextStyle(fontSize: 17),
@@ -137,7 +137,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                         end: Alignment.bottomRight,
                       ),
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           color: Colors.black12,
                           offset: Offset(5, 5),
@@ -145,8 +145,8 @@ class _ManagerProfileState extends State<ManagerProfile> {
                         )
                       ],
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(15.0),
                       child: Center(
                         child: Text(
                           'LogOut',
