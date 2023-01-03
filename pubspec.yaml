@@ -36,6 +36,9 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  shared_preferences: ^2.0.15
+  http: ^0.13.5
+  flutter_launcher_icons: ^0.11.0
 
 dev_dependencies:
   flutter_test:
@@ -51,6 +54,8 @@ dev_dependencies:
   animated_notch_bottom_bar: ^0.0.6
   flutter_svg: ^1.1.6
   sliding_clipped_nav_bar: ^1.0.2
+  cupertino_radio_choice: ^1.0.2
+  email_validator: ^2.1.17
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -68,6 +73,13 @@ flutter:
     - assets/images/login.png
     - assets/images/appBarlogo.png
     - assets/images/bigmouth_icon.png
+    - assets/images/profile.jpg
+    - assets/images/pro.png
+    - assets/images/download.png
+    - assets/images/navbar.jpg
+    - assets/images/manager.png
+    - assets/images/operator.png
+    - assets/images/client.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
