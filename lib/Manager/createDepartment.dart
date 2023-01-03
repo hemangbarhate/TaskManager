@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intership/Admin/model/session.dart';
 import 'package:intership/Manager/AddDepatmentOpearator.dart';
 import 'package:intership/Manager/ConatainerHelper/ManagerContainer.dart';
 import 'package:intership/Manager/managerProfile.dart';
+import 'package:intership/Manager/model/operatormodel.dart';
 import 'package:intership/constant/color.dart';
 import 'package:intership/Manager/ConatainerHelper/ClientContainer.dart';
 
@@ -11,6 +13,7 @@ class CreateDept extends StatefulWidget {
   @override
   _CreateDeptState createState() => _CreateDeptState();
 }
+
 Map<String, dynamic> _portaInfoMap = {
   "name": "Vitalflux.com",
   "domains": ["Data Science", "Mobile", "Web"],
@@ -19,8 +22,57 @@ Map<String, dynamic> _portaInfoMap = {
     {"type": "web", "count": 75}
   ]
 };
+
+List<String> departlist = [];
+List<String> departlistID = [];
+List<String> operaortlist = [];
+
 class _CreateDeptState extends State<CreateDept> {
-  PortalInfo portalInfo =  PortalInfo.fromJson(_portaInfoMap);
+  PortalInfo portalInfo = PortalInfo.fromJson(_portaInfoMap);
+
+  @override
+  void initState() {
+    getDetp();
+    getOperator();
+    super.initState();
+  }
+
+  //
+  Future<List<String>> getDetp() async {
+    Session _session = Session();
+    final response =
+        await _session.get('http://164.92.83.169/manager/getDepartments');
+    // print(response);
+    // print(departlist.length);
+    // dispose()
+    for (dynamic i in response['data']['departments']) {
+      // print('OK : ${i['departmentName']}');
+      if (!departlist.contains(i['departmentName'])) {
+        departlist.add(i['departmentName']);
+        departlistID.add(i['departmentId']);
+      }
+    }
+    // print(departlist.length);
+    // print(departlist);
+    return departlist;
+  }
+
+  Future<List<String>> getOperator() async {
+    Session _session = Session();
+    for (String i in departlistID) {
+      print(i);
+      final response =
+          await _session.get('http://164.92.83.169/manager/getOperators/$i');
+      for (dynamic i in response['data']['operators']) {
+        print('OK : ${i['name']}');
+        if (!operaortlist.contains(i['name'])) {
+          operaortlist.add(i['name']);
+        }
+      }
+    }
+    return operaortlist;
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -101,70 +153,44 @@ class _CreateDeptState extends State<CreateDept> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  yellowColor.withOpacity(0.9),
-                                  yellowColor.withOpacity(0.9),
-                                  // Colors.teal[200],
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  offset: Offset(5, 5),
-                                  blurRadius: 10,
-                                )
-                              ],
-                            ),
-                            padding: const EdgeInsets.all(8.0),
-                            child: const ListTile(
-                              title: Text("App Department"),
-                              subtitle: Text("10 Operator"),
-                              leading: CircleAvatar(
-                                child: Text(''),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  yellowColor.withOpacity(0.9),
-                                  yellowColor.withOpacity(0.9),
-                                  // Colors.teal[200],
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  offset: Offset(5, 5),
-                                  blurRadius: 10,
-                                )
-                              ],
-                            ),
-                            padding: const EdgeInsets.all(8.0),
-                            child: const ListTile(
-                              title: Text("Web Development"),
-                              subtitle: Text("06 Operator"),
-                              leading: CircleAvatar(
-                                child: Text(''),
-                              ),
-                            ),
-                          ),
-                        ),
+                        // ListView.builder(
+                        //   physics: NeverScrollableScrollPhysics(),
+                        //   shrinkWrap: true,
+                        //   itemCount: departlist.length,
+                        //   itemBuilder: (context, index) {
+                        //     return Padding(
+                        //       padding: const EdgeInsets.all(8.0),
+                        //       child: Container(
+                        //         decoration: BoxDecoration(
+                        //           gradient: LinearGradient(
+                        //             colors: [
+                        //               yellowColor.withOpacity(0.9),
+                        //               yellowColor.withOpacity(0.9),
+                        //               // Colors.teal[200],
+                        //             ],
+                        //             begin: Alignment.topLeft,
+                        //             end: Alignment.bottomRight,
+                        //           ),
+                        //           borderRadius: BorderRadius.circular(20),
+                        //           boxShadow: const [
+                        //             BoxShadow(
+                        //               color: Colors.black12,
+                        //               offset: Offset(5, 5),
+                        //               blurRadius: 10,
+                        //             )
+                        //           ],
+                        //         ),
+                        //         padding: EdgeInsets.all(8.0),
+                        //         child: ListTile(
+                        //           title: Text(departlist[index]),
+                        //           leading: CircleAvatar(
+                        //             child: Text(''),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
                       ],
                     ),
                   ),
@@ -172,66 +198,90 @@ class _CreateDeptState extends State<CreateDept> {
                     physics: ScrollPhysics(),
                     child: Column(
                       children: <Widget>[
-                              const SizedBox(  height: 10,  ),
-                              // TextFormField(
-                              //   style: const TextStyle(color: Colors.black),
-                              //   decoration: const InputDecoration(
-                              //     icon: Icon(
-                              //       Icons.search,
-                              //       color: Colors.black,
-                              //     ),
-                              //     hintText: 'App Developers',
-                              //     hintStyle: TextStyle(color: Colors.grey),
-                              //     labelText: 'Department',
-                              //     labelStyle: TextStyle(color: Colors.grey),
-                              //     border: OutlineInputBorder(
-                              //         borderSide: BorderSide(color: Colors.black)),
-                              //   ),
-                              //   validator: (value) {
-                              //     if (value != null && value.length < 1) {
-                              //       return 'This field cant be null';
-                              //     }
-                              //     return null;
-                              //   },
-                              // ),
-                        ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: _portaInfoMap.length,
-                            itemBuilder: (context,index){
-                              return  Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        yellowColor.withOpacity(0.9),
-                                        yellowColor.withOpacity(0.9),
-                                        // Colors.teal[200],
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
-                                    borderRadius: BorderRadius.circular(20),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        offset: Offset(5, 5),
-                                        blurRadius: 10,
-                                      )
-                                    ],
-                                  ),
-                                  padding:  EdgeInsets.all(8.0),
-                                  child:  ListTile(
-                                    title: Text(portalInfo.domains![index].toString()),
-                                    subtitle: Text("06 Operator"),
-                                    leading: CircleAvatar(
-                                      child: Text(''),
-                                    ),
-                                  ),
-                                ),
-                              );
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        // TextFormField(
+                        //   style: const TextStyle(color: Colors.black),
+                        //   decoration: const InputDecoration(
+                        //     icon: Icon(
+                        //       Icons.search,
+                        //       color: Colors.black,
+                        //     ),
+                        //     hintText: 'App Developers',
+                        //     hintStyle: TextStyle(color: Colors.grey),
+                        //     labelText: 'Department',
+                        //     labelStyle: TextStyle(color: Colors.grey),
+                        //     border: OutlineInputBorder(
+                        //         borderSide: BorderSide(color: Colors.black)),
+                        //   ),
+                        //   validator: (value) {
+                        //     if (value != null && value.length < 1) {
+                        //       return 'This field cant be null';
+                        //     }
+                        //     return null;
+                        //   },
+                        // ),
+                        FutureBuilder(
+                            future: getDetp(),
+                            builder: (context, AsyncSnapshot snapshot) {
+                              // return Text('');
+                              if (!snapshot.hasData) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              }
+                              else {
+                                Container(
+                                    child: ListView.builder(
+                                        itemCount: departlist.length,
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return Text(
+                                              '${departlist[index]}');
+                                        }));
+                              }
+                              return Text('rdfghbjn');
                             })
+                        // ListView.builder(
+                        //     physics: NeverScrollableScrollPhysics(),
+                        //     shrinkWrap: true,
+                        //     itemCount: operaortlist.length,
+                        //     itemBuilder: (context, index) {
+                        //       return Padding(
+                        //         padding: const EdgeInsets.all(8.0),
+                        //         child: Container(
+                        //           decoration: BoxDecoration(
+                        //             gradient: LinearGradient(
+                        //               colors: [
+                        //                 yellowColor.withOpacity(0.9),
+                        //                 yellowColor.withOpacity(0.9),
+                        //                 // Colors.teal[200],
+                        //               ],
+                        //               begin: Alignment.topLeft,
+                        //               end: Alignment.bottomRight,
+                        //             ),
+                        //             borderRadius: BorderRadius.circular(20),
+                        //             boxShadow: const [
+                        //               BoxShadow(
+                        //                 color: Colors.black12,
+                        //                 offset: Offset(5, 5),
+                        //                 blurRadius: 10,
+                        //               )
+                        //             ],
+                        //           ),
+                        //           padding: EdgeInsets.all(8.0),
+                        //           child: ListTile(
+                        //             title: Text(
+                        //                 operaortlist[index]),
+                        //             // subtitle: Text(operaortlist[index]),
+                        //             leading: CircleAvatar(
+                        //               child: Text(''),
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       );
+                        //     })
                       ],
                     ),
                   )
@@ -246,31 +296,28 @@ class _CreateDeptState extends State<CreateDept> {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const AddDepatmentOpearator()));
           },
-          child: Icon(Icons.add
-            ,color: greyColor,size: 30,),
+          child: Icon(
+            Icons.add,
+            color: greyColor,
+            size: 30,
+          ),
         ),
       ),
     );
   }
 }
 
-
 class PortalInfo {
   final String? name;
   final List<String>? domains;
   final List<Object>? noOfArtcles;
 
-  PortalInfo({
-    this.name,
-    this.domains,
-    this.noOfArtcles
-  });
+  PortalInfo({this.name, this.domains, this.noOfArtcles});
 
-  factory PortalInfo.fromJson(Map<String, dynamic> parsedJson){
+  factory PortalInfo.fromJson(Map<String, dynamic> parsedJson) {
     return PortalInfo(
         name: parsedJson['name'],
-        domains : parsedJson['domains'],
-        noOfArtcles : parsedJson ['noOfArticles']
-    );
+        domains: parsedJson['domains'],
+        noOfArtcles: parsedJson['noOfArticles']);
   }
 }

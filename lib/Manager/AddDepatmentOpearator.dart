@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intership/Admin/addclient.dart';
 import 'package:intership/Manager/session.dart';
 import 'package:intership/constant/ApI.dart';
 import 'package:intership/constant/color.dart';
@@ -13,35 +14,36 @@ class AddDepatmentOpearator extends StatefulWidget {
 }
 
 class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
-
-
-  Future<dynamic> addoperator(String email, password, name, mobile) async {
+  Future<dynamic> addOperator(
+      String email, name, password, departmentid, mobile) async {
     try {
       Session _session = Session();
       final data = jsonEncode(<String, String>{
         'email': email,
         'name': name,
         'password': password,
-        'mobile': mobile
+        'mobile': mobile,
+        'departmentId': departmentid
       });
-      final response = await _session.post(manageraddOperator, data);
-      print(response);
-      // print('Manager Added successfully');
+      print(data);
+      final response =
+          await _session.post('http://$ip/manager/addOperator', data);
+      print(response.toString());
+      print('Operator Added successfully');
       return response;
     } catch (e) {
       print(e.toString());
     }
   }
 
-  Future<dynamic> addDepartment(String depart) async {
+  Future<dynamic> addDept(String dept) async {
     try {
       Session _session = Session();
-      final data = jsonEncode(<String, String>{
-        'name': depart,
-      });
-      final response = await _session.post(manageraddDepartment, data);
-      print(response);
-      // print('Manager Added successfully');
+      final data = jsonEncode(<String, String>{'name': dept});
+      final response = await _session.post(
+          'http://164.92.83.169/manager/addDepartment', data);
+      print(response.toString());
+      print('data Added successfully');
       return response;
     } catch (e) {
       print(e.toString());
@@ -84,6 +86,10 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
             Padding(
               padding: const EdgeInsets.all(25),
               child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
@@ -94,17 +100,13 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                         color: greyColor.withOpacity(0.9)),
                   ),
                 ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(),
-                ),
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: TextFormField(
                 controller: department,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Name ',
                   focusColor: whiteColor,
                   border: OutlineInputBorder(),
@@ -117,13 +119,13 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                 onTap: () async {
-                  var response = await addDepartment(
-                    department.text.toString()
+                  var response = await addDept(
+                    department.text.toString(),
                   ).catchError((err) {});
                   if (response == null) {
                     return;
                   } else {
-                    print("added");
+                    Navigator.of(context).pop();
                   }
                 },
                 child: Container(
@@ -165,6 +167,10 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
             Padding(
               padding: const EdgeInsets.all(25),
               child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
@@ -175,17 +181,13 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                         color: greyColor.withOpacity(0.9)),
                   ),
                 ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(),
-                ),
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: TextField(
                 controller: opname,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Name ',
                   focusColor: whiteColor,
                   border: OutlineInputBorder(),
@@ -195,10 +197,10 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: TextField(
                 controller: opemail,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Email ',
                   focusColor: whiteColor,
                   border: OutlineInputBorder(),
@@ -208,10 +210,10 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: TextField(
                 controller: opmobile,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Mobile ',
                   focusColor: whiteColor,
                   border: OutlineInputBorder(),
@@ -221,11 +223,11 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: TextField(
                 controller: oppassword,
 
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'password ',
                   focusColor: whiteColor,
                   border: OutlineInputBorder(),
@@ -235,19 +237,23 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                 onTap: () async {
-                  var response = await addoperator(
-                    opemail.text.toString(),
-                    oppassword.text.toString(),
-                    opname.text.toString(),
-                    opmobile.text.toString(),
-                  ).catchError((err) {});
-                  if (response == null) {
-                    return;
-                  } else {
-                    print("added");
+                  // final isValidForm = _formKey.currentState!.validate();
+                  // if (isValidForm) {
+                    var response = await addOperator(
+                        opemail.text.toString(),
+                        opname.text.toString(),
+                        oppassword.text.toString(),
+                        'departmentcontroller.text.toString()',
+                        oppassword.text.toString()
+                    ).catchError((err) {});
+                    if (response == null) {
+                      return;
+                    }else {
+                      Navigator.of(context).pop();
+                    // }
                   }
                 },
                 child: Container(
