@@ -186,8 +186,8 @@ class _AddManagerState extends State<AddManager> {
                         if (isValidForm) {
                           var response = await addManager(
                             emailcontroller.text.toString(),
-                            namecontroller.text.toString(),
                             passwordcontroller.text.toString(),
+                              namecontroller.text.toString(),
                             mobilecontroller.text.toString()
                           ).catchError((err) {});
                           if (response == null) {

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:intership/Admin/addclient.dart';
+import 'package:intership/Admin/addmanager.dart';
+import 'package:intership/Admin/addoperator.dart';
 import 'package:intership/Admin/constant.dart';
+import 'package:intership/Admin/viewclient.dart';
+import 'package:intership/Admin/viewmanager.dart';
+import 'package:intership/Admin/viewoperator.dart';
 import 'package:intership/constant/ApI.dart';
 // import 'package:superadmin/constant.dart';
 
@@ -65,14 +71,23 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                CustomWidget(routename: 'AddManager', size: size, imagename: 'manager', boxcolor: kpblue, boxname: 'Add Manager'),
-                CustomWidget(routename: 'AddClient', size: size, boxcolor: kpred, boxname: 'Add Client', imagename: 'client',),
+                CustomWidget(routename: (){Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddManager()));}, size: size, imagename: 'manager', boxcolor: kpblue, boxname: 'Add Manager'),
+                CustomWidget(routename: (){Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddClient()));}, size: size, boxcolor: kpred, boxname: 'Add Client', imagename: 'client',),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                CustomWidget(routename: 'AddOperator', size: size, imagename: 'operator', boxcolor: kpyellow, boxname: 'Add Operator'),
+                CustomWidget(routename: (){Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddOperator()));}, size: size, imagename: 'operator', boxcolor: kpyellow, boxname: 'Add Operator'),
               ],
             ),
             Container(
@@ -83,14 +98,23 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                CustomWidget(routename: 'ViewManager', size: size, imagename: 'manager', boxcolor: kpred, boxname: 'View Managers'),
-                CustomWidget(routename: 'ViewClient', size: size, boxcolor: kpblue, boxname: 'View Clients', imagename: 'client',),
+                CustomWidget(routename: (){Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ViewManager()));}, size: size, imagename: 'manager', boxcolor: kpred, boxname: 'View Managers'),
+                CustomWidget(routename: (){Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ViewClient()));}, size: size, boxcolor: kpblue, boxname: 'View Clients', imagename: 'client',),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                CustomWidget(routename: 'ViewOperator', size: size, imagename: 'operator', boxcolor: kpyellow, boxname: 'View Operators'),
+                CustomWidget(routename: (){Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ViewOperator()));}, size: size, imagename: 'operator', boxcolor: kpyellow, boxname: 'View Operators'),
               ],
             ),
           ],
@@ -110,7 +134,7 @@ class CustomWidget extends StatelessWidget {
     required this.boxname,
   }) : super(key: key);
 
-  final routename;
+  final VoidCallback routename;
   final Size size;
   final imagename;
   final boxcolor;
@@ -119,9 +143,7 @@ class CustomWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '$routename');
-      },
+      onTap: routename,
       child: Column(
         children: [
           Container(

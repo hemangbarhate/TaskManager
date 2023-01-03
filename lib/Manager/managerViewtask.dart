@@ -7,6 +7,7 @@ import 'package:intership/Manager/createTask.dart';
 import 'package:intership/Manager/managerProfile.dart';
 import 'package:intership/constant/color.dart';
 import 'package:intership/Manager/ConatainerHelper/ClientContainer.dart';
+import 'package:intership/Admin/model/session.dart';
 
 import '../constant/ApI.dart';
 
@@ -16,8 +17,17 @@ class ViewTask extends StatefulWidget {
   @override
   _ViewTaskState createState() => _ViewTaskState();
 }
-Future<http.Response> getData() async {
-  final response = await http.get(Uri.parse("http://164.92.83.169/manager/assignedTask"));
+Future<dynamic> getData () async{
+  Session _session = Session();
+  final response = await _session.get(managergetassignedtask);
+  print(response['data']);
+
+  // for(Map<String,dynamic> i in response['data']){
+  //   managerlist.add(Managermodel.fromJson(i));
+  //   setState(() {
+  //     managerlist
+  //   });
+  // }
   return response;
 }
 class _ViewTaskState extends State<ViewTask> {
@@ -177,17 +187,14 @@ class _ViewTaskState extends State<ViewTask> {
           backgroundColor: yellowColor.withOpacity(0.9),
           onPressed: () {
             getData().then((response) {
-              if (response.statusCode == 200) {
-                final jsonResponse = json.decode(response.body);
-                if (jsonResponse['success']) {
+                if (response['success']) {
                   print("The request was successful. Do something with the data here");
+                  print(response);
                 } else {
                   print("// There was an error. Display the error message to the user.");
-                  print(jsonResponse['error']);
+                  print(response['error']);
                 }
-              } else {
-               print(" ${response.statusCode}// The request failed. Handle the error here.");
-              }
+
             });
 
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateTask()));

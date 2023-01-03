@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:intership/Admin/homepage.dart';
 import 'package:intership/Manager/managerHome.dart';
-import 'package:intership/Manager/session.dart';
+import 'package:intership/Admin/model/session.dart';
 import 'dart:convert';
 import 'package:cupertino_radio_choice/cupertino_radio_choice.dart';
 import 'package:intership/Operator/operatorHome.dart';
@@ -185,9 +185,9 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                                           builder: (context) => home_operator()));
                                 }
                               }
-                             else  if (response == null) {
+                             else {
                                final snackBar = SnackBar(
-                                 content: const Text('Please Right Credentials'),
+                                 content: Text(response['data']),
                                  backgroundColor: (Colors.black12),
                                  action: SnackBarAction(
                                    label: 'dismiss',
