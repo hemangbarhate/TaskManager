@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // import 'dart:html';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:intership/Admin/homepage.dart';
 import 'package:intership/Manager/managerHome.dart';
 import 'package:intership/Manager/session.dart';
 import 'dart:convert';
@@ -25,6 +26,7 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
     'manager': 'Manager',
     'client': 'Client',
     'operator': 'Operator',
+    'admin' : 'Admin',
   };
 
   String _selectedGender = genderMap.keys.first;
@@ -64,7 +66,7 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                 height: MediaQuery.of(context).size.height / 17,
               ),
               Container(
-                height: MediaQuery.of(context).size.height / 1.8,
+                // height: MediaQuery.of(context).size.height / 1.8,
                 child: Container(
                   decoration: const BoxDecoration(
                       color: Colors.black87,
@@ -146,9 +148,10 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                           onTap: () async {
                             if(!emailController.text.isEmpty && !pwdController.text.isEmpty) {
                               String api = "";
-                              print(_selectedGender == "manager");
+                              // print(_selectedGender == "manager");
                               if(_selectedGender == "manager") api = managerlogin;
                               else if (_selectedGender == "operator") api = operatorlogin;
+                              else if (_selectedGender == "admin") api = adminlogin;
                               else api = clientlogin;
                               print(_selectedGender);
                               var response = await login(
@@ -156,9 +159,7 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                                       pwdController.text.toString(),
                                       api)
                                   .catchError((err) {});
-                              if (response == null) {
-                                return;
-                              } else {
+                             if (response['success'] == true) {
                                 if(_selectedGender == "manager"){
                                   Navigator.push(
                                       context,
@@ -171,16 +172,34 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                                       MaterialPageRoute(
                                           builder: (context) => home_operator()));
                                 }
+                                else if (_selectedGender == "admin"){
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => HomePage()));
+                                }
                                 else {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => home_operator()));
                                 }
-
                               }
-
+                             else  if (response == null) {
+                               final snackBar = SnackBar(
+                                 content: const Text('Please Right Credentials'),
+                                 backgroundColor: (Colors.black12),
+                                 action: SnackBarAction(
+                                   label: 'dismiss',
+                                   onPressed: () {
+                                   },
+                                 ),
+                               );
+                               ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                               return;
+                             }
                             }else{
+                              print("ddddd");
                               final snackBar = SnackBar(
                                 content: const Text('Please Enter Credentials'),
                                 backgroundColor: (Colors.black12),
@@ -216,9 +235,9 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 25,
-                        ),
+                        // const SizedBox(
+                        //   height: 25,
+                        // ),
 
                       ],
                     ),

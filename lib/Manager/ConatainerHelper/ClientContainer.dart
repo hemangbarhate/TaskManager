@@ -12,9 +12,16 @@ class ClientContainer extends StatefulWidget {
   final Color fifth;
   final Color sixth;
 
-
   const ClientContainer(
-      {Key? key, required this.fontColor, required this.backgrondColor, required this.first, required this.second, required this.third, required this.forth, required this.fifth, required this.sixth})
+      {Key? key,
+      required this.fontColor,
+      required this.backgrondColor,
+      required this.first,
+      required this.second,
+      required this.third,
+      required this.forth,
+      required this.fifth,
+      required this.sixth})
       : super(key: key);
 
   @override
@@ -79,7 +86,6 @@ class _ClientContainerState extends State<ClientContainer> {
                       fontSize: 15),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Container(
@@ -97,7 +103,7 @@ class _ClientContainerState extends State<ClientContainer> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget> [
+                children: <Widget>[
                   GestureDetector(
                     onTap: () {
                       // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
@@ -125,11 +131,19 @@ class _ClientContainerState extends State<ClientContainer> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 10.0, right: 10),
-                        child:  Center(
+                        child: Center(
                           child: Text(
-                            'Run time',
+                            widget.backgrondColor == greenColor
+                                ? "Request"
+                                : (widget.backgrondColor == orangeColor
+                                    ? "Assigned"
+                                    : (widget.backgrondColor == blueColor
+                                        ? "Running"
+                                        : "Done")),
                             style: TextStyle(
-                              color: widget.first == greyColor ? yellowColor.withOpacity(0.9) : greyColor.withOpacity(0.9) ,
+                              color: widget.first == greyColor
+                                  ? yellowColor.withOpacity(0.9)
+                                  : greyColor.withOpacity(0.9),
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
                             ),
@@ -163,9 +177,9 @@ class _ClientContainerState extends State<ClientContainer> {
                           )
                         ],
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10),
-                        child: const Center(
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 10.0, right: 10),
+                        child: Center(
                           child: Text(
                             'Open',
                             style: TextStyle(
@@ -177,7 +191,8 @@ class _ClientContainerState extends State<ClientContainer> {
                         ),
                       ),
                     ),
-                  ),   GestureDetector(
+                  ),
+                  GestureDetector(
                     onTap: () {
                       // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
                     },
@@ -202,9 +217,9 @@ class _ClientContainerState extends State<ClientContainer> {
                           )
                         ],
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10),
-                        child: const Center(
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 10.0, right: 10),
+                        child: Center(
                           child: Text(
                             '01.02.023',
                             style: TextStyle(
@@ -219,11 +234,13 @@ class _ClientContainerState extends State<ClientContainer> {
                   ),
                 ],
               ),
-              SizedBox(height: 15,),
+              const SizedBox(
+                height: 15,
+              ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget> [
+                children: <Widget>[
                   GestureDetector(
                     onTap: () {
                       // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
@@ -249,24 +266,26 @@ class _ClientContainerState extends State<ClientContainer> {
                           )
                         ],
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10),
-                        child: const Center(
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 10.0, right: 10),
+                        child: Center(
                           child: Text(
                             '01.01.023',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,
-                              fontWeight: FontWeight.bold
-                              ,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),   GestureDetector(
+                  ),
+                  GestureDetector(
                     onTap: () {
-                      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
+                      if (widget.backgrondColor == greenColor)
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const AssignTask()));
                     },
                     child: Container(
                       width: 100,
@@ -290,10 +309,12 @@ class _ClientContainerState extends State<ClientContainer> {
                         ],
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10),
-                        child: const Center(
+                        padding: EdgeInsets.only(left: 10.0, right: 10),
+                        child: Center(
                           child: Text(
-                            'Urgent',
+                            widget.backgrondColor == greenColor
+                                ? "ASSIGN"
+                                : "urgent",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,
@@ -303,7 +324,8 @@ class _ClientContainerState extends State<ClientContainer> {
                         ),
                       ),
                     ),
-                  ),   GestureDetector(
+                  ),
+                  GestureDetector(
                     onTap: () {
                       // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
                     },
@@ -330,11 +352,13 @@ class _ClientContainerState extends State<ClientContainer> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 10.0, right: 10),
-                        child:  Center(
+                        child: Center(
                           child: Text(
-                            'Add Links',
+                            'Add Link',
                             style: TextStyle(
-                              color: widget.sixth == greyColor ? yellowColor.withOpacity(0.9) : greyColor.withOpacity(0.9) ,
+                              color: widget.sixth == greyColor
+                                  ? yellowColor.withOpacity(0.9)
+                                  : greyColor.withOpacity(0.9),
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
                             ),
@@ -345,6 +369,100 @@ class _ClientContainerState extends State<ClientContainer> {
                   ),
                 ],
               ),
+              const SizedBox(
+                height: 15,
+              ),
+              if (widget.backgrondColor == yellowColor)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        width: 130,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [
+                              Colors.green,
+                              Colors.greenAccent,
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              offset: Offset(5, 5),
+                              blurRadius: 10,
+                            )
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10.0, right: 10),
+                          child: Center(
+                            child: Text(
+                              'APPROVE',
+                              style: TextStyle(
+                                color: whiteColor.withOpacity(1),
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        width: 130,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [
+                              Colors.red,
+                              Colors.red,
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              offset: Offset(5, 5),
+                              blurRadius: 10,
+                            )
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10.0, right: 10),
+                          child: Center(
+                            child: Text(
+                              'Reject',
+                              style: TextStyle(
+                                color: whiteColor.withOpacity(1),
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              // color: const Color(0xffc3f7ab),
+              // splashColor: Colors.lightBlueAccent,
+              // elevation: 10.0,
+              // shape: const StadiumBorder(),
+              // child: const Padding(
+              //     padding: EdgeInsets.symmetric(
+              //         horizontal: 10, vertical: 10),
+              //     child: Text('Accept')
+              // ),
             ],
           ),
         ),

@@ -129,30 +129,12 @@ class _AssignTaskState extends State<AssignTask> {
             ),
             ListTile(
               title: Text("Opearator 1"),
-              subtitle: Text("'email"),
+              subtitle: Text("email"),
               leading: CircleAvatar(
                 child: Text(''),
               ),
             ),
-            ListTile(
-              title: Text("Opearator 1"),
-              subtitle: Text("'email"),
-              leading: CircleAvatar(
-                child: Text(''),
-              ),
-            ),ListTile(
-              title: Text("Opearator 1"),
-              subtitle: Text("'email"),
-              leading: CircleAvatar(
-                child: Text(''),
-              ),
-            ),ListTile(
-              title: Text("Opearator 1"),
-              subtitle: Text("'email"),
-              leading: CircleAvatar(
-                child: Text(''),
-              ),
-            ),
+
             GestureDetector(
               onTap: () {},
               child: Container(

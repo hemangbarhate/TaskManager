@@ -55,6 +55,7 @@ dev_dependencies:
   flutter_svg: ^1.1.6
   sliding_clipped_nav_bar: ^1.0.2
   cupertino_radio_choice: ^1.0.2
+  email_validator: ^2.1.17
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -76,6 +77,9 @@ flutter:
     - assets/images/pro.png
     - assets/images/download.png
     - assets/images/navbar.jpg
+    - assets/images/manager.png
+    - assets/images/operator.png
+    - assets/images/client.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -56,6 +56,31 @@ class _CreateTaskState extends State<CreateTask> {
                 controller: TaskName,
                 decoration: const InputDecoration(
                   icon: Icon(
+                    Icons.account_circle,
+                    color: Colors.black,
+                  ),
+                  hintText: 'Enter client name',
+                  hintStyle: TextStyle(color: Colors.black),
+                  labelText: 'ClientName',
+                  labelStyle: TextStyle(color: Colors.black),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black)),
+                ),
+                validator: (value) {
+                  if (value != null && value.length < 1) {
+                    return 'This field cant be null';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                style: TextStyle(color: Colors.black),
+                controller: TaskName,
+                decoration: const InputDecoration(
+                  icon: Icon(
                     Icons.task,
                     color: Colors.black,
                   ),
@@ -138,6 +163,31 @@ class _CreateTaskState extends State<CreateTask> {
                   hintText: 'Task Description',
                   hintStyle: TextStyle(color: Colors.black),
                   labelText: 'Description',
+                  labelStyle: TextStyle(color: Colors.black),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black)),
+                ),
+                validator: (value) {
+                  if (value != null && value.length < 1) {
+                    return 'This field cant be null';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                style: TextStyle(color: Colors.black),
+                controller: TaskName,
+                decoration: const InputDecoration(
+                  icon: Icon(
+                    Icons.account_circle,
+                    color: Colors.black,
+                  ),
+                  hintText: 'Enter Operator name',
+                  hintStyle: TextStyle(color: Colors.black),
+                  labelText: 'OperatorName',
                   labelStyle: TextStyle(color: Colors.black),
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black)),

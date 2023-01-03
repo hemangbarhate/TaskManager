@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intership/Manager/ConatainerHelper/ManagerContainer.dart';
 import 'package:intership/Manager/createTask.dart';
@@ -7,20 +8,30 @@ import 'package:intership/Manager/managerProfile.dart';
 import 'package:intership/constant/color.dart';
 import 'package:intership/Manager/ConatainerHelper/ClientContainer.dart';
 
+import '../constant/ApI.dart';
+
 class ViewTask extends StatefulWidget {
   const ViewTask({Key? key}) : super(key: key);
 
   @override
   _ViewTaskState createState() => _ViewTaskState();
 }
-
+Future<http.Response> getData() async {
+  final response = await http.get(Uri.parse("http://164.92.83.169/manager/assignedTask"));
+  return response;
+}
 class _ViewTaskState extends State<ViewTask> {
+
+  @override
+  void initState() {
+    // getData();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        // backgroundColor: greyColor.withOpacity(0.1),
         appBar: AppBar(
           backgroundColor: Colors.white,
           shadowColor: Colors.white,
@@ -165,8 +176,21 @@ class _ViewTaskState extends State<ViewTask> {
           // foregroundColor: Colors.blueAccent,
           backgroundColor: yellowColor.withOpacity(0.9),
           onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => CreateTask()));
+            getData().then((response) {
+              if (response.statusCode == 200) {
+                final jsonResponse = json.decode(response.body);
+                if (jsonResponse['success']) {
+                  print("The request was successful. Do something with the data here");
+                } else {
+                  print("// There was an error. Display the error message to the user.");
+                  print(jsonResponse['error']);
+                }
+              } else {
+               print(" ${response.statusCode}// The request failed. Handle the error here.");
+              }
+            });
+
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateTask()));
           },
           child: Icon(Icons.add
           ,color: greyColor,size: 30,),
