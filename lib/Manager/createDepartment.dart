@@ -74,11 +74,11 @@ class _CreateDeptState extends State<CreateDept> {
                 height: 45,
                 width: 350,
                 decoration: BoxDecoration(
-                    color: Colors.grey[300],
+                    color: Colors.grey[400],
                     borderRadius: BorderRadius.circular(25.0)),
                 child: TabBar(
                   indicator: BoxDecoration(
-                      color: Colors.grey[500],
+                      color: Colors.grey[800],
                       borderRadius: BorderRadius.circular(25.0)),
                   labelColor: Colors.white,
                   unselectedLabelColor: Colors.black,
@@ -107,8 +107,8 @@ class _CreateDeptState extends State<CreateDept> {
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
-                                  greyColor.withOpacity(0.2),
-                                  greyColor.withOpacity(0.2)
+                                  yellowColor.withOpacity(0.9),
+                                  yellowColor.withOpacity(0.9),
                                   // Colors.teal[200],
                                 ],
                                 begin: Alignment.topLeft,
@@ -139,8 +139,8 @@ class _CreateDeptState extends State<CreateDept> {
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
-                                  greyColor.withOpacity(0.2),
-                                  greyColor.withOpacity(0.2)
+                                  yellowColor.withOpacity(0.9),
+                                  yellowColor.withOpacity(0.9),
                                   // Colors.teal[200],
                                 ],
                                 begin: Alignment.topLeft,
@@ -173,27 +173,27 @@ class _CreateDeptState extends State<CreateDept> {
                     child: Column(
                       children: <Widget>[
                               const SizedBox(  height: 10,  ),
-                              TextFormField(
-                                style: const TextStyle(color: Colors.black),
-                                decoration: const InputDecoration(
-                                  icon: Icon(
-                                    Icons.search,
-                                    color: Colors.black,
-                                  ),
-                                  hintText: 'App Developers',
-                                  hintStyle: TextStyle(color: Colors.grey),
-                                  labelText: 'Department',
-                                  labelStyle: TextStyle(color: Colors.grey),
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.black)),
-                                ),
-                                validator: (value) {
-                                  if (value != null && value.length < 1) {
-                                    return 'This field cant be null';
-                                  }
-                                  return null;
-                                },
-                              ),
+                              // TextFormField(
+                              //   style: const TextStyle(color: Colors.black),
+                              //   decoration: const InputDecoration(
+                              //     icon: Icon(
+                              //       Icons.search,
+                              //       color: Colors.black,
+                              //     ),
+                              //     hintText: 'App Developers',
+                              //     hintStyle: TextStyle(color: Colors.grey),
+                              //     labelText: 'Department',
+                              //     labelStyle: TextStyle(color: Colors.grey),
+                              //     border: OutlineInputBorder(
+                              //         borderSide: BorderSide(color: Colors.black)),
+                              //   ),
+                              //   validator: (value) {
+                              //     if (value != null && value.length < 1) {
+                              //       return 'This field cant be null';
+                              //     }
+                              //     return null;
+                              //   },
+                              // ),
                         ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
@@ -205,8 +205,8 @@ class _CreateDeptState extends State<CreateDept> {
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                       colors: [
-                                        greyColor.withOpacity(0.2),
-                                        greyColor.withOpacity(0.2)
+                                        yellowColor.withOpacity(0.9),
+                                        yellowColor.withOpacity(0.9),
                                         // Colors.teal[200],
                                       ],
                                       begin: Alignment.topLeft,
@@ -241,11 +241,13 @@ class _CreateDeptState extends State<CreateDept> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: yellowColor.withOpacity(0.9),
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const AddDepatmentOpearator()));
           },
-          child: const Icon(Icons.add),
+          child: Icon(Icons.add
+            ,color: greyColor,size: 30,),
         ),
       ),
     );

@@ -25,7 +25,7 @@ class _home_managerState extends State<home_manager> {
       body: tabs[_ixd],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _ixd,
-        backgroundColor: Colors.grey[300],
+        backgroundColor: yellowColor.withOpacity(1),
         iconSize: 30,
         // backgroundColor: greyColor.withOpacity(0.8),
         items: const [
@@ -37,12 +37,12 @@ class _home_managerState extends State<home_manager> {
           BottomNavigationBarItem(
             label: "Add",
             icon: Icon(Icons.add),
-            backgroundColor: blueColor,
+            backgroundColor: redColor,
           ),
           BottomNavigationBarItem(
             label: "Profile",
-            icon: Icon(Icons.home),
-            backgroundColor: blueColor,
+            icon: Icon(Icons.account_circle),
+            backgroundColor: Colors.blue,
           ),
         ],
         onTap: (indx)

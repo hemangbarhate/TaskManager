@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:intership/Manager/session.dart';
 import 'package:intership/constant/color.dart';
 
 class AddDepatmentOpearator extends StatefulWidget {
@@ -9,8 +12,32 @@ class AddDepatmentOpearator extends StatefulWidget {
 }
 
 class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
+
+
+  Future<dynamic> addoperator(String email, password, name, mobile) async {
+    try {
+      Session _session = Session();
+      final data = jsonEncode(<String, String>{
+        'email': email,
+        'name': name,
+        'password': password,
+        'mobile': mobile
+      });
+      final response = await _session.post('http://164.92.83.169/manager/addOperator', data);
+      print(response);
+      // print('Manager Added successfully');
+      return response;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    TextEditingController opname = TextEditingController();
+    TextEditingController opemail = TextEditingController();
+    TextEditingController oppassword = TextEditingController();
+    TextEditingController opmobile = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         backgroundColor:  Colors.grey[200],
@@ -37,7 +64,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
         child: Column(
           children: <Widget> [
             Padding(
-              padding: EdgeInsets.all(25),
+              padding: const EdgeInsets.all(25),
               child: Container(
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
@@ -49,9 +76,9 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
+             Padding(
+              padding: EdgeInsets.all(8.0),
+              child: TextFormField(
 
                 decoration: InputDecoration(
                   labelText: 'Name ',
@@ -103,7 +130,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(25),
+              padding: const EdgeInsets.all(25),
               child: Container(
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
@@ -115,10 +142,10 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+             Padding(
+              padding: EdgeInsets.all(8.0),
               child: TextField(
-
+                controller: opname,
                 decoration: InputDecoration(
                   labelText: 'Name ',
                   focusColor: whiteColor,
@@ -128,10 +155,10 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                 minLines: 1, // <-- SEE HERE
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+             Padding(
+              padding: EdgeInsets.all(8.0),
               child: TextField(
-
+                controller: opemail,
                 decoration: InputDecoration(
                   labelText: 'Email ',
                   focusColor: whiteColor,
@@ -142,11 +169,26 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: TextField(
+                controller: opmobile,
+                decoration: InputDecoration(
+                  labelText: 'Mobile ',
+                  focusColor: whiteColor,
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 5, // <-- SEE HERE
+                minLines: 1, // <-- SEE HERE
+              ),
+            ),
+             Padding(
+              padding: EdgeInsets.all(8.0),
+              child: TextField(
+                controller: oppassword,
 
                 decoration: InputDecoration(
-                  labelText: 'Department ',
+
+                  labelText: 'password ',
                   focusColor: whiteColor,
                   border: OutlineInputBorder(),
                 ),
@@ -155,22 +197,22 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-
-                decoration: InputDecoration(
-                  labelText: 'Moblie ',
-                  focusColor: whiteColor,
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 5, // <-- SEE HERE
-                minLines: 1, // <-- SEE HERE
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding:  EdgeInsets.all(8.0),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () async {
+                  var response = await addoperator(
+                      opemail.text.toString(),
+                    oppassword.text.toString(),
+                    opname.text.toString(),
+                    opmobile.text.toString(),
+                  )
+                      .catchError((err) {});
+                  if (response == null) {
+                    return;
+                  } else {
+                    print("added");
+                  }
+                },
                 child: Container(
                   // width: 150,
                   height: 50,

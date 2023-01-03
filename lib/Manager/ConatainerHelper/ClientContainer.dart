@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intership/Manager/assignTask.dart';
-import 'package:intership/not_usable/Button.dart';
-
-import '../../constant/color.dart';
+import 'package:intership/constant/color.dart';
 
 class ClientContainer extends StatefulWidget {
   final Color fontColor;
   final Color backgrondColor;
+  final Color first;
+  final Color second;
+  final Color third;
+  final Color forth;
+  final Color fifth;
+  final Color sixth;
+
+
   const ClientContainer(
-      {Key? key, required this.fontColor, required this.backgrondColor})
+      {Key? key, required this.fontColor, required this.backgrondColor, required this.first, required this.second, required this.third, required this.forth, required this.fifth, required this.sixth})
       : super(key: key);
 
   @override
@@ -24,17 +30,17 @@ class _ClientContainerState extends State<ClientContainer> {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           gradient: LinearGradient(colors: [
-            widget.backgrondColor.withOpacity(0.5),
-            widget.backgrondColor.withOpacity(0.5),
+            widget.backgrondColor.withOpacity(1),
+            widget.backgrondColor.withOpacity(1),
           ], begin: Alignment.topLeft, end: Alignment.bottomRight),
           border: Border.all(
-            color: Color(0x282019).withOpacity(0.2),
+            color: const Color(0x282019).withOpacity(0.2),
           ),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
           padding:
-              const EdgeInsets.only(left: 8.0, right: 2, top: 2, bottom: 15),
+              const EdgeInsets.only(left: 8.0, right: 5, top: 2, bottom: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -45,7 +51,7 @@ class _ClientContainerState extends State<ClientContainer> {
                     children: <Widget>[
                       CircleAvatar(
                           radius: 20,
-                          backgroundColor: widget.fontColor.withOpacity(0.9)),
+                          backgroundColor: widget.fontColor.withOpacity(01)),
                       const SizedBox(
                         width: 15,
                       ),
@@ -69,99 +75,47 @@ class _ClientContainerState extends State<ClientContainer> {
                       // #FED457
                       fontWeight: FontWeight.w600,
                       // color: Color(0xFED457),
-                      color: widget.fontColor.withOpacity(0.9),
+                      color: widget.fontColor.withOpacity(1),
                       fontSize: 15),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Project Name :  abc xyz ",
-                  style: TextStyle(
-                    // #FED457
-                      fontWeight: FontWeight.w600,
-                      // color: Color(0xFED457),
-                      color: widget.fontColor.withOpacity(0.9),
-                      fontSize: 14),
-                ),
-              ),
+
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Container(
                   child: Text(
                     "Description : \n   now theres a best way to achieve this, its ListTile."
                     "it has leading property for left side, and title and subtitle,"
-
-                        "it has leading property for left side, and title and subtitle,"
-                        "it has leading property for left side, and title and subtitle,"
-                    " it has leading property for left side, and title and subtitle, and then for right side widgets it has trailing property.",
+                    "and then for right side widgets it has trailing property.",
                     style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget> [
-                  // GestureDetector(
-                  //   onTap: () {},
-                  //   child: Container(
-                  //     // width: 150,
-                  //     height: 50,
-                  //     decoration: BoxDecoration(
-                  //       gradient: LinearGradient(
-                  //         colors: [
-                  //           widget.fontColor.withOpacity(0.7),
-                  //           widget.fontColor.withOpacity(0.7)
-                  //           // Colors.teal[200],
-                  //         ],
-                  //         begin: Alignment.topLeft,
-                  //         end: Alignment.bottomRight,
-                  //       ),
-                  //       borderRadius: BorderRadius.circular(20),
-                  //       boxShadow: [
-                  //         BoxShadow(
-                  //           color: Colors.black12,
-                  //           offset: Offset(5, 5),
-                  //           blurRadius: 10,
-                  //         )
-                  //       ],
-                  //     ),
-                  //     child: Padding(
-                  //       padding: const EdgeInsets.all(15.0),
-                  //       child: Text(
-                  //         'Set Priority',
-                  //         style: TextStyle(
-                  //           color: Colors.white,
-                  //           fontSize: 13,
-                  //           fontWeight: FontWeight.w400,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => AssignTask()));
+                      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
                     },
                     child: Container(
-                      // width: 150,
-                      height: 50,
+                      width: 100,
+                      height: 46,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            widget.fontColor.withOpacity(0.7),
-                            widget.fontColor.withOpacity(0.7)
-                            // Colors.teal[200],
+                            widget.first.withOpacity(0.9),
+                            widget.first.withOpacity(0.9)
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
                         borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                             color: Colors.black12,
                             offset: Offset(5, 5),
@@ -170,13 +124,94 @@ class _ClientContainerState extends State<ClientContainer> {
                         ],
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Text(
-                          'Assign Task',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
+                        padding: const EdgeInsets.only(left: 10.0, right: 10),
+                        child:  Center(
+                          child: Text(
+                            'Run time',
+                            style: TextStyle(
+                              color: widget.first == greyColor ? yellowColor.withOpacity(0.9) : greyColor.withOpacity(0.9) ,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            widget.second.withOpacity(0.7),
+                            widget.second.withOpacity(0.7)
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(5, 5),
+                            blurRadius: 10,
+                          )
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10),
+                        child: const Center(
+                          child: Text(
+                            'Open',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),   GestureDetector(
+                    onTap: () {
+                      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            widget.third.withOpacity(0.7),
+                            widget.third.withOpacity(0.7)
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(5, 5),
+                            blurRadius: 10,
+                          )
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10),
+                        child: const Center(
+                          child: Text(
+                            '01.02.023',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -184,7 +219,132 @@ class _ClientContainerState extends State<ClientContainer> {
                   ),
                 ],
               ),
-
+              SizedBox(height: 15,),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget> [
+                  GestureDetector(
+                    onTap: () {
+                      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            widget.forth.withOpacity(0.9),
+                            widget.forth.withOpacity(0.9)
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(5, 5),
+                            blurRadius: 10,
+                          )
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10),
+                        child: const Center(
+                          child: Text(
+                            '01.01.023',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold
+                              ,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),   GestureDetector(
+                    onTap: () {
+                      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            widget.fifth.withOpacity(0.9),
+                            widget.fifth.withOpacity(0.9)
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(5, 5),
+                            blurRadius: 10,
+                          )
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10),
+                        child: const Center(
+                          child: Text(
+                            'Urgent',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),   GestureDetector(
+                    onTap: () {
+                      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            widget.sixth.withOpacity(0.9),
+                            widget.sixth.withOpacity(0.9)
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(5, 5),
+                            blurRadius: 10,
+                          )
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10),
+                        child:  Center(
+                          child: Text(
+                            'Add Links',
+                            style: TextStyle(
+                              color: widget.sixth == greyColor ? yellowColor.withOpacity(0.9) : greyColor.withOpacity(0.9) ,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
