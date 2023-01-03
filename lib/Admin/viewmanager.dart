@@ -73,7 +73,6 @@ class _ViewManagerState extends State<ViewManager> {
                   );
                   }
               },
-
               )
       ),
     );
