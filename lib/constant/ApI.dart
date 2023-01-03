@@ -11,7 +11,10 @@ final operatorlogin = 'http://$ip/operator/login';
 final clientlogin = 'http://$ip/client/login';
 final adminlogin = 'http://$ip/admin/login';
 
+// MANAGER
 final managergetassignedtask = "http://$ip/manager/assignedTask";
+final manageraddOperator = 'http://$ip/manager/addOperator';
+final manageraddDepartment = 'http://$ip/manager/addDepartment';
 
 
 //ADMIN

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intership/Manager/session.dart';
+import 'package:intership/constant/ApI.dart';
 import 'package:intership/constant/color.dart';
 
 class AddDepatmentOpearator extends StatefulWidget {
@@ -23,7 +24,22 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
         'password': password,
         'mobile': mobile
       });
-      final response = await _session.post('http://164.92.83.169/manager/addOperator', data);
+      final response = await _session.post(manageraddOperator, data);
+      print(response);
+      // print('Manager Added successfully');
+      return response;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<dynamic> addDepartment(String depart) async {
+    try {
+      Session _session = Session();
+      final data = jsonEncode(<String, String>{
+        'name': depart,
+      });
+      final response = await _session.post(manageraddDepartment, data);
       print(response);
       // print('Manager Added successfully');
       return response;
@@ -38,15 +54,17 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
     TextEditingController opemail = TextEditingController();
     TextEditingController oppassword = TextEditingController();
     TextEditingController opmobile = TextEditingController();
+    TextEditingController department = TextEditingController();
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:  Colors.grey[200],
+        backgroundColor: Colors.grey[200],
         shadowColor: Colors.white,
         title: const Center(
             child: Text(
-              "ADD DEPARTMENT",
-              style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold, color: Colors.black),
-            )),
+          "ADD DEPARTMENT",
+          style: TextStyle(
+              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+        )),
         elevation: 0.0,
         leading: Builder(builder: (BuildContext context) {
           return Padding(
@@ -62,13 +80,19 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: <Widget> [
+          children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(25),
               child: Container(
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Text("Add Department",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color:greyColor.withOpacity(0.9) ),),
+                  child: Text(
+                    "Add Department",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: greyColor.withOpacity(0.9)),
+                  ),
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
@@ -76,10 +100,10 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                 ),
               ),
             ),
-             Padding(
+            Padding(
               padding: EdgeInsets.all(8.0),
               child: TextFormField(
-
+                controller: department,
                 decoration: InputDecoration(
                   labelText: 'Name ',
                   focusColor: whiteColor,
@@ -92,7 +116,16 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () async {
+                  var response = await addDepartment(
+                    department.text.toString()
+                  ).catchError((err) {});
+                  if (response == null) {
+                    return;
+                  } else {
+                    print("added");
+                  }
+                },
                 child: Container(
                   // width: 150,
                   height: 50,
@@ -134,7 +167,13 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
               child: Container(
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Text("Add Opeartor",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color:greyColor.withOpacity(0.9) ),),
+                  child: Text(
+                    "Add Opeartor",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: greyColor.withOpacity(0.9)),
+                  ),
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
@@ -142,7 +181,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                 ),
               ),
             ),
-             Padding(
+            Padding(
               padding: EdgeInsets.all(8.0),
               child: TextField(
                 controller: opname,
@@ -155,7 +194,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                 minLines: 1, // <-- SEE HERE
               ),
             ),
-             Padding(
+            Padding(
               padding: EdgeInsets.all(8.0),
               child: TextField(
                 controller: opemail,
@@ -181,13 +220,12 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                 minLines: 1, // <-- SEE HERE
               ),
             ),
-             Padding(
+            Padding(
               padding: EdgeInsets.all(8.0),
               child: TextField(
                 controller: oppassword,
 
                 decoration: InputDecoration(
-
                   labelText: 'password ',
                   focusColor: whiteColor,
                   border: OutlineInputBorder(),
@@ -197,16 +235,15 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
               ),
             ),
             Padding(
-              padding:  EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: GestureDetector(
                 onTap: () async {
                   var response = await addoperator(
-                      opemail.text.toString(),
+                    opemail.text.toString(),
                     oppassword.text.toString(),
                     opname.text.toString(),
                     opmobile.text.toString(),
-                  )
-                      .catchError((err) {});
+                  ).catchError((err) {});
                   if (response == null) {
                     return;
                   } else {

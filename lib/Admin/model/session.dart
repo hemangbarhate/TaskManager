@@ -12,6 +12,14 @@ class Session {
   Map<String, String> headers = {'Content-Type': 'application/json; charset=UTF-8',};
 
   Map<String,String> get cookies =>headers;
+
+  Future<dynamic> get2(String url) async {
+    http.Response response = await http.get(Uri.parse(url), headers: headers);
+    updateCookie(response);
+    print(response.body);
+    return response;
+  }
+
   Future<Map> get(String url) async {
     http.Response response = await http.get(Uri.parse(url), headers: headers);
     updateCookie(response);

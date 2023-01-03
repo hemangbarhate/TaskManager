@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:intership/Admin/homepage.dart';
 import 'package:intership/Manager/managerHome.dart';
-import 'package:intership/Manager/session.dart';
+import 'package:intership/Admin/model/session.dart';
 import 'dart:convert';
 import 'package:cupertino_radio_choice/cupertino_radio_choice.dart';
 import 'package:intership/Operator/operatorHome.dart';
@@ -92,8 +92,8 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                           height: 40,
                         ),
                         CupertinoRadioChoice(
-                          selectedColor: yellowColor.withOpacity(1),
-                          notSelectedColor: greyColor,
+                            selectedColor: yellowColor.withOpacity(1),
+                            notSelectedColor: greyColor,
                             choices: genderMap,
                             onChange: (genderKey)
                             {
@@ -155,11 +155,11 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                               else api = clientlogin;
                               print(_selectedGender);
                               var response = await login(
-                                      emailController.text.toString(),
-                                      pwdController.text.toString(),
-                                      api)
+                                  emailController.text.toString(),
+                                  pwdController.text.toString(),
+                                  api)
                                   .catchError((err) {});
-                             if (response['success'] == true) {
+                              if (response['success'] == true) {
                                 if(_selectedGender == "manager"){
                                   Navigator.push(
                                       context,
@@ -185,19 +185,19 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                                           builder: (context) => home_operator()));
                                 }
                               }
-                             else{
-                               final snackBar = SnackBar(
-                                 content: const Text('Please Enter Right Credentials'),
-                                 backgroundColor: (Colors.black12),
-                                 action: SnackBarAction(
-                                   label: 'dismiss',
-                                   onPressed: () {
-                                   },
-                                 ),
-                               );
-                               ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                               return;
-                             }
+                              else {
+                                final snackBar = SnackBar(
+                                  content: Text(response['data']),
+                                  backgroundColor: (Colors.black12),
+                                  action: SnackBarAction(
+                                    label: 'dismiss',
+                                    onPressed: () {
+                                    },
+                                  ),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                return;
+                              }
                             }else{
                               print("ddddd");
                               final snackBar = SnackBar(
@@ -250,8 +250,8 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
       ),
     );
   }
-  // void onGenderSelected(String genderKey) {
-  // }
+// void onGenderSelected(String genderKey) {
+// }
 }
 
 class Header extends StatelessWidget {
