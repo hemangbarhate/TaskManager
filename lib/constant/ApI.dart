@@ -19,3 +19,5 @@ final manageraddDepartment = 'http://$ip/manager/addDepartment';
 
 //ADMIN
 final getmanagerlist = "http://$ip/admin/getManagers";
+final getoperatorlist = "http://$ip/admin/getOperators";
+final getclientlist = "http://$ip/admin/getClients";

@@ -101,16 +101,16 @@
 //   };
 // }
 
-class Manager {
+class Operator {
   final String managerId;
   final String name;
   final String email;
   final String mobile;
   final String password;
 
-  Manager(this.managerId, this.name, this.email, this.mobile, this.password);
+  Operator(this.managerId, this.name, this.email, this.mobile, this.password);
 
-  Manager.fromJson(Map<String, dynamic> data)
+  Operator.fromJson(Map<String, dynamic> data)
       : managerId = data['managerId'] as String,
         name = data['name'] as String,
         email = data['email'] as String,

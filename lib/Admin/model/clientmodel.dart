@@ -1,65 +1,22 @@
-// To parse this JSON data, do
-//
-//     final clientmodel = clientmodelFromJson(jsonString);
+class Client {
+  final String clientId;
+  final String name;
+  final String email;
+  final String mobile;
+  final String password;
+  final String organization;
 
-import 'dart:convert';
+  Client(this.clientId, this.name, this.email, this.mobile, this.password, this.organization,);
 
-Clientmodel clientmodelFromJson(String str) => Clientmodel.fromJson(json.decode(str));
+  Client.fromJson(Map<String, dynamic> data)
+      : clientId = data['clientId'] as String,
+        name = data['name'] as String,
+        email = data['email'] as String,
+        mobile = data['mobile'] as String,
+        password = data['password'] as String,
+        organization = data['organization'] as String;
 
-String clientmodelToJson(Clientmodel data) => json.encode(data.toJson());
-
-class Clientmodel {
-  Clientmodel({
-    required this.success,
-    required this.data,
-  });
-
-  bool success;
-  List<Datum> data;
-
-  factory Clientmodel.fromJson(Map<String, dynamic> json) => Clientmodel(
-    success: json["success"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "success": success,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
-}
-
-class Datum {
-  Datum({
-    required this.clientId,
-    required this.name,
-    required this.email,
-    required this.mobile,
-    required this.organization,
-    required this.password,
-  });
-
-  String clientId;
-  String name;
-  String email;
-  String mobile;
-  String organization;
-  String password;
-
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    clientId: json["clientId"],
-    name: json["name"],
-    email: json["email"],
-    mobile: json["mobile"],
-    organization: json["organization"],
-    password: json["password"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "clientId": clientId,
-    "name": name,
-    "email": email,
-    "mobile": mobile,
-    "organization": organization,
-    "password": password,
-  };
+  @override
+  String toString() =>
+      'Client, clientId=$clientId, name=$name, email=$email, mobile=$mobile, password=$password, organization=$organization';
 }
