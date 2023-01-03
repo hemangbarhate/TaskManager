@@ -19,15 +19,14 @@ class _ViewManagerState extends State<ViewManager> {
     getManager();
     super.initState();
   }
-  List<Managermodel> managerlist = [];
-  Future<List<Managermodel>> getManager () async{
+  List<Manager> managerlist = [];
+  Future<List<Manager>> getManager () async{
     Session _session = Session();
-    final response = await _session.get2(getmanagerlist);
-    print(response['data']);
+    final response = await _session.get(getmanagerlist);
 
-    for(dynamic i in response){
-      print(i);
-      managerlist.add(Managermodel.fromJson(i));
+    for(dynamic i in response['data']){
+      // print(i['email']);
+      managerlist.add(Manager.fromJson(i));
     }
     print(managerlist);
     return managerlist;
