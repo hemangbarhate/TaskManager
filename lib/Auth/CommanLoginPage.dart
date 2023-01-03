@@ -185,9 +185,9 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                                           builder: (context) => home_operator()));
                                 }
                               }
-                             else  if (response == null) {
+                             else{
                                final snackBar = SnackBar(
-                                 content: const Text('Please Right Credentials'),
+                                 content: const Text('Please Enter Right Credentials'),
                                  backgroundColor: (Colors.black12),
                                  action: SnackBarAction(
                                    label: 'dismiss',
