@@ -68,42 +68,43 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
               child:   SingleChildScrollView(
                   child: Column(
                     children: const <Widget>[
-                      ClientContainer(
-                        fontColor: greyColor,
-                        backgrondColor: orangeColor, first: greyColor,
-                        second: greenColor,third: greenColor,
-                        forth: redColor,
-                        fifth: redColor,
-                        sixth: greyColor,
-                      ),
-                      ClientContainer(
-                        fontColor: greyColor,
-                        backgrondColor: greenColor,
-                        first: yellowColor,
-                        second: blackColor,
-                        third: greenColor,
-                        forth: redColor,
-                        fifth: redColor,
-                        sixth: yellowColor,
-                      ),
-                      ClientContainer(
-                        fontColor: greyColor,
-                        backgrondColor: yellowColor
-                        ,first: greyColor,
-                        second: greenColor,third: greenColor,
-                        forth: redColor,
-                        fifth: redColor,
-                        sixth: greyColor,
-                      ),
-                      ClientContainer(
-                        fontColor: yellowColor,
-                        backgrondColor: blueColor
-                        ,first: greyColor,
-                        second: greenColor,third: greenColor,
-                        forth: redColor,
-                        fifth: redColor,
-                        sixth: greyColor,
-                      ),
+                      CircularProgressIndicator(),
+                      // ClientContainer(
+                      //   fontColor: greyColor,
+                      //   backgrondColor: orangeColor, first: greyColor,
+                      //   second: greenColor,third: greenColor,
+                      //   forth: redColor,
+                      //   fifth: redColor,
+                      //   sixth: greyColor,
+                      // ),
+                      // ClientContainer(
+                      //   fontColor: greyColor,
+                      //   backgrondColor: greenColor,
+                      //   first: yellowColor,
+                      //   second: blackColor,
+                      //   third: greenColor,
+                      //   forth: redColor,
+                      //   fifth: redColor,
+                      //   sixth: yellowColor,
+                      // ),
+                      // ClientContainer(
+                      //   fontColor: greyColor,
+                      //   backgrondColor: yellowColor
+                      //   ,first: greyColor,
+                      //   second: greenColor,third: greenColor,
+                      //   forth: redColor,
+                      //   fifth: redColor,
+                      //   sixth: greyColor,
+                      // ),
+                      // ClientContainer(
+                      //   fontColor: yellowColor,
+                      //   backgrondColor: blueColor
+                      //   ,first: greyColor,
+                      //   second: greenColor,third: greenColor,
+                      //   forth: redColor,
+                      //   fifth: redColor,
+                      //   sixth: greyColor,
+                      // ),
                       SizedBox(height: 30,),
                     ],
                   ),

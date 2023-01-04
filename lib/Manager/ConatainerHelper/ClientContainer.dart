@@ -11,6 +11,24 @@ class ClientContainer extends StatefulWidget {
   final Color forth;
   final Color fifth;
   final Color sixth;
+  final String taskId;
+  final String clientId;
+  final String operatorId;
+  final String managerId;
+  final String taskName;
+  final String ProjectName;
+  final String taskDescription;
+  final String openDate;
+  final String closeDate;
+  final String clientNote;
+  final String managerNote;
+  final String priority;
+  final String AssignationStatus;
+  final String taskStatus;
+  final String clientApproval;
+  final String managerApproval;
+  final String taskCategory;
+  final VoidCallback assignTask;
 
   const ClientContainer(
       {Key? key,
@@ -21,7 +39,24 @@ class ClientContainer extends StatefulWidget {
       required this.third,
       required this.forth,
       required this.fifth,
-      required this.sixth})
+      required this.sixth,
+      required this.taskId,
+      required this.clientId,
+      required this.operatorId,
+      required this.managerId,
+      required this.taskName,
+      required this.taskDescription,
+      required this.openDate,
+      required this.closeDate,
+      required this.clientNote,
+      required this.managerNote,
+      required this.priority,
+      required this.AssignationStatus,
+      required this.taskStatus,
+      required this.clientApproval,
+      required this.managerApproval,
+      required this.taskCategory, required this.assignTask, required this.ProjectName
+      })
       : super(key: key);
 
   @override
@@ -63,7 +98,7 @@ class _ClientContainerState extends State<ClientContainer> {
                         width: 15,
                       ),
                       Text(
-                        "Client name",
+                        "${widget.clientId.length}",
                         style: TextStyle(
                             // #FED457
                             fontWeight: FontWeight.w600,
@@ -77,9 +112,21 @@ class _ClientContainerState extends State<ClientContainer> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Tasks Name : ABC XYZ ",
+                  "Tasks Name : ${widget.taskName} ",
                   style: TextStyle(
                       // #FED457
+                      fontWeight: FontWeight.w600,
+                      // color: Color(0xFED457),
+                      color: widget.fontColor.withOpacity(1),
+                      fontSize: 15),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Project Name : ${widget.ProjectName} ",
+                  style: TextStyle(
+                    // #FED457
                       fontWeight: FontWeight.w600,
                       // color: Color(0xFED457),
                       color: widget.fontColor.withOpacity(1),
@@ -90,9 +137,16 @@ class _ClientContainerState extends State<ClientContainer> {
                 padding: const EdgeInsets.all(10),
                 child: Container(
                   child: Text(
-                    "Description : \n   now theres a best way to achieve this, its ListTile."
-                    "it has leading property for left side, and title and subtitle,"
-                    "and then for right side widgets it has trailing property.",
+                    "Description :   ${widget.taskDescription}",
+                    style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Container(
+                  child: Text(
+                    "Client Not :   ${widget.clientNote}",
                     style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
                   ),
                 ),
@@ -133,13 +187,14 @@ class _ClientContainerState extends State<ClientContainer> {
                         padding: const EdgeInsets.only(left: 10.0, right: 10),
                         child: Center(
                           child: Text(
-                            widget.backgrondColor == greenColor
-                                ? "Request"
-                                : (widget.backgrondColor == orangeColor
-                                    ? "Assigned"
-                                    : (widget.backgrondColor == blueColor
-                                        ? "Running"
-                                        : "Done")),
+                            '${widget.taskStatus}',
+                            // widget.backgrondColor == greenColor
+                            //     ? "Request"
+                            //     : (widget.backgrondColor == orangeColor
+                            //         ? "Assigned"
+                            //         : (widget.backgrondColor == blueColor
+                            //             ? "Running"
+                            //             : "Done")),
                             style: TextStyle(
                               color: widget.first == greyColor
                                   ? yellowColor.withOpacity(0.9)
@@ -197,7 +252,7 @@ class _ClientContainerState extends State<ClientContainer> {
                       // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
                     },
                     child: Container(
-                      width: 100,
+                      width: 120,
                       height: 46,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -217,11 +272,11 @@ class _ClientContainerState extends State<ClientContainer> {
                           )
                         ],
                       ),
-                      child: const Padding(
+                      child:  Padding(
                         padding: EdgeInsets.only(left: 10.0, right: 10),
                         child: Center(
                           child: Text(
-                            '01.02.023',
+                            '${widget.openDate}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,
@@ -246,7 +301,7 @@ class _ClientContainerState extends State<ClientContainer> {
                       // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
                     },
                     child: Container(
-                      width: 100,
+                      width: 120,
                       height: 46,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -266,11 +321,11 @@ class _ClientContainerState extends State<ClientContainer> {
                           )
                         ],
                       ),
-                      child: const Padding(
+                      child: Padding(
                         padding: EdgeInsets.only(left: 10.0, right: 10),
                         child: Center(
                           child: Text(
-                            '01.01.023',
+                            '${widget.closeDate}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,
@@ -282,11 +337,7 @@ class _ClientContainerState extends State<ClientContainer> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      if (widget.backgrondColor == greenColor)
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const AssignTask()));
-                    },
+                    onTap:  widget.assignTask,
                     child: Container(
                       width: 100,
                       height: 46,
@@ -314,7 +365,7 @@ class _ClientContainerState extends State<ClientContainer> {
                           child: Text(
                             widget.backgrondColor == greenColor
                                 ? "ASSIGN"
-                                : "urgent",
+                                : widget.priority,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,

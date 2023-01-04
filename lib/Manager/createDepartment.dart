@@ -29,16 +29,19 @@ List<String> operaortlist = [];
 
 class _CreateDeptState extends State<CreateDept> {
   PortalInfo portalInfo = PortalInfo.fromJson(_portaInfoMap);
-
+  bool loadingofsecond = false;
+  bool loadingofirst = false;
   @override
   void initState() {
     getDetp();
-    getOperator();
     super.initState();
   }
 
   //
-  Future<List<String>> getDetp() async {
+  getDetp() async {
+    setState(() {
+      loadingofirst = true; //make loading true to show progressindicator
+    });
     Session _session = Session();
     final response =
         await _session.get('http://164.92.83.169/manager/getDepartments');
@@ -53,16 +56,23 @@ class _CreateDeptState extends State<CreateDept> {
       }
     }
     // print(departlist.length);
-    // print(departlist);
-    return departlist;
+    loadingofirst = false;
+    setState(() {
+
+      if(operaortlist.length == 0) getOperator();
+    });
   }
 
   Future<List<String>> getOperator() async {
+    setState(() {
+      loadingofsecond = true; //make loading true to show progressindicator
+    });
     Session _session = Session();
     for (String i in departlistID) {
       print(i);
       final response =
           await _session.get('http://164.92.83.169/manager/getOperators/$i');
+      print("OperatorResponse $response");
       for (dynamic i in response['data']['operators']) {
         print('OK : ${i['name']}');
         if (!operaortlist.contains(i['name'])) {
@@ -70,11 +80,15 @@ class _CreateDeptState extends State<CreateDept> {
         }
       }
     }
+    loadingofsecond = false;
+    setState(() {});
     return operaortlist;
   }
 
   @override
   Widget build(BuildContext context) {
+    // getDetp();
+    // getOperator();
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -153,44 +167,53 @@ class _CreateDeptState extends State<CreateDept> {
                         const SizedBox(
                           height: 10,
                         ),
-                        // ListView.builder(
-                        //   physics: NeverScrollableScrollPhysics(),
-                        //   shrinkWrap: true,
-                        //   itemCount: departlist.length,
-                        //   itemBuilder: (context, index) {
-                        //     return Padding(
-                        //       padding: const EdgeInsets.all(8.0),
-                        //       child: Container(
-                        //         decoration: BoxDecoration(
-                        //           gradient: LinearGradient(
-                        //             colors: [
-                        //               yellowColor.withOpacity(0.9),
-                        //               yellowColor.withOpacity(0.9),
-                        //               // Colors.teal[200],
-                        //             ],
-                        //             begin: Alignment.topLeft,
-                        //             end: Alignment.bottomRight,
-                        //           ),
-                        //           borderRadius: BorderRadius.circular(20),
-                        //           boxShadow: const [
-                        //             BoxShadow(
-                        //               color: Colors.black12,
-                        //               offset: Offset(5, 5),
-                        //               blurRadius: 10,
-                        //             )
-                        //           ],
-                        //         ),
-                        //         padding: EdgeInsets.all(8.0),
-                        //         child: ListTile(
-                        //           title: Text(departlist[index]),
-                        //           leading: CircleAvatar(
-                        //             child: Text(''),
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     );
-                        //   },
-                        // ),
+                        loadingofirst
+                            ? Padding(
+                              padding: const EdgeInsets.only(top: 50.0),
+                              child: Center(
+                          child: CircularProgressIndicator(
+                              color: blackColor.withOpacity(1),
+                          ),
+                        ),
+                            )
+                       : ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: departlist.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      yellowColor.withOpacity(0.9),
+                                      yellowColor.withOpacity(0.9),
+                                      // Colors.teal[200],
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      offset: Offset(5, 5),
+                                      blurRadius: 10,
+                                    )
+                                  ],
+                                ),
+                                padding: EdgeInsets.all(8.0),
+                                child: ListTile(
+                                  title: Text(departlist[index]),
+                                  leading: CircleAvatar(
+                                    child: Text(''),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -201,87 +224,53 @@ class _CreateDeptState extends State<CreateDept> {
                         const SizedBox(
                           height: 10,
                         ),
-                        // TextFormField(
-                        //   style: const TextStyle(color: Colors.black),
-                        //   decoration: const InputDecoration(
-                        //     icon: Icon(
-                        //       Icons.search,
-                        //       color: Colors.black,
-                        //     ),
-                        //     hintText: 'App Developers',
-                        //     hintStyle: TextStyle(color: Colors.grey),
-                        //     labelText: 'Department',
-                        //     labelStyle: TextStyle(color: Colors.grey),
-                        //     border: OutlineInputBorder(
-                        //         borderSide: BorderSide(color: Colors.black)),
-                        //   ),
-                        //   validator: (value) {
-                        //     if (value != null && value.length < 1) {
-                        //       return 'This field cant be null';
-                        //     }
-                        //     return null;
-                        //   },
-                        // ),
-                        FutureBuilder(
-                            future: getDetp(),
-                            builder: (context, AsyncSnapshot snapshot) {
-                              // return Text('');
-                              if (!snapshot.hasData) {
-                                return Center(
-                                    child: CircularProgressIndicator());
-                              }
-                              else {
-                                Container(
-                                    child: ListView.builder(
-                                        itemCount: departlist.length,
-                                        scrollDirection: Axis.horizontal,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return Text(
-                                              '${departlist[index]}');
-                                        }));
-                              }
-                              return Text('rdfghbjn');
-                            })
-                        // ListView.builder(
-                        //     physics: NeverScrollableScrollPhysics(),
-                        //     shrinkWrap: true,
-                        //     itemCount: operaortlist.length,
-                        //     itemBuilder: (context, index) {
-                        //       return Padding(
-                        //         padding: const EdgeInsets.all(8.0),
-                        //         child: Container(
-                        //           decoration: BoxDecoration(
-                        //             gradient: LinearGradient(
-                        //               colors: [
-                        //                 yellowColor.withOpacity(0.9),
-                        //                 yellowColor.withOpacity(0.9),
-                        //                 // Colors.teal[200],
-                        //               ],
-                        //               begin: Alignment.topLeft,
-                        //               end: Alignment.bottomRight,
-                        //             ),
-                        //             borderRadius: BorderRadius.circular(20),
-                        //             boxShadow: const [
-                        //               BoxShadow(
-                        //                 color: Colors.black12,
-                        //                 offset: Offset(5, 5),
-                        //                 blurRadius: 10,
-                        //               )
-                        //             ],
-                        //           ),
-                        //           padding: EdgeInsets.all(8.0),
-                        //           child: ListTile(
-                        //             title: Text(
-                        //                 operaortlist[index]),
-                        //             // subtitle: Text(operaortlist[index]),
-                        //             leading: CircleAvatar(
-                        //               child: Text(''),
-                        //             ),
-                        //           ),
-                        //         ),
-                        //       );
-                        //     })
+                        loadingofsecond
+                            ? Padding(
+                          padding: const EdgeInsets.only(top: 50.0),
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: blackColor.withOpacity(1),
+                                  ),
+                                ),
+                            )
+                            : ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: operaortlist.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            yellowColor.withOpacity(0.9),
+                                            yellowColor.withOpacity(0.9),
+                                            // Colors.teal[200],
+                                          ],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        ),
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            color: Colors.black12,
+                                            offset: Offset(5, 5),
+                                            blurRadius: 10,
+                                          )
+                                        ],
+                                      ),
+                                      padding: EdgeInsets.all(8.0),
+                                      child: ListTile(
+                                        title: Text(operaortlist[index]),
+                                        // subtitle: Text(operaortlist[index]),
+                                        leading: CircleAvatar(
+                                          child: Text(''),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                })
                       ],
                     ),
                   )

@@ -1,27 +1,83 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:intership/Admin/model/session.dart';
+import 'package:intership/Manager/ApiCall/DepartmentANDOpratorData.dart';
+import 'package:intership/Manager/model/operatormodel.dart';
+import 'package:intership/constant/ApI.dart';
 import 'package:intership/constant/color.dart';
 
-
 class AssignTask extends StatefulWidget {
-  const AssignTask({Key? key}) : super(key: key);
-
+  final String taskId;
+  const AssignTask({Key? key, required this.taskId}) : super(key: key);
   @override
   _AssignTaskState createState() => _AssignTaskState();
 }
-enum Priority { high,medium, low }
+
+enum Priority { high, medium, low }
+
 class _AssignTaskState extends State<AssignTask> {
   Priority? _pri = Priority.medium;
+  bool loading = false;
+  Future<dynamic> assignTask(
+      String opId, String managerNote, String priorityAssigned) async {
+    try {
+      print(
+          "Operatorid ${opId} && managerNote ${managerNote} && priorityAssigned $priorityAssigned taskId ${widget.taskId}");
+      Session _session = Session();
+      final data = jsonEncode(
+        <String, String>{
+      "operatorId" : opId,
+      "managerNote" : managerNote,
+      "priority" : priorityAssigned,
+      "AssignationStatus" : "Assigned",
+      "taskStatus" : "Assigned"
+        },
+      );
+      final response = await _session.post(
+          '${managerAssigntask}${widget.taskId}', data);
+      print(response.toString());
+      print('Task Assigned successfully');
+      return response;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  List<OperatorData> operaortlist = [];
+  @override
+  void getDATA() async {
+    // TODO: implement initState
+    setState(() {
+      loading = true;
+    });
+    operaortlist = await getOperator();
+    setState(() {
+      loading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getDATA();
+    super.initState();
+  }
+
+  TextEditingController managerNOTE = TextEditingController();
+  int select = -1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:  Colors.grey[200],
+        backgroundColor: Colors.grey[200],
         shadowColor: Colors.white,
         title: const Center(
             child: Text(
-              "Assign Task",
-              style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold, color: Colors.black),
-            )),
+          "Assign Task",
+          style: TextStyle(
+              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+        )),
         elevation: 0.0,
         leading: Builder(builder: (BuildContext context) {
           return Padding(
@@ -43,7 +99,13 @@ class _AssignTaskState extends State<AssignTask> {
               child: Container(
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Text("Set Priority",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color:greyColor.withOpacity(0.9) ),),
+                  child: Text(
+                    "Set Priority",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: greyColor.withOpacity(0.9)),
+                  ),
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
@@ -87,13 +149,18 @@ class _AssignTaskState extends State<AssignTask> {
                 },
               ),
             ),
-
             Padding(
               padding: EdgeInsets.all(25),
               child: Container(
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Text("Note for Operator",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color:greyColor.withOpacity(0.9) ),),
+                  child: Text(
+                    "Note for Operator",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: greyColor.withOpacity(0.9)),
+                  ),
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
@@ -104,7 +171,7 @@ class _AssignTaskState extends State<AssignTask> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
-
+                controller: managerNOTE,
                 decoration: InputDecoration(
                   labelText: 'Note',
                   focusColor: whiteColor,
@@ -119,7 +186,13 @@ class _AssignTaskState extends State<AssignTask> {
               child: Container(
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Text("Assign Operator",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color:greyColor.withOpacity(0.9) ),),
+                  child: Text(
+                    "Assign Operator",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: greyColor.withOpacity(0.9)),
+                  ),
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
@@ -127,16 +200,63 @@ class _AssignTaskState extends State<AssignTask> {
                 ),
               ),
             ),
-            ListTile(
-              title: Text("Opearator 1"),
-              subtitle: Text("email"),
-              leading: CircleAvatar(
-                child: Text(''),
-              ),
-            ),
-
+            loading
+                ? CircularProgressIndicator()
+                : ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: operaortlist.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            select = index;
+                          });
+                        },
+                        child: Container(
+                          color: select == index
+                              ? greyColor.withOpacity(0.2)
+                              : whiteColor.withOpacity(1),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              child: ListTile(
+                                title: Text("${operaortlist[index].name}"),
+                                subtitle: Text("${operaortlist[index].email}"),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
             GestureDetector(
-              onTap: () {},
+              onTap: () async {
+                if (select != -1 && !managerNOTE.text.isEmpty) {
+                  print(_pri);
+                  var response = await assignTask(
+                    operaortlist[select].operatorId,
+                    managerNOTE.text.toString(),
+                    _pri.toString().substring(9),
+                  ).catchError((err) {});
+                  if (response == null) {
+                    return;
+                  } else {
+                    Navigator.of(context).pop();
+                  }
+                } else {
+                  final snackBar = SnackBar(
+                    content: Text("Try again"),
+                    backgroundColor: (Colors.black12),
+                    action: SnackBarAction(
+                      label: 'dismiss',
+                      onPressed: () {},
+                    ),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  return;
+                }
+              },
               child: Container(
                 // width: 150,
                 height: 50,
@@ -172,7 +292,9 @@ class _AssignTaskState extends State<AssignTask> {
                 ),
               ),
             ),
-            SizedBox(height: 25,)
+            SizedBox(
+              height: 25,
+            )
           ],
         ),
       ),

@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intership/Admin/addclient.dart';
-import 'package:intership/Manager/session.dart';
+import 'package:intership/Admin/model/session.dart';
+// import 'package:intership/Manager/session.dart';
 import 'package:intership/constant/ApI.dart';
 import 'package:intership/constant/color.dart';
 
@@ -14,8 +15,31 @@ class AddDepatmentOpearator extends StatefulWidget {
 }
 
 class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
-  Future<dynamic> addOperator(
-      String email, name, password, departmentid, mobile) async {
+
+
+  // Future<dynamic> addOperator(
+  //     String email, name, password, departmentid, mobile) async {
+  //   try {
+  //     Session _session = Session();
+  //     final data = jsonEncode(<String, String>{
+  //       'email': email,
+  //       'name': name,
+  //       'password': password,
+  //       'mobile': mobile,
+  //       'departmentId': departmentid
+  //     });
+  //     print(data);
+  //     final response =
+  //         await _session.post('http://$ip/manager/addOperator', data);
+  //     print(response.toString());
+  //     print('Operator Added successfully');
+  //     return response;
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  // }
+
+  Future<dynamic> addOperator(String email,String name,String password,String departmentid,String mobile) async {
     try {
       Session _session = Session();
       final data = jsonEncode(<String, String>{
@@ -25,9 +49,8 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
         'mobile': mobile,
         'departmentId': departmentid
       });
-      print(data);
-      final response =
-          await _session.post('http://$ip/manager/addOperator', data);
+      final response = await _session.post(
+          'http://164.92.83.169/manager/addOperator', data);
       print(response.toString());
       print('Operator Added successfully');
       return response;
@@ -35,7 +58,6 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
       print(e.toString());
     }
   }
-
   Future<dynamic> addDept(String dept) async {
     try {
       Session _session = Session();
@@ -43,7 +65,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
       final response = await _session.post(
           'http://164.92.83.169/manager/addDepartment', data);
       print(response.toString());
-      print('data Added successfully');
+      print('Department Added successfully');
       return response;
     } catch (e) {
       print(e.toString());
@@ -242,17 +264,17 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                 onTap: () async {
                   // final isValidForm = _formKey.currentState!.validate();
                   // if (isValidForm) {
-                    var response = await addOperator(
-                        opemail.text.toString(),
-                        opname.text.toString(),
-                        oppassword.text.toString(),
-                        'departmentcontroller.text.toString()',
-                        oppassword.text.toString()
-                    ).catchError((err) {});
-                    if (response == null) {
-                      return;
-                    }else {
-                      Navigator.of(context).pop();
+                  var response = await addOperator(
+                          opemail.text.toString(),
+                          opname.text.toString(),
+                          oppassword.text.toString(),
+                          'departmentcontroller.text.toString()',
+                          oppassword.text.toString())
+                      .catchError((err) {});
+                  if (response == null) {
+                    return;
+                  } else {
+                    Navigator.of(context).pop();
                     // }
                   }
                 },

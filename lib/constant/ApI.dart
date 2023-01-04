@@ -15,6 +15,7 @@ final adminlogin = 'http://$ip/admin/login';
 final managergetassignedtask = "http://$ip/manager/assignedTask";
 final manageraddOperator = 'http://$ip/manager/addOperator';
 final manageraddDepartment = 'http://$ip/manager/addDepartment';
+final managerAssigntask = 'http://$ip/manager/assignTask/';
 
 
 //ADMIN

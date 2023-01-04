@@ -1,13 +1,23 @@
-class DepartmentModel {
+
+class OperatorData {
+  final String operatorId;
   final String name;
+  final String email;
+  final String mobile;
+  final String password;
+  final String departmentId;
 
-  DepartmentModel(
-    this.name,
-  );
+  OperatorData(this.operatorId, this.name, this.email, this.mobile, this.password, this.departmentId,);
 
-  DepartmentModel.fromJson(Map<String, dynamic> data)
-      : name = data['name'] as String;
+  OperatorData.fromJson(Map<String, dynamic> data)
+      : operatorId = data['operatorId'] as String,
+        name = data['name'] as String,
+        email = data['email'] as String,
+        mobile = data['mobile'] as String,
+        password = data['password'] as String,
+        departmentId = data['departmentId'] as String;
 
   @override
-  String toString() => ' name=$name,';
+  String toString() =>
+      'Operator, operatorId=$operatorId, name=$name, email=$email, mobile=$mobile, password=$password, departmentId=$departmentId';
 }

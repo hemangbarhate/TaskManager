@@ -2,9 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:intership/Manager/ApiCall/clientData.dart';
 import 'package:intership/Manager/ConatainerHelper/ManagerContainer.dart';
+import 'package:intership/Manager/assignTask.dart';
 import 'package:intership/Manager/createTask.dart';
 import 'package:intership/Manager/managerProfile.dart';
+import 'package:intership/Manager/model/TASKMODEL.dart';
+import 'package:intership/Manager/model/clientmodel.dart';
 import 'package:intership/constant/color.dart';
 import 'package:intership/Manager/ConatainerHelper/ClientContainer.dart';
 import 'package:intership/Admin/model/session.dart';
@@ -17,28 +21,115 @@ class ViewTask extends StatefulWidget {
   @override
   _ViewTaskState createState() => _ViewTaskState();
 }
-// Future<dynamic> getData () async{
-//   Session _session = Session();
-//   final response = await _session.get(managergetassignedtask);
-//   print(response['data']);
-//
-//   // for(Map<String,dynamic> i in response['data']){
-//   //   managerlist.add(Managermodel.fromJson(i));
-//   //   setState(() {
-//   //     managerlist
-//   //   });
-//   // }
-//   return response;
-// }
-class _ViewTaskState extends State<ViewTask> {
 
+class _ViewTaskState extends State<ViewTask> {
+  bool loadingofirst = false;
+  bool loadingsecond = false;
+  bool loadingthird = false;
+  bool loadingfour = false;
   @override
   void initState() {
-    // getData();
+    getNOtAssignTask();
+    getAssignTask();
+    gerInProgressTask();
+    getCompleteTask();
+    getclient();
     super.initState();
   }
+
+  List<ClientModel> clientlist = [];
+  getclient() async {
+    ////>>>>>>>>>>>>>>>>>> client name  & id
+    clientlist = await getClientdata();
+  }
+
+  //??????????????????????????????? client id
+  List<TaskModel> noassignedtasklist = [];
+  Future<List<TaskModel>> getNOtAssignTask() async {
+    setState(() {
+      loadingofirst = true; //make loading true to show progressindicator
+    });
+    Session _session = Session();
+    final response =
+        await _session.get('http://164.92.83.169/manager/notassignedTask');
+    // print(response);
+
+    for (dynamic i in response['result']) {
+      // print(i);
+      noassignedtasklist.add(TaskModel.fromJson(i));
+    }
+    // print(noassignedtasklist[0]);
+    loadingofirst = false;
+    setState(() {});
+    return noassignedtasklist;
+  }
+
+  List<TaskModel> assignedtasklist = [];
+  Future<List<TaskModel>> getAssignTask() async {
+    // print("// Assigned Tasks");
+    setState(() {
+      loadingsecond = true; //make loading true to show progressindicator
+    });
+    Session _session = Session();
+    final response =
+        await _session.get('http://164.92.83.169/manager/assignedTask');
+    // print(response);
+
+    for (dynamic i in response['result']) {
+      // print(i);
+      assignedtasklist.add(TaskModel.fromJson(i));
+    }
+    // print(assignedtasklist[0]);
+    loadingsecond = false;
+    setState(() {});
+    return assignedtasklist;
+  }
+
+  List<TaskModel> inprogresstask = [];
+  Future<List<TaskModel>> gerInProgressTask() async {
+    // print("// InProgressAssigned Tasks");
+    setState(() {
+      loadingthird = true; //make loading true to show progressindicator
+    });
+    Session _session = Session();
+    final response =
+        await _session.get('http://164.92.83.169/manager/inProgressTask');
+    // print(response);
+
+    for (dynamic i in response['result']) {
+      // print(i);
+      inprogresstask.add(TaskModel.fromJson(i));
+    }
+    // print(inprogresstask[0]);
+    loadingthird = false;
+    setState(() {});
+    return inprogresstask;
+  }
+
+  List<TaskModel> completetask = [];
+  Future<List<TaskModel>> getCompleteTask() async {
+    // print("// Complete Tasks");
+    setState(() {
+      loadingfour = true; //make loading true to show progressindicator
+    });
+    Session _session = Session();
+    final response =
+        await _session.get('http://164.92.83.169/manager/completedTask');
+    // print("response $response");
+
+    for (dynamic i in response['result']) {
+      // print("i" + i);
+      completetask.add(TaskModel.fromJson(i));
+    }
+    // if(completetask.length >= 1) print(completetask[0]);
+    loadingfour = false;
+    setState(() {});
+    return completetask;
+  }
+
   @override
   Widget build(BuildContext context) {
+    // getNOtAssignTask();
     return DefaultTabController(
       length: 4,
       child: Scaffold(
@@ -57,28 +148,24 @@ class _ViewTaskState extends State<ViewTask> {
               return Padding(
                 padding: const EdgeInsets.only(left: 15.0),
                 child: IconButton(
-                    icon: Image.asset("assets/images/bigmouth_icon.png"),
-                    iconSize: 70,
-                    onPressed: () {
-                      Scaffold.of(context).openDrawer();
-                    },
+                  icon: Image.asset("assets/images/bigmouth_icon.png"),
+                  iconSize: 70,
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
                 ),
               );
             },
-              // assets/images/
+            // assets/images/
           ),
           actions: <Widget>[
             Padding(
-              padding:  EdgeInsets.only(right: 18.0),
-              child: Container(
-                height: 25,
+                padding: EdgeInsets.only(right: 18.0),
+                child: Container(
+                  height: 25,
                   child: CircleAvatar(
-
-                      child:
-                    Image.asset("assets/images/download.png")
-                    ),
-              )
-            )
+                      child: Image.asset("assets/images/download.png")),
+                ))
           ],
         ),
         body: Padding(
@@ -88,7 +175,7 @@ class _ViewTaskState extends State<ViewTask> {
             children: [
               Container(
                 height: 45,
-                width: MediaQuery.of(context).size.width-2,
+                width: MediaQuery.of(context).size.width - 2,
                 decoration: BoxDecoration(
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.circular(25.0)),
@@ -117,66 +204,323 @@ class _ViewTaskState extends State<ViewTask> {
               Expanded(
                   child: TabBarView(
                 children: [
-                  SingleChildScrollView(
-                    child: Column(
-                      children: const <Widget>[
-                        ClientContainer(
-                          fontColor: greyColor,
-                          backgrondColor: greenColor,
-                          first: yellowColor,
-                          second: blackColor,
-                          third: greenColor,
-                          forth: redColor,
-                          fifth: redColor,
-                          sixth: yellowColor,
+                  loadingofirst
+                      ? CircularProgressIndicator()
+                      : SingleChildScrollView(
+                          child: Column(
+                            children: <Widget>[
+                              ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: noassignedtasklist.length,
+                                itemBuilder: (context, index) {
+                                  return noassignedtasklist[index].priority ==
+                                          'null'
+                                      ? Container()
+                                      : Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Container(
+                                            child: ClientContainer(
+                                              fontColor: greyColor,
+                                              backgrondColor: greenColor,
+                                              first: yellowColor,
+                                              second: blackColor,
+                                              third: greenColor,
+                                              forth: redColor,
+                                              fifth: redColor,
+                                              sixth: yellowColor,
+                                              taskName:
+                                                  '${noassignedtasklist[index].taskName}',
+                                              ProjectName:
+                                                  '${noassignedtasklist[index].ProjectName}',
+                                              taskId:
+                                                  '${noassignedtasklist[index].taskID}',
+                                              clientId:
+                                                  '${noassignedtasklist[index].clientId}',
+                                              operatorId: '',
+                                              openDate:
+                                                  '${noassignedtasklist[index].openDate?.substring(0, 10)}',
+                                              taskDescription:
+                                                  '${noassignedtasklist[index].taskDescription}',
+                                              closeDate:
+                                                  '${noassignedtasklist[index].closeDate?.substring(0, 10)}',
+                                              clientNote:
+                                                  '${noassignedtasklist[index].clientNote}',
+                                              managerNote: '',
+                                              AssignationStatus: '',
+                                              priority: '',
+                                              clientApproval: '',
+                                              taskStatus:
+                                                  '${noassignedtasklist[index].taskStatus}',
+                                              managerApproval: '',
+                                              taskCategory: '',
+                                              managerId: '',
+                                              assignTask: () {
+                                                if (noassignedtasklist[index]
+                                                        .taskStatus ==
+                                                    'Pending') {
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          AssignTask(
+                                                        taskId:
+                                                            '${noassignedtasklist[index].taskID}',
+                                                      ),
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                        );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                  SingleChildScrollView(
-                    child: Column(
-                      children: const <Widget>[
-                        ClientContainer(
-                          fontColor: greyColor,
-                          backgrondColor: orangeColor, first: greyColor,
-                          second: greenColor,third: greenColor,
-                          forth: redColor,
-                          fifth: redColor,
-                          sixth: greyColor,
+                  loadingsecond
+                      ? CircularProgressIndicator()
+                      : SingleChildScrollView(
+                          child: Column(
+                            children: <Widget>[
+                              ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: assignedtasklist.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      child: ClientContainer(
+                                        fontColor: greyColor,
+                                        backgrondColor: orangeColor,
+                                        first: greyColor,
+                                        second: greenColor,
+                                        third: greenColor,
+                                        forth: redColor,
+                                        fifth: redColor,
+                                        sixth: greyColor,
+                                        taskName:
+                                            '${assignedtasklist[index].taskName}',
+                                        ProjectName:
+                                            '${assignedtasklist[index].ProjectName}',
+                                        taskId:
+                                            '${assignedtasklist[index].taskID}',
+                                        clientId:
+                                            '${assignedtasklist[index].clientId}',
+                                        operatorId:
+                                            '${assignedtasklist[index].operatorId}',
+                                        openDate:
+                                            '${assignedtasklist[index].openDate?.substring(0, 10)}',
+                                        taskDescription:
+                                            '${assignedtasklist[index].taskDescription}',
+                                        closeDate:
+                                            '${assignedtasklist[index].closeDate?.substring(0, 10)}',
+                                        clientNote:
+                                            '${assignedtasklist[index].clientNote}',
+                                        managerNote:
+                                            '${assignedtasklist[index].managerNote}',
+                                        AssignationStatus:
+                                            '${assignedtasklist[index].AssignationStatus}',
+                                        priority:
+                                            '${assignedtasklist[index].priority}',
+                                        clientApproval:
+                                            '${assignedtasklist[index].clientApproval}',
+                                        taskStatus:
+                                            '${assignedtasklist[index].taskStatus}',
+                                        managerApproval:
+                                            '${assignedtasklist[index].managerApproval}',
+                                        taskCategory:
+                                            '${assignedtasklist[index].taskCategory}',
+                                        managerId:
+                                            '${assignedtasklist[index].managerId}',
+                                        assignTask: () {
+                                          if (assignedtasklist[index]
+                                                  .taskStatus ==
+                                              'Pending') {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AssignTask(
+                                                  taskId:
+                                                      '${assignedtasklist[index].taskID}',
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                  SingleChildScrollView(
-                    child: Column(
-                      children: const <Widget>[
-                        ClientContainer(
-                          fontColor: yellowColor,
-                          backgrondColor: blueColor
-                          ,first: greyColor,
-                          second: greenColor,third: greenColor,
-                          forth: redColor,
-                          fifth: redColor,
-                          sixth: greyColor,
+                  loadingthird
+                      ? CircularProgressIndicator()
+                      : SingleChildScrollView(
+                          child: Column(
+                            children: <Widget>[
+                              ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: inprogresstask.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      child: ClientContainer(
+                                        fontColor: yellowColor,
+                                        backgrondColor: blueColor,
+                                        first: greyColor,
+                                        second: greenColor,
+                                        third: greenColor,
+                                        forth: redColor,
+                                        fifth: redColor,
+                                        sixth: greyColor,
+                                        taskName:
+                                            '${inprogresstask[index].taskName}',
+                                        ProjectName:
+                                            '${inprogresstask[index].ProjectName}',
+                                        taskId:
+                                            '${inprogresstask[index].taskID}',
+                                        clientId:
+                                            '${inprogresstask[index].clientId}',
+                                        operatorId:
+                                            '${inprogresstask[index].operatorId}',
+                                        openDate:
+                                            '${inprogresstask[index].openDate?.substring(0, 10)}',
+                                        taskDescription:
+                                            '${inprogresstask[index].taskDescription}',
+                                        closeDate:
+                                            '${inprogresstask[index].closeDate?.substring(0, 10)}',
+                                        clientNote:
+                                            '${inprogresstask[index].clientNote}',
+                                        managerNote:
+                                            '${inprogresstask[index].managerNote}',
+                                        AssignationStatus:
+                                            '${inprogresstask[index].AssignationStatus}',
+                                        priority:
+                                            '${inprogresstask[index].priority}',
+                                        clientApproval:
+                                            '${inprogresstask[index].clientApproval}',
+                                        taskStatus:
+                                            '${inprogresstask[index].taskStatus}',
+                                        managerApproval:
+                                            '${inprogresstask[index].managerApproval}',
+                                        taskCategory:
+                                            '${inprogresstask[index].taskCategory}',
+                                        managerId:
+                                            '${inprogresstask[index].managerId}',
+                                        assignTask: () {
+                                          if (inprogresstask[index]
+                                                  .taskStatus ==
+                                              'Pending') {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AssignTask(
+                                                  taskId:
+                                                      '${inprogresstask[index].taskID}',
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                  SingleChildScrollView(
-                    child: Column(
-                      children: const <Widget>[
-                        ClientContainer(
-                          fontColor: greyColor,
-                          backgrondColor: yellowColor
-                          ,first: greyColor,
-                          second: greenColor,third: greenColor,
-                          forth: redColor,
-                          fifth: redColor,
-                          sixth: greyColor,
-                        ),
-                      ],
-                    ),
-                  ),
+                  loadingfour
+                      ? CircularProgressIndicator()
+                      : completetask.length == 0
+                          ? Container(
+                              child: Center(
+                                child: Text("NO data"),
+                              ),
+                            )
+                          : SingleChildScrollView(
+                              child: Column(
+                                children: <Widget>[
+                                  ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: completetask.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          child: ClientContainer(
+                                            fontColor: yellowColor,
+                                            backgrondColor: blueColor,
+                                            first: greyColor,
+                                            second: greenColor,
+                                            third: greenColor,
+                                            forth: redColor,
+                                            fifth: redColor,
+                                            sixth: greyColor,
+                                            taskName:
+                                                '${completetask[index].taskName}',
+                                            ProjectName:
+                                                '${completetask[index].ProjectName}',
+                                            taskId:
+                                                '${completetask[index].taskID}',
+                                            clientId:
+                                                '${completetask[index].clientId}',
+                                            operatorId:
+                                                '${completetask[index].operatorId}',
+                                            openDate:
+                                                '${completetask[index].openDate?.substring(0, 10)}',
+                                            taskDescription:
+                                                '${completetask[index].taskDescription}',
+                                            closeDate:
+                                                '${completetask[index].closeDate?.substring(0, 10)}',
+                                            clientNote:
+                                                '${completetask[index].clientNote}',
+                                            managerNote:
+                                                '${completetask[index].managerNote}',
+                                            AssignationStatus:
+                                                '${completetask[index].AssignationStatus}',
+                                            priority:
+                                                '${completetask[index].priority}',
+                                            clientApproval:
+                                                '${completetask[index].clientApproval}',
+                                            taskStatus:
+                                                '${completetask[index].taskStatus}',
+                                            managerApproval:
+                                                '${completetask[index].managerApproval}',
+                                            taskCategory:
+                                                '${completetask[index].taskCategory}',
+                                            managerId:
+                                                '${completetask[index].managerId}',
+                                            assignTask: () {
+                                              if (completetask[index]
+                                                      .taskStatus ==
+                                                  'Pending') {
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        AssignTask(
+                                                      taskId:
+                                                          '${completetask[index].taskID}',
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
                 ],
               )),
             ],
@@ -197,10 +541,14 @@ class _ViewTaskState extends State<ViewTask> {
             //
             // });
 
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateTask()));
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => CreateTask()));
           },
-          child: Icon(Icons.add
-          ,color: greyColor,size: 30,),
+          child: Icon(
+            Icons.add,
+            color: greyColor,
+            size: 30,
+          ),
         ),
       ),
     );
