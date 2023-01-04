@@ -216,7 +216,7 @@ class _ClientContainerState extends State<ClientContainer> {
                         child: Center(
                           child: Text(
                             widget.who == 'operator'
-                                ? 'Status'
+                                ? 'Done'
                                 : '${widget.taskStatus}',
                             // widget.backgrondColor == greenColor
                             //     ? "Request"

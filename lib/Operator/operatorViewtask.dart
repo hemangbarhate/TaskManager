@@ -52,9 +52,10 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
     final response = await _session.get(operatortaskByOperatorId);
     // print(response);
     for (dynamic i in response['result']) {
-      // if (TaskModel.fromJson(i).taskStatus == 'inProgress')
+      if (TaskModel.fromJson(i).taskStatus == 'inProgress') {
         print(i);
         assignedtask.add(TaskModel.fromJson(i));
+      }
     }
     print(assignedtask.length);
     for (var i in assignedtask) {
@@ -67,16 +68,29 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
 
   Future<dynamic> UpdateStatus(String taskid) async {
     try {
+      setState(() {
+        loading = true; //make loading true to show progressindicator
+      });
+
       Session _session = Session();
       final data = jsonEncode(<String, String>{'name': taskid});
       final response = await _session.post(
           'http://$ip/operator/changeTaskStatus/${taskid}', data);
       print(response.toString());
       print('status updated successfully');
+      loading = false;
+      await gerInProgressTask();
+      setState(() {
+        //make loading true to show progressindicator
+      });
       return response;
     } catch (e) {
       print(e.toString());
     }
+    loading = false;
+    setState(() {
+      //make loading true to show progressindicator
+    });
   }
 
   // http://164.92.83.169/operator/getTimeline/1a19cd55-bc76-420f-b506-d078c248bd79
@@ -152,7 +166,7 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Container(
                                             child: ClientContainer(
-                                              Approve: () {  }, Reject: () {  },
+                                              Approve: () {}, Reject: () {},
                                               TimeLineDoc: () {
                                                 Navigator.of(context).push(
                                                   MaterialPageRoute(
@@ -181,9 +195,7 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                   '${assignedtask[index].taskID}',
                                                 );
                                                 // home_operator
-                                               setState(() {
-
-                                               });
+                                                // setState(() {});
                                               },
                                               who: 'operator',
                                               fontColor: greyColor,
