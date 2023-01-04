@@ -29,35 +29,44 @@ class ClientContainer extends StatefulWidget {
   final String managerApproval;
   final String taskCategory;
   final VoidCallback assignTask;
+  final VoidCallback TimeLineDoc;
+  final VoidCallback AttachDoc;
+  final VoidCallback ChangeStatus;
+  final String who;
 
-  const ClientContainer(
-      {Key? key,
-      required this.fontColor,
-      required this.backgrondColor,
-      required this.first,
-      required this.second,
-      required this.third,
-      required this.forth,
-      required this.fifth,
-      required this.sixth,
-      required this.taskId,
-      required this.clientId,
-      required this.operatorId,
-      required this.managerId,
-      required this.taskName,
-      required this.taskDescription,
-      required this.openDate,
-      required this.closeDate,
-      required this.clientNote,
-      required this.managerNote,
-      required this.priority,
-      required this.AssignationStatus,
-      required this.taskStatus,
-      required this.clientApproval,
-      required this.managerApproval,
-      required this.taskCategory, required this.assignTask, required this.ProjectName
-      })
-      : super(key: key);
+  const ClientContainer({
+    Key? key,
+    required this.fontColor,
+    required this.backgrondColor,
+    required this.first,
+    required this.second,
+    required this.third,
+    required this.forth,
+    required this.fifth,
+    required this.sixth,
+    required this.taskId,
+    required this.clientId,
+    required this.operatorId,
+    required this.managerId,
+    required this.taskName,
+    required this.taskDescription,
+    required this.openDate,
+    required this.closeDate,
+    required this.clientNote,
+    required this.managerNote,
+    required this.priority,
+    required this.AssignationStatus,
+    required this.taskStatus,
+    required this.clientApproval,
+    required this.managerApproval,
+    required this.taskCategory,
+    required this.assignTask,
+    required this.ProjectName,
+    required this.who,
+    required this.TimeLineDoc,
+    required this.AttachDoc,
+    required this.ChangeStatus,
+  }) : super(key: key);
 
   @override
   _ClientContainerState createState() => _ClientContainerState();
@@ -89,24 +98,29 @@ class _ClientContainerState extends State<ClientContainer> {
               Padding(
                 padding: const EdgeInsets.all(6.0),
                 child: Stack(children: [
-                  Row(
-                    children: <Widget>[
-                      CircleAvatar(
-                          radius: 20,
-                          backgroundColor: widget.fontColor.withOpacity(01)),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      Text(
-                        "${widget.clientId}",
-                        style: TextStyle(
-                            // #FED457
-                            fontWeight: FontWeight.w600,
-                            color: widget.fontColor.withOpacity(0.9),
-                            fontSize: 20),
-                      ),
-                    ],
-                  ),
+                  widget.who == 'operator'
+                      ? Container()
+                      : Row(
+                          children: <Widget>[
+                            CircleAvatar(
+                                radius: 20,
+                                backgroundColor:
+                                    widget.fontColor.withOpacity(01)),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            Text(
+                              widget.who == 'operator'
+                                  ? "Operator"
+                                  : "${widget.clientId}",
+                              style: TextStyle(
+                                  // #FED457
+                                  fontWeight: FontWeight.w600,
+                                  color: widget.fontColor.withOpacity(0.9),
+                                  fontSize: 20),
+                            ),
+                          ],
+                        ),
                 ]),
               ),
               Padding(
@@ -126,7 +140,7 @@ class _ClientContainerState extends State<ClientContainer> {
                 child: Text(
                   "Project Name : ${widget.ProjectName} ",
                   style: TextStyle(
-                    // #FED457
+                      // #FED457
                       fontWeight: FontWeight.w600,
                       // color: Color(0xFED457),
                       color: widget.fontColor.withOpacity(1),
@@ -151,15 +165,18 @@ class _ClientContainerState extends State<ClientContainer> {
                   ),
                 ),
               ),
-            widget.backgrondColor != greenColor ? Padding(
-                padding: const EdgeInsets.all(10),
-                child: Container(
-                  child: Text(
-                    "Manager note:   ${widget.managerNote}",
-                    style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
-                  ),
-                ),
-              ) : Container(),
+              widget.backgrondColor != greenColor
+                  ? Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Container(
+                        child: Text(
+                          "Manager note:   ${widget.managerNote}",
+                          style: TextStyle(
+                              color: widget.fontColor.withOpacity(0.8)),
+                        ),
+                      ),
+                    )
+                  : Container(),
               const SizedBox(
                 height: 10,
               ),
@@ -168,9 +185,7 @@ class _ClientContainerState extends State<ClientContainer> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () {
-                      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
-                    },
+                    onTap: widget.ChangeStatus,
                     child: Container(
                       width: 100,
                       height: 46,
@@ -196,7 +211,9 @@ class _ClientContainerState extends State<ClientContainer> {
                         padding: const EdgeInsets.only(left: 10.0, right: 10),
                         child: Center(
                           child: Text(
-                            '${widget.taskStatus}',
+                            widget.who == 'operator'
+                                ? 'Status'
+                                : '${widget.taskStatus}',
                             // widget.backgrondColor == greenColor
                             //     ? "Request"
                             //     : (widget.backgrondColor == orangeColor
@@ -217,9 +234,7 @@ class _ClientContainerState extends State<ClientContainer> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
-                    },
+                    onTap: widget.TimeLineDoc,
                     child: Container(
                       width: 100,
                       height: 46,
@@ -241,11 +256,11 @@ class _ClientContainerState extends State<ClientContainer> {
                           )
                         ],
                       ),
-                      child: const Padding(
+                      child: Padding(
                         padding: EdgeInsets.only(left: 10.0, right: 10),
                         child: Center(
                           child: Text(
-                            'Open',
+                            widget.who == 'manager' ? 'Open' : 'TimeLine',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 15,
@@ -281,7 +296,7 @@ class _ClientContainerState extends State<ClientContainer> {
                           )
                         ],
                       ),
-                      child:  Padding(
+                      child: Padding(
                         padding: EdgeInsets.only(left: 10.0, right: 10),
                         child: Center(
                           child: Text(
@@ -346,7 +361,7 @@ class _ClientContainerState extends State<ClientContainer> {
                     ),
                   ),
                   GestureDetector(
-                    onTap:  widget.assignTask,
+                    onTap: widget.assignTask,
                     child: Container(
                       width: 100,
                       height: 46,
@@ -386,9 +401,7 @@ class _ClientContainerState extends State<ClientContainer> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
-                    },
+                    onTap: widget.AttachDoc,
                     child: Container(
                       width: 100,
                       height: 46,
@@ -414,7 +427,7 @@ class _ClientContainerState extends State<ClientContainer> {
                         padding: const EdgeInsets.only(left: 10.0, right: 10),
                         child: Center(
                           child: Text(
-                            'Add Link',
+                            widget.who == 'manager' ? 'Add Link' : 'AttachDoc',
                             style: TextStyle(
                               color: widget.sixth == greyColor
                                   ? yellowColor.withOpacity(0.9)

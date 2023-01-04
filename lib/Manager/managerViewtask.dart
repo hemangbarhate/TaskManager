@@ -44,7 +44,7 @@ class _ViewTaskState extends State<ViewTask> {
     clientlist = await getClientdata();
     for (ClientModel i in clientlist) {
       mapClientIdName['${i.clientId}'] = '${i.name}';
-      // print('${i.clientId} == ${i.name}');
+      print('${i.clientId} == ${i.name}');
     }
   }
 
@@ -215,7 +215,7 @@ class _ViewTaskState extends State<ViewTask> {
                   child: TabBarView(
                 children: [
                   loadingofirst
-                      ? CircularProgressIndicator()
+                      ? Center(child: CircularProgressIndicator())
                       : noassignedtasklist.length == 0
                           ? Container(
                               child: Center(
@@ -239,6 +239,7 @@ class _ViewTaskState extends State<ViewTask> {
                                                   const EdgeInsets.all(8.0),
                                               child: Container(
                                                 child: ClientContainer(
+                                                  who: 'manager',
                                                   fontColor: greyColor,
                                                   backgrondColor: greenColor,
                                                   first: yellowColor,
@@ -290,7 +291,7 @@ class _ViewTaskState extends State<ViewTask> {
                                                         ),
                                                       );
                                                     }
-                                                  },
+                                                  }, TimeLineDoc: () {  }, AttachDoc: () {  },ChangeStatus: () {  },
                                                 ),
                                               ),
                                             );
@@ -300,7 +301,7 @@ class _ViewTaskState extends State<ViewTask> {
                               ),
                             ),
                   loadingsecond
-                      ? CircularProgressIndicator()
+                      ? Center(child: CircularProgressIndicator())
                       : assignedtasklist.length == 0
                           ? Container(
                               child: Center(
@@ -376,7 +377,7 @@ class _ViewTaskState extends State<ViewTask> {
                                                   ),
                                                 );
                                               }
-                                            },
+                                            }, who: 'manager', TimeLineDoc: () {  }, AttachDoc: () {  },ChangeStatus: () {  },
                                           ),
                                         ),
                                       );
@@ -386,7 +387,7 @@ class _ViewTaskState extends State<ViewTask> {
                               ),
                             ),
                   loadingthird
-                      ? CircularProgressIndicator()
+                      ? Center(child: CircularProgressIndicator())
                       : inprogresstask.length == 0
                           ? Container(
                               child: Center(
@@ -405,6 +406,7 @@ class _ViewTaskState extends State<ViewTask> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
                                           child: ClientContainer(
+                                            who: 'manager',
                                             fontColor: yellowColor,
                                             backgrondColor: blueColor,
                                             first: greyColor,
@@ -448,6 +450,7 @@ class _ViewTaskState extends State<ViewTask> {
                                                 '${inprogresstask[index].taskCategory}',
                                             managerId:
                                                 '${inprogresstask[index].managerId}',
+                                            TimeLineDoc: () {  }, AttachDoc: () {  },ChangeStatus: () {  },
                                             assignTask: () {
                                               if (inprogresstask[index]
                                                       .taskStatus ==
@@ -472,7 +475,7 @@ class _ViewTaskState extends State<ViewTask> {
                               ),
                             ),
                   loadingfour
-                      ? CircularProgressIndicator()
+                      ? Center(child: CircularProgressIndicator())
                       : completetask.length == 0
                           ? Container(
                               child: Center(
@@ -491,6 +494,8 @@ class _ViewTaskState extends State<ViewTask> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
                                           child: ClientContainer(
+                                            TimeLineDoc: () {  }, AttachDoc: () {  },ChangeStatus: () {  },
+                                            who: 'manager',
                                             fontColor: yellowColor,
                                             backgrondColor: blueColor,
                                             first: greyColor,

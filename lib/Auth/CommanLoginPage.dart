@@ -48,7 +48,6 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
   // String _selectedGender = genderMap.keys.first;
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -189,7 +188,7 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                               }
                               else {
                                 final snackBar = SnackBar(
-                                  content: Text(response['data']),
+                                  content: Text("response['data']"),
                                   backgroundColor: (Colors.black12),
                                   action: SnackBarAction(
                                     label: 'dismiss',

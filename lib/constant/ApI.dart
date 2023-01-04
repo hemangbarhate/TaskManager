@@ -17,6 +17,7 @@ final manageraddOperator = 'http://$ip/manager/addOperator';
 final manageraddDepartment = 'http://$ip/manager/addDepartment';
 final managerAssigntask = 'http://$ip/manager/assignTask/';
 final managerProfile = 'http://$ip/manager/profile';
+final managerLogout = 'http://$ip/manager/logout';
 
 //ADMIN
 final getmanagerlist = "http://$ip/admin/getManagers";
@@ -32,3 +33,7 @@ final approvetask= 'http://$ip/client/';
 final rejecttask = 'http://$ip/client/';
 final addlinks= 'http://$ip/client/';
 final getlinks = 'http://$ip/client/';
+
+//Operator
+final operatortaskByOperatorId = 'http://$ip/operator/taskByOperatorId';
+final operatortasktimelinebyTaskId = "http://$ip/operator/getTimeline/";

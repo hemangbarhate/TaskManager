@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intership/Admin/model/session.dart';
 import 'package:intership/Manager/ApiCall/DepartmentANDOpratorData.dart';
+import 'package:intership/Manager/managerViewtask.dart';
 import 'package:intership/Manager/model/operatormodel.dart';
 import 'package:intership/constant/ApI.dart';
 import 'package:intership/constant/color.dart';
@@ -22,18 +23,18 @@ class _AssignTaskState extends State<AssignTask> {
   Future<dynamic> assignTask(
       String opId, String managerNote, String priorityAssigned) async {
     try {
-
       Session _session = Session();
       final data = jsonEncode(
         <String, String>{
-      "operatorId" : opId,
-      "managerNote" : managerNote,
-      "priority" : priorityAssigned,
-      "AssignationStatus" : "Assigned",
-      "taskStatus" : "inProgress"
+          "operatorId": opId,
+          "managerNote": managerNote,
+          "priority": priorityAssigned,
+          "AssignationStatus": "Assigned",
+          "taskStatus": "inProgress"
         },
       );
-      print("Operatorid ${opId} && managerNote ${managerNote} && priorityAssigned $priorityAssigned taskId ${widget.taskId}");
+      print(
+          "Operatorid ${opId} && managerNote ${managerNote} && priorityAssigned $priorityAssigned taskId ${widget.taskId}");
       final response = await _session.post(
           'http://164.92.83.169/manager/assignTask/${widget.taskId}', data);
       print(response.toString());
@@ -202,34 +203,47 @@ class _AssignTaskState extends State<AssignTask> {
             ),
             loading
                 ? CircularProgressIndicator()
-                : ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: operaortlist.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            select = index;
-                          });
-                        },
-                        child: Container(
-                          color: select == index
-                              ? greyColor.withOpacity(0.2)
-                              : whiteColor.withOpacity(1),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              child: ListTile(
-                                title: Text("${operaortlist[index].name}"),
-                                subtitle: Text("${operaortlist[index].email}"),
+                : Container(
+                    height: 350,
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10),
+                        child: ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: operaortlist.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  select = index;
+                                  print("${operaortlist[index].operatorId} = ${operaortlist[index].email}");
+                                });
+                              },
+                              child: Container(
+                                color: select == index
+                                    ? greyColor.withOpacity(0.2)
+                                    : whiteColor.withOpacity(1),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    child: ListTile(
+                                      title: Text("${operaortlist[index].name}"),
+                                      subtitle:
+                                          Text("${operaortlist[index].email}"),
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
+                            );
+                          },
                         ),
-                      );
-                    },
+                      ),
+                    ),
                   ),
+            SizedBox(
+              height: 25,
+            ),
             GestureDetector(
               onTap: () async {
                 if (select != -1 && !managerNOTE.text.isEmpty) {
@@ -242,7 +256,12 @@ class _AssignTaskState extends State<AssignTask> {
                   if (response == null) {
                     return;
                   } else {
-                    Navigator.of(context).pop();
+                    managerNOTE.clear();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ViewTask(),
+                      ),
+                    );
                   }
                 } else {
                   final snackBar = SnackBar(
@@ -293,7 +312,7 @@ class _AssignTaskState extends State<AssignTask> {
               ),
             ),
             SizedBox(
-              height: 25,
+              height: 50,
             )
           ],
         ),

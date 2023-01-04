@@ -73,6 +73,30 @@ class _ManagerProfileState extends State<ManagerProfile> {
         children: <Widget>[
           Center(
             child: Container(
+              height: MediaQuery.of(context).size.height / 1.4,
+              width: MediaQuery.of(context).size.width / 1.09,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    whiteColor.withOpacity(0.9),
+                    whiteColor.withOpacity(0.9)
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    offset: Offset(8, 8),
+                    blurRadius: 10,
+                  )
+                ],
+              ),
               child: Column(
                 children: <Widget>[
                   Padding(
@@ -90,7 +114,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                              load ? "name" :  "$name",
+                                load ? "name" : "$name",
                                 style: TextStyle(
                                     color: blackColor.withOpacity(1),
                                     fontSize: 22),
@@ -111,7 +135,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                     height: 1.2,
                     color: Colors.black,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 25,
                   ),
                   Padding(
@@ -147,7 +171,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                             Container(
                                 // height: 40,
                                 // width: 22,
-                                child: Icon(
+                                child: const Icon(
                               Icons.email,
                               size: 35,
                             )),
@@ -158,7 +182,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                 load ? "email":   "$email",
+                                    load ? "email" : "$email",
                                     style: TextStyle(
                                         color: blackColor.withOpacity(1),
                                         fontSize: 18),
@@ -171,7 +195,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Padding(
@@ -207,7 +231,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                             Container(
                                 // height: 40,
                                 // width: 22,
-                                child: Icon(
+                                child: const Icon(
                               Icons.mobile_screen_share,
                               size: 35,
                             )),
@@ -218,7 +242,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                  load ? "mobile" :  "$mobile",
+                                    load ? "mobile" : "$mobile",
                                     style: TextStyle(
                                         color: blackColor.withOpacity(1),
                                         fontSize: 18),
@@ -236,8 +260,8 @@ class _ManagerProfileState extends State<ManagerProfile> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      Response response = await http.get(
-                          Uri.parse('http://164.92.83.169/manager/logout'));
+                      Response response =
+                          await http.get(Uri.parse(managerLogout));
                       if (response.statusCode == 200) {
                         print('LogOut successfully');
                         Navigator.pop(context);
@@ -266,7 +290,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                         ),
                         child: Center(
                           child: Container(
-                            child: Text(
+                            child: const Text(
                               'LogOut',
                               textAlign: TextAlign.left,
                               style: TextStyle(
@@ -283,31 +307,6 @@ class _ManagerProfileState extends State<ManagerProfile> {
                     ),
                   ),
                   // ),
-                ],
-              ),
-              // color: Colors.white,
-              height: MediaQuery.of(context).size.height / 1.4,
-              width: MediaQuery.of(context).size.width / 1.09,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    whiteColor.withOpacity(0.9),
-                    whiteColor.withOpacity(0.9)
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: Colors.black,
-                  width: 1,
-                ),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black12,
-                    offset: Offset(8, 8),
-                    blurRadius: 10,
-                  )
                 ],
               ),
             ),

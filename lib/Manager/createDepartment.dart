@@ -94,7 +94,7 @@ class _CreateDeptState extends State<CreateDept> {
       child: Scaffold(
         backgroundColor: greyColor.withOpacity(0.1),
         appBar: AppBar(
-          backgroundColor: Colors.grey[200],
+          backgroundColor: Colors.white,
           shadowColor: Colors.white,
           title: const Center(
               child: Text(
@@ -116,18 +116,12 @@ class _CreateDeptState extends State<CreateDept> {
           }),
           actions: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(right: 18.0),
-              child: IconButton(
-                  icon: Icon(
-                    Icons.circle_sharp,
-                    size: 40,
-                    color: greyColor.withOpacity(0.9),
-                  ),
-                  onPressed: () => {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const ManagerProfile()))
-                      }),
-            )
+                padding: EdgeInsets.only(right: 18.0),
+                child: Container(
+                  height: 25,
+                  child: CircleAvatar(
+                      child: Image.asset("assets/images/download.png")),
+                ))
           ],
         ),
         body: Padding(
