@@ -14,6 +14,8 @@ import 'package:intership/constant/color.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Client/home_client.dart';
+
 class CommanLoginPage extends StatefulWidget {
   @override
   State<CommanLoginPage> createState() => _CommanLoginPageState();
@@ -182,7 +184,7 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => home_operator()));
+                                          builder: (context) => home_client()));
                                 }
                               }
                               else {

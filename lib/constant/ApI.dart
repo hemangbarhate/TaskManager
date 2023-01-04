@@ -22,3 +22,13 @@ final managerAssigntask = 'http://$ip/manager/assignTask/';
 final getmanagerlist = "http://$ip/admin/getManagers";
 final getoperatorlist = "http://$ip/admin/getOperators";
 final getclientlist = "http://$ip/admin/getClients";
+
+//Client
+final clientprofile = 'http://$ip/client/profile';
+final getcreatedtask = 'http://$ip/client/trackYourTask';
+final createtask = 'http://$ip/client/createTask';
+final gettasktimeline = 'http://$ip/client/';
+final approvetask= 'http://$ip/client/';
+final rejecttask = 'http://$ip/client/';
+final addlinks= 'http://$ip/client/';
+final getlinks = 'http://$ip/client/';
