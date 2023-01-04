@@ -22,8 +22,7 @@ class _AssignTaskState extends State<AssignTask> {
   Future<dynamic> assignTask(
       String opId, String managerNote, String priorityAssigned) async {
     try {
-      print(
-          "Operatorid ${opId} && managerNote ${managerNote} && priorityAssigned $priorityAssigned taskId ${widget.taskId}");
+
       Session _session = Session();
       final data = jsonEncode(
         <String, String>{
@@ -31,11 +30,12 @@ class _AssignTaskState extends State<AssignTask> {
       "managerNote" : managerNote,
       "priority" : priorityAssigned,
       "AssignationStatus" : "Assigned",
-      "taskStatus" : "Assigned"
+      "taskStatus" : "inProgress"
         },
       );
+      print("Operatorid ${opId} && managerNote ${managerNote} && priorityAssigned $priorityAssigned taskId ${widget.taskId}");
       final response = await _session.post(
-          '${managerAssigntask}${widget.taskId}', data);
+          'http://164.92.83.169/manager/assignTask/${widget.taskId}', data);
       print(response.toString());
       print('Task Assigned successfully');
       return response;

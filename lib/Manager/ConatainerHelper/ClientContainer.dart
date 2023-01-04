@@ -98,7 +98,7 @@ class _ClientContainerState extends State<ClientContainer> {
                         width: 15,
                       ),
                       Text(
-                        "${widget.clientId.length}",
+                        "${widget.clientId}",
                         style: TextStyle(
                             // #FED457
                             fontWeight: FontWeight.w600,
@@ -146,11 +146,20 @@ class _ClientContainerState extends State<ClientContainer> {
                 padding: const EdgeInsets.all(10),
                 child: Container(
                   child: Text(
-                    "Client Not :   ${widget.clientNote}",
+                    "Client note :   ${widget.clientNote}",
                     style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
                   ),
                 ),
               ),
+            widget.backgrondColor != greenColor ? Padding(
+                padding: const EdgeInsets.all(10),
+                child: Container(
+                  child: Text(
+                    "Manager note:   ${widget.managerNote}",
+                    style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
+                  ),
+                ),
+              ) : Container(),
               const SizedBox(
                 height: 10,
               ),

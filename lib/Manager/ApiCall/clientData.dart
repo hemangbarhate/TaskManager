@@ -4,6 +4,7 @@
 import 'package:intership/Manager/model/clientmodel.dart';
 
 List <ClientModel> clientlist = [];
+
  Future<List <ClientModel> >  getClientdata() async {
   print("// client data");
   Session _session = Session();
@@ -15,6 +16,7 @@ List <ClientModel> clientlist = [];
       print("i");
       clientlist.add(ClientModel.fromJson(i));
     }
+
   if(clientlist.length >= 1) print(clientlist[0]);
   return clientlist;
 }
