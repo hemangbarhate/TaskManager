@@ -21,7 +21,7 @@ class ClientContainer extends StatefulWidget {
         required this.third,
         required this.forth,
         required this.fifth,
-        required this.sixth})
+        required this.sixth, required String taskName})
       : super(key: key);
 
   @override

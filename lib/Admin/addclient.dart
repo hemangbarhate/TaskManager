@@ -22,10 +22,17 @@ class AddClient extends StatefulWidget {
 class _AddClientState extends State<AddClient> {
   final _formKey = GlobalKey<FormState>();
 
-  Future<dynamic> addClient(String email,name,password,organization,mobile) async {
+  Future<dynamic> addClient(
+      String email, name, password, organization, mobile) async {
     try {
       Session _session = Session();
-      final data = jsonEncode(<String, String>{'email': email,'name': name ,'password': password,'organization': organization,'mobile': mobile});
+      final data = jsonEncode(<String, String>{
+        'email': email,
+        'name': name,
+        'password': password,
+        'organization': organization,
+        'mobile': mobile
+      });
       final response = await _session.post('http://$ip/admin/addClient', data);
       print(response.toString());
       print('Client Added successfully');
@@ -54,6 +61,7 @@ class _AddClientState extends State<AddClient> {
       print(e.toString());
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,16 +70,19 @@ class _AddClientState extends State<AddClient> {
         shadowColor: Colors.white,
         title: Container(
             child: const Text(
-              "Add Client",
-              style: TextStyle(
-                  fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
-            )),
+          "Add Client",
+          style: TextStyle(
+              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+        )),
         elevation: 0.0,
         leading: Builder(builder: (BuildContext context) {
           return Padding(
             padding: const EdgeInsets.only(left: 15.0),
             child: IconButton(
-                icon: Icon(Icons.arrow_back,color: Colors.black,),
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 }),
@@ -92,19 +103,21 @@ class _AddClientState extends State<AddClient> {
                 style: TextStyle(color: Colors.black),
                 controller: emailcontroller,
                 decoration: const InputDecoration(
-                  icon: Icon(Icons.email_outlined,color: Colors.black,),
+                  icon: Icon(
+                    Icons.email_outlined,
+                    color: Colors.black,
+                  ),
                   hintText: 'Enter Client Email',
                   hintStyle: TextStyle(color: Colors.black),
                   labelText: 'Email',
                   labelStyle: TextStyle(color: Colors.black),
                   border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black)
-                  ),
+                      borderSide: BorderSide(color: Colors.black)),
                 ),
                 validator: (email) =>
-                email != null && !EmailValidator.validate(email)
-                    ? 'Enter a valid email'
-                    : null,
+                    email != null && !EmailValidator.validate(email)
+                        ? 'Enter a valid email'
+                        : null,
               ),
               const SizedBox(
                 height: 10,
@@ -113,14 +126,16 @@ class _AddClientState extends State<AddClient> {
                 style: TextStyle(color: Colors.black),
                 controller: namecontroller,
                 decoration: const InputDecoration(
-                  icon: Icon(Icons.person,color: Colors.black,),
+                  icon: Icon(
+                    Icons.person,
+                    color: Colors.black,
+                  ),
                   hintText: 'Enter Client name',
                   hintStyle: TextStyle(color: Colors.black),
                   labelText: 'Client Name',
                   labelStyle: TextStyle(color: Colors.black),
                   border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black)
-                  ),
+                      borderSide: BorderSide(color: Colors.black)),
                 ),
                 validator: (value) {
                   if (value != null && value.length < 4) {
@@ -136,14 +151,16 @@ class _AddClientState extends State<AddClient> {
                 style: TextStyle(color: Colors.black),
                 controller: passwordcontroller,
                 decoration: const InputDecoration(
-                  icon: Icon(Icons.password,color: Colors.black,),
+                  icon: Icon(
+                    Icons.password,
+                    color: Colors.black,
+                  ),
                   hintText: 'Enter Password',
                   hintStyle: TextStyle(color: Colors.black),
                   labelText: 'Password',
                   labelStyle: TextStyle(color: Colors.black),
                   border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black)
-                  ),
+                      borderSide: BorderSide(color: Colors.black)),
                 ),
                 validator: (value) {
                   if (value != null && value.length < 6) {
@@ -159,14 +176,16 @@ class _AddClientState extends State<AddClient> {
                 style: TextStyle(color: Colors.black),
                 controller: organizationcontroller,
                 decoration: const InputDecoration(
-                  icon: Icon(Icons.password,color: Colors.black,),
+                  icon: Icon(
+                    Icons.password,
+                    color: Colors.black,
+                  ),
                   hintText: 'Enter Organization Name',
                   hintStyle: TextStyle(color: Colors.black),
                   labelText: 'Organization',
                   labelStyle: TextStyle(color: Colors.black),
                   border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black)
-                  ),
+                      borderSide: BorderSide(color: Colors.black)),
                 ),
                 validator: (value) {
                   if (value != null && value.length < 4) {
@@ -182,14 +201,16 @@ class _AddClientState extends State<AddClient> {
                 style: TextStyle(color: Colors.black),
                 controller: mobilecontroller,
                 decoration: const InputDecoration(
-                  icon: Icon(Icons.phone,color: Colors.black,),
+                  icon: Icon(
+                    Icons.phone,
+                    color: Colors.black,
+                  ),
                   hintText: 'Enter a phone number',
                   hintStyle: TextStyle(color: Colors.black),
                   labelText: 'Phone',
                   labelStyle: TextStyle(color: Colors.black),
                   border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black)
-                  ),
+                      borderSide: BorderSide(color: Colors.black)),
                 ),
                 keyboardType: TextInputType.phone,
                 validator: (value) {
@@ -199,7 +220,9 @@ class _AddClientState extends State<AddClient> {
                   return null;
                 },
               ),
-              SizedBox(height: 12,),
+              SizedBox(
+                height: 12,
+              ),
               SizedBox(
                   height: 50,
                   child: ElevatedButton(
@@ -207,19 +230,20 @@ class _AddClientState extends State<AddClient> {
                         final isValidForm = _formKey.currentState!.validate();
                         if (isValidForm) {
                           var response = await addClient(
-                              emailcontroller.text.toString(),
-                              namecontroller.text.toString(),
-                              passwordcontroller.text.toString(),
-                              organizationcontroller.text.toString(),
-                              mobilecontroller.text.toString()
-                          ).catchError((err) {});
+                                  emailcontroller.text.toString(),
+                                  namecontroller.text.toString(),
+                                  passwordcontroller.text.toString(),
+                                  organizationcontroller.text.toString(),
+                                  mobilecontroller.text.toString())
+                              .catchError((err) {});
                           if (response == null) {
                             return;
-                          }else {
+                          } else {
                             Navigator.of(context).pop();
                           }
                         }
-                      }, child: Text('Add Client'))),
+                      },
+                      child: Text('Add Client'))),
             ],
           ),
         ),
