@@ -1,6 +1,6 @@
 
 class TaskModel {
-  final String? taskID;
+  final String taskID;
   final String? clientId;
   final String? operatorId;
   final String? managerId;
@@ -27,7 +27,7 @@ class TaskModel {
       );
 
   TaskModel.fromJson(Map<String, dynamic> data)
-      : taskID = data['taskID'] as String?,
+      : taskID = data['taskID'] as String,
         clientId = data['clientId'] as String?,
         operatorId = data['operatorId'] as String?,
         managerId = data['managerId'] as String?,
