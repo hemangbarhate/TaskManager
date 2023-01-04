@@ -32,6 +32,8 @@ class ClientContainer extends StatefulWidget {
   final VoidCallback TimeLineDoc;
   final VoidCallback AttachDoc;
   final VoidCallback ChangeStatus;
+  final VoidCallback Approve;
+  final VoidCallback Reject;
   final String who;
 
   const ClientContainer({
@@ -66,6 +68,8 @@ class ClientContainer extends StatefulWidget {
     required this.TimeLineDoc,
     required this.AttachDoc,
     required this.ChangeStatus,
+    required this.Approve,
+    required this.Reject,
   }) : super(key: key);
 
   @override
@@ -450,7 +454,7 @@ class _ClientContainerState extends State<ClientContainer> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     GestureDetector(
-                      onTap: () {},
+                      onTap: widget.Approve,
                       child: Container(
                         width: 130,
                         height: 60,
@@ -488,7 +492,7 @@ class _ClientContainerState extends State<ClientContainer> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: widget.Reject,
                       child: Container(
                         width: 130,
                         height: 60,
@@ -527,15 +531,6 @@ class _ClientContainerState extends State<ClientContainer> {
                     ),
                   ],
                 )
-              // color: const Color(0xffc3f7ab),
-              // splashColor: Colors.lightBlueAccent,
-              // elevation: 10.0,
-              // shape: const StadiumBorder(),
-              // child: const Padding(
-              //     padding: EdgeInsets.symmetric(
-              //         horizontal: 10, vertical: 10),
-              //     child: Text('Accept')
-              // ),
             ],
           ),
         ),

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intership/Admin/model/session.dart';
@@ -9,6 +10,7 @@ import 'package:intership/Manager/model/clientmodel.dart';
 import 'package:intership/Operator/ContainerHelper/AssignedContainer.dart';
 import 'package:intership/Operator/ContainerHelper/ReassignedContainer.dart';
 import 'package:intership/Operator/attachdata.dart';
+import 'package:intership/Operator/operatorHome.dart';
 import 'package:intership/Operator/operatorProfile.dart';
 import 'package:intership/Operator/timedata.dart';
 import 'package:intership/constant/ApI.dart';
@@ -50,11 +52,29 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
     final response = await _session.get(operatortaskByOperatorId);
     // print(response);
     for (dynamic i in response['result']) {
-      assignedtask.add(TaskModel.fromJson(i));
+      if (TaskModel.fromJson(i).taskStatus == 'inProgress')
+        assignedtask.add(TaskModel.fromJson(i));
+    }
+    for (var i in assignedtask) {
+      print("${i.taskDescription} == ${i.taskStatus}");
     }
     loading = false;
     setState(() {});
     return assignedtask;
+  }
+
+  Future<dynamic> UpdateStatus(String taskid) async {
+    try {
+      Session _session = Session();
+      final data = jsonEncode(<String, String>{'name': taskid});
+      final response = await _session.post(
+          'http://$ip/operator/changeTaskStatus/${taskid}', data);
+      print(response.toString());
+      print('status updated successfully');
+      return response;
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   // http://164.92.83.169/operator/getTimeline/1a19cd55-bc76-420f-b506-d078c248bd79
@@ -130,6 +150,7 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Container(
                                             child: ClientContainer(
+                                              Approve: () {  }, Reject: () {  },
                                               TimeLineDoc: () {
                                                 Navigator.of(context).push(
                                                   MaterialPageRoute(
@@ -153,7 +174,17 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                 );
                                               },
                                               ChangeStatus: () {
-
+                                                // print('object');
+                                                UpdateStatus(
+                                                  '${assignedtask[index].taskID}',
+                                                );
+                                                // home_operator
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        home_operator(),
+                                                  ),
+                                                );
                                               },
                                               who: 'operator',
                                               fontColor: greyColor,
@@ -194,17 +225,7 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                               assignTask: () {
                                                 if (assignedtask[index]
                                                         .taskStatus ==
-                                                    'Pending') {
-                                                  // Navigator.of(context).push(
-                                                  //   MaterialPageRoute(
-                                                  //     builder: (context) =>
-                                                  //         AssignTask(
-                                                  //       taskId:
-                                                  //           '${assignedtask[index].taskID}',
-                                                  //     ),
-                                                  //   ),
-                                                  // );
-                                                }
+                                                    'Pending') {}
                                               },
                                             ),
                                           ),
@@ -220,80 +241,6 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
             ],
           ),
         ),
-        // Container(
-        //   height: 45,
-        //   width: 390,
-        //   decoration: BoxDecoration(
-        //       color: Colors.grey[300],
-        //       borderRadius: BorderRadius.circular(25.0)),
-        //   child: TabBar(
-        //     indicator: BoxDecoration(
-        //         color: Colors.grey[500],
-        //         borderRadius: BorderRadius.circular(25.0)),
-        //     labelColor: Colors.white,
-        //     unselectedLabelColor: Colors.black,
-        //     tabs: const [
-        //       Tab(
-        //         text: 'Assigned Tasks',
-        //       ),
-        //       Tab(
-        //         text: 'ReAssigned Tasks',
-        //       )
-        //     ],
-        //   ),
-        // ),
-        // Expanded(
-        //     child: TabBarView(
-        //   children: [
-        //     SingleChildScrollView(
-        //       child: Column(
-        //         children: const <Widget>[
-        //           AssignedContainer(
-        //             fontColor: greyColor,
-        //             backgrondColor: greenColor,
-        //           ),
-        //           AssignedContainer(
-        //             fontColor: greyColor,
-        //             backgrondColor: blueColor,
-        //           ),
-        //           AssignedContainer(
-        //             fontColor: greyColor,
-        //             backgrondColor: greenColor,
-        //           ),
-        //           AssignedContainer(
-        //             fontColor: greyColor,
-        //             backgrondColor: blueColor,
-        //           )
-        //         ],
-        //       ),
-        //     ),
-        //     SingleChildScrollView(
-        //       child: Column(
-        //         children: const <Widget>[
-        //           ReassignedContainer(
-        //             fontColor: greyColor,
-        //             backgrondColor: redColor,
-        //           ),
-        //           ReassignedContainer(
-        //             fontColor: greyColor,
-        //             backgrondColor: blueColor,
-        //           ),
-        //           ReassignedContainer(
-        //             fontColor: greyColor,
-        //             backgrondColor: redColor,
-        //           ),
-        //           ReassignedContainer(
-        //             fontColor: greyColor,
-        //             backgrondColor: redColor,
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //   ],
-        // ))
-        // ],
-        // ),
-        // )
       ),
     );
   }

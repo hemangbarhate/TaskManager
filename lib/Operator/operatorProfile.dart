@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:intership/Admin/model/session.dart';
+import 'package:intership/constant/ApI.dart';
 
 import '../constant/color.dart';
+
+var name, email, mobile, organization;
 
 class OperatorProfile extends StatefulWidget {
   const OperatorProfile({Key? key}) : super(key: key);
@@ -12,6 +16,31 @@ class OperatorProfile extends StatefulWidget {
 }
 
 class _OperatorProfileState extends State<OperatorProfile> {
+  bool load = false;
+  @override
+  void initState() {
+    getProfile();
+    super.initState();
+  }
+
+  void getProfile() async {
+    setState(() {
+      load = true;
+    });
+    Session _session = Session();
+    final response = await _session.get('http://$ip/operator/profile');
+    print(response);
+    setState(() {
+      name = response['data']['operator']['name'];
+      email = response['data']['operator']['email'];
+      mobile = response['data']['operator']['mobile'];
+      organization = response['data']['operator']['departmentName'];
+    });
+    setState(() {
+      load = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,10 +50,10 @@ class _OperatorProfileState extends State<OperatorProfile> {
         shadowColor: Colors.white,
         title: Container(
             child: const Text(
-          "Operator Profile",
-          style: TextStyle(
-              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
-        )),
+              "Manager Profile",
+              style: TextStyle(
+                  fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+            )),
         elevation: 0.0,
         leading: Builder(builder: (BuildContext context) {
           return Padding(
@@ -37,7 +66,6 @@ class _OperatorProfileState extends State<OperatorProfile> {
                 }),
           );
         }),
-
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -86,13 +114,13 @@ class _OperatorProfileState extends State<OperatorProfile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                "Dhiraj Darakhe",
+                                load ? "name" : "$name",
                                 style: TextStyle(
                                     color: blackColor.withOpacity(1),
                                     fontSize: 22),
                               ),
                               Text(
-                                "App Developer",
+                                "Manager",
                                 style: TextStyle(
                                     color: blackColor.withOpacity(0.6),
                                     fontSize: 18),
@@ -107,7 +135,7 @@ class _OperatorProfileState extends State<OperatorProfile> {
                     height: 1.2,
                     color: Colors.black,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 25,
                   ),
                   Padding(
@@ -141,12 +169,12 @@ class _OperatorProfileState extends State<OperatorProfile> {
                         child: Row(
                           children: <Widget>[
                             Container(
-                                // height: 40,
-                                // width: 22,
-                                child: Icon(
-                              Icons.email,
-                              size: 35,
-                            )),
+                              // height: 40,
+                              // width: 22,
+                                child: const Icon(
+                                  Icons.email,
+                                  size: 35,
+                                )),
                             Padding(
                               padding: const EdgeInsets.all(18.0),
                               child: Column(
@@ -154,7 +182,7 @@ class _OperatorProfileState extends State<OperatorProfile> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    "dhiraj@gmail.com",
+                                    load ? "email" : "$email",
                                     style: TextStyle(
                                         color: blackColor.withOpacity(1),
                                         fontSize: 18),
@@ -167,7 +195,7 @@ class _OperatorProfileState extends State<OperatorProfile> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Padding(
@@ -201,12 +229,12 @@ class _OperatorProfileState extends State<OperatorProfile> {
                         child: Row(
                           children: <Widget>[
                             Container(
-                                // height: 40,
-                                // width: 22,
-                                child: Icon(
-                              Icons.mobile_screen_share,
-                              size: 35,
-                            )),
+                              // height: 40,
+                              // width: 22,
+                                child: const Icon(
+                                  Icons.mobile_screen_share,
+                                  size: 35,
+                                )),
                             Padding(
                               padding: const EdgeInsets.all(18.0),
                               child: Column(
@@ -214,7 +242,7 @@ class _OperatorProfileState extends State<OperatorProfile> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    "7218724337",
+                                    load ? "mobile" : "$mobile",
                                     style: TextStyle(
                                         color: blackColor.withOpacity(1),
                                         fontSize: 18),
@@ -227,13 +255,14 @@ class _OperatorProfileState extends State<OperatorProfile> {
                       ),
                     ),
                   ),
+
                   SizedBox(
                     height: MediaQuery.of(context).size.height / 5.8,
                   ),
                   GestureDetector(
                     onTap: () async {
-                      Response response = await http.get(
-                          Uri.parse('http://164.92.83.169/manager/logout'));
+                      Response response =
+                      await http.get(Uri.parse(managerLogout));
                       if (response.statusCode == 200) {
                         print('LogOut successfully');
                         Navigator.pop(context);
@@ -262,7 +291,7 @@ class _OperatorProfileState extends State<OperatorProfile> {
                         ),
                         child: Center(
                           child: Container(
-                            child: Text(
+                            child: const Text(
                               'LogOut',
                               textAlign: TextAlign.left,
                               style: TextStyle(
@@ -460,174 +489,3 @@ class _OperatorProfileState extends State<OperatorProfile> {
 //           ),
 //         ),
 //       )
-
-// import 'package:flutter/material.dart';
-//
-// import '../constant/color.dart';
-//
-// class OperatorProfile extends StatefulWidget {
-//   const OperatorProfile({Key? key}) : super(key: key);
-//
-//   @override
-//   _OperatorProfileState createState() => _OperatorProfileState();
-// }
-//
-// class _OperatorProfileState extends State<OperatorProfile> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: greyColor.withOpacity(0.1),
-//       appBar: AppBar(
-//         backgroundColor: Colors.grey[200],
-//         shadowColor: Colors.white,
-//         title: Container(
-//             child: const Text(
-//               "Operator Profile",
-//               style: TextStyle(
-//                   fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
-//             )),
-//         elevation: 0.0,
-//         leading: Builder(builder: (BuildContext context) {
-//           return Padding(
-//             padding: const EdgeInsets.only(left: 15.0),
-//             child: IconButton(
-//                 icon: Image.asset("assets/images/bigmouth_icon.png"),
-//                 iconSize: 70,
-//                 onPressed: () {
-//                   Scaffold.of(context).openDrawer();
-//                 }),
-//           );
-//         }),
-//       ),
-//       body: Container(
-//         width: MediaQuery.of(context).size.width,
-//         child: SingleChildScrollView(
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             // crossAxisAlignment: CrossAxisAlignment.center,
-//             children: <Widget>[
-//               SizedBox(
-//                 height: 50,
-//               ),
-//               CircleAvatar(
-//                 backgroundColor: greyColor.withOpacity(0.9),
-//                 radius: 50,
-//               ),
-//               Padding(
-//                 padding: const EdgeInsets.all(8.0),
-//                 child: Container(
-//                   // decoration: BoxDecoration(
-//                   //   color: Colors.grey[200],
-//                   //   borderRadius: BorderRadius.circular(10),
-//                   // ),
-//                   height: 45,
-//                   width: 250,
-//                   child: Center(
-//                     child: Text(
-//                       "Dhiraj Darakhe ",
-//                       style: TextStyle(fontSize: 18),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               Padding(
-//                 padding: const EdgeInsets.all(8.0),
-//                 child: Container(
-//                   decoration: BoxDecoration(
-//                     color: Colors.grey[200],
-//                     borderRadius: BorderRadius.circular(10),
-//                   ),
-//                   height: 45,
-//                   width: 350,
-//                   child: Padding(
-//                     padding: const EdgeInsets.all(8.0),
-//                     child: Text(
-//                       "🙂 :  Operator ",
-//                       style: TextStyle(fontSize: 17),
-//                     ),
-//                   ),
-//                 ),
-//               ),  Padding(
-//                 padding: const EdgeInsets.only(top: 20.0, right: 6, left: 5),
-//                 child: Container(
-//                   decoration: BoxDecoration(
-//                     color: Colors.grey[200],
-//                     borderRadius: BorderRadius.circular(10),
-//                   ),
-//                   height: 45,
-//                   width: 350,
-//                   child: Padding(
-//                     padding: const EdgeInsets.all(8.0),
-//                     child: Text(
-//                       "📱 :    7218724337 ",
-//                       style: TextStyle(fontSize: 17),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               Padding(
-//                 padding: const EdgeInsets.only(top: 20.0, right: 6, left: 5),
-//                 child: Container(
-//                   decoration: BoxDecoration(
-//                     color: Colors.grey[200],
-//                     borderRadius: BorderRadius.circular(10),
-//                   ),
-//                   height: 45,
-//                   width: 350,
-//                   child: Center(
-//                     child: Text(
-//                       "📧 : dhirajdarakhe03@gmail.com ",
-//                       style: TextStyle(fontSize: 17),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               Padding(
-//                 padding: const EdgeInsets.all(38.0),
-//                 child: GestureDetector(
-//                   onTap: () {},
-//                   child: Container(
-//                     width: 150,
-//                     height: 50,
-//                     decoration: BoxDecoration(
-//                       gradient: LinearGradient(
-//                         colors: [
-//                           greyColor.withOpacity(0.7),
-//                           greyColor.withOpacity(0.7)
-//                           // Colors.teal[200],
-//                         ],
-//                         begin: Alignment.topLeft,
-//                         end: Alignment.bottomRight,
-//                       ),
-//                       borderRadius: BorderRadius.circular(20),
-//                       boxShadow: [
-//                         BoxShadow(
-//                           color: Colors.black12,
-//                           offset: Offset(5, 5),
-//                           blurRadius: 10,
-//                         )
-//                       ],
-//                     ),
-//                     child: Padding(
-//                       padding: const EdgeInsets.all(15.0),
-//                       child: Center(
-//                         child: Text(
-//                           'LogOut',
-//                           style: TextStyle(
-//                             color: Colors.white,
-//                             fontSize: 13,
-//                             fontWeight: FontWeight.w400,
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

@@ -16,31 +16,31 @@ class AddDepatmentOpearator extends StatefulWidget {
 
 class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
 
-
-  // Future<dynamic> addOperator(
-  //     String email, name, password, departmentid, mobile) async {
-  //   try {
-  //     Session _session = Session();
-  //     final data = jsonEncode(<String, String>{
-  //       'email': email,
-  //       'name': name,
-  //       'password': password,
-  //       'mobile': mobile,
-  //       'departmentId': departmentid
-  //     });
-  //     print(data);
-  //     final response =
-  //         await _session.post('http://$ip/manager/addOperator', data);
-  //     print(response.toString());
-  //     print('Operator Added successfully');
-  //     return response;
-  //   } catch (e) {
-  //     print(e.toString());
-  //   }
-  // }
+  bool loading = false;
+  List<String> departlist = [];
+  List<String> departlistID = [];
+  int select = -1;
+  getDetp() async {
+    setState(() {
+      loading = true;
+    });
+    Session _session = Session();
+    final response =
+    await _session.get('http://164.92.83.169/manager/getDepartments');
+    for (dynamic i in response['data']['departments']) {
+      if (!departlist.contains(i['departmentName'])) {
+        departlist.add(i['departmentName']);
+        departlistID.add(i['departmentId']);
+      }
+    }
+    setState(() {
+      loading = false;
+    });
+  }
 
   Future<dynamic> addOperator(String email,String name,String password,String departmentid,String mobile) async {
     try {
+      print("departmentid $departmentid");
       Session _session = Session();
       final data = jsonEncode(<String, String>{
         'email': email,
@@ -50,7 +50,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
         'departmentId': departmentid
       });
       final response = await _session.post(
-          'http://164.92.83.169/manager/addOperator', data);
+          'http://$ip/manager/addOperator', data);
       print(response.toString());
       print('Operator Added successfully');
       return response;
@@ -71,7 +71,12 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
       print(e.toString());
     }
   }
-
+ @override
+  void initState() {
+    // TODO: implement initState
+   getDetp();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     TextEditingController opname = TextEditingController();
@@ -205,9 +210,60 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                 ),
               ),
             ),
+            Container(
+              child: Text(""
+                  "Select Department"),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            loading
+                ? Center(child: CircularProgressIndicator())
+                : Container(
+              height: 250,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: blueColor.withOpacity(0.6),
+                ),
+                borderRadius: BorderRadius.circular(1),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: SingleChildScrollView(
+                  child: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: departlist.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            select = index;
+                          });
+                        },
+                        child: Container(
+                          color: select == index
+                              ? greyColor.withOpacity(0.2)
+                              : whiteColor.withOpacity(1),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              child: ListTile(
+                                title:
+                                Text("${departlist[index]}"),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: TextField(
+              child: TextFormField(
                 controller: opname,
                 decoration: const InputDecoration(
                   labelText: 'Name ',
@@ -220,7 +276,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: TextField(
+              child: TextFormField(
                 controller: opemail,
                 decoration: const InputDecoration(
                   labelText: 'Email ',
@@ -233,7 +289,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: TextField(
+              child: TextFormField(
                 controller: opmobile,
                 decoration: const InputDecoration(
                   labelText: 'Mobile ',
@@ -246,9 +302,8 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: TextField(
+              child: TextFormField(
                 controller: oppassword,
-
                 decoration: const InputDecoration(
                   labelText: 'password ',
                   focusColor: whiteColor,
@@ -258,25 +313,46 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                 minLines: 1, // <-- SEE HERE
               ),
             ),
+
+
+            SizedBox(
+              height: 25,
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                 onTap: () async {
                   // final isValidForm = _formKey.currentState!.validate();
                   // if (isValidForm) {
-                  var response = await addOperator(
-                          opemail.text.toString(),
-                          opname.text.toString(),
-                          oppassword.text.toString(),
-                          'departmentcontroller.text.toString()',
-                          oppassword.text.toString())
-                      .catchError((err) {});
-                  if (response == null) {
-                    return;
-                  } else {
-                    Navigator.of(context).pop();
-                    // }
+                if(select != -1)
+                  {
+                    var response = await addOperator(
+                        opemail.text.toString(),
+                        opname.text.toString(),
+                        oppassword.text.toString(),
+                        departlistID[select],
+                        oppassword.text.toString())
+                        .catchError((err) {});
+                    if (response == null) {
+                      return;
+                    } else {
+                      Navigator.of(context).pop();
+                      // }
+                    }
                   }
+                else{
+                  final snackBar = SnackBar(
+                    content: const Text('Please Enter Data'),
+                    backgroundColor: (Colors.black12),
+                    action: SnackBarAction(
+                      label: 'dismiss',
+                      onPressed: () {
+                      },
+                    ),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                }
                 },
                 child: Container(
                   // width: 150,

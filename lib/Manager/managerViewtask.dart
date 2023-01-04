@@ -44,7 +44,7 @@ class _ViewTaskState extends State<ViewTask> {
     clientlist = await getClientdata();
     for (ClientModel i in clientlist) {
       mapClientIdName['${i.clientId}'] = '${i.name}';
-      print('${i.clientId} == ${i.name}');
+      // print('${i.clientId} == ${i.name}');
     }
   }
 
@@ -133,6 +133,54 @@ class _ViewTaskState extends State<ViewTask> {
     setState(() {});
     return completetask;
   }
+
+  Future<dynamic> RejectRequest(String taskid) async {
+    try {
+      setState(() {
+        loadingfour = true; //make loading true to show progressindicator
+      });
+      Session _session = Session();
+      final data = jsonEncode(<String, String>{"Note" : "Task Rejected by manager"});
+      final response = await _session.post(
+          'http://$ip/manager/rejectTask/${taskid}', data);
+      print(response.toString());
+      print('Rejected');
+      setState(() {
+        loadingfour = false; //make loading true to show progressindicator
+      });
+      return response;
+    } catch (e) {
+      setState(() {
+        loadingfour = false; //make loading true to show progressindicator
+      });
+      print(e.toString());
+    }
+  }
+
+  Future<dynamic> ApproveRequest(String taskid) async {
+    try {
+      setState(() {
+        loadingfour = true; //make loading true to show progressindicator
+      });
+      Session _session = Session();
+      final data = jsonEncode(<String, String>{"Note" : "Task Completed." });
+      final response = await _session.post(
+          'http://$ip/manager/approveTask/${taskid}', data);
+      print(response.toString());
+      print('Accepted ${taskid}');
+      setState(() {
+        loadingfour = false; //make loading true to show progressindicator
+      });
+      return response;
+    } catch (e) {
+      setState(() {
+        loadingfour = false; //make loading true to show progressindicator
+      });
+      print(e.toString());
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -239,6 +287,8 @@ class _ViewTaskState extends State<ViewTask> {
                                                   const EdgeInsets.all(8.0),
                                               child: Container(
                                                 child: ClientContainer(
+                                                  Approve: () {},
+                                                  Reject: () {},
                                                   who: 'manager',
                                                   fontColor: greyColor,
                                                   backgrondColor: greenColor,
@@ -291,7 +341,10 @@ class _ViewTaskState extends State<ViewTask> {
                                                         ),
                                                       );
                                                     }
-                                                  }, TimeLineDoc: () {  }, AttachDoc: () {  },ChangeStatus: () {  },
+                                                  },
+                                                  TimeLineDoc: () {},
+                                                  AttachDoc: () {},
+                                                  ChangeStatus: () {},
                                                 ),
                                               ),
                                             );
@@ -320,6 +373,7 @@ class _ViewTaskState extends State<ViewTask> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
                                           child: ClientContainer(
+
                                             fontColor: greyColor,
                                             backgrondColor: orangeColor,
                                             first: greyColor,
@@ -377,7 +431,11 @@ class _ViewTaskState extends State<ViewTask> {
                                                   ),
                                                 );
                                               }
-                                            }, who: 'manager', TimeLineDoc: () {  }, AttachDoc: () {  },ChangeStatus: () {  },
+                                            },
+                                            who: 'manager',
+                                            TimeLineDoc: () {},
+                                            AttachDoc: () {},
+                                            ChangeStatus: () {}, Approve: () {  }, Reject: () {  },
                                           ),
                                         ),
                                       );
@@ -450,7 +508,9 @@ class _ViewTaskState extends State<ViewTask> {
                                                 '${inprogresstask[index].taskCategory}',
                                             managerId:
                                                 '${inprogresstask[index].managerId}',
-                                            TimeLineDoc: () {  }, AttachDoc: () {  },ChangeStatus: () {  },
+                                            TimeLineDoc: () {},
+                                            AttachDoc: () {},
+                                            ChangeStatus: () {},
                                             assignTask: () {
                                               if (inprogresstask[index]
                                                       .taskStatus ==
@@ -466,6 +526,8 @@ class _ViewTaskState extends State<ViewTask> {
                                                 );
                                               }
                                             },
+                                            Approve: () {},
+                                            Reject: () {},
                                           ),
                                         ),
                                       );
@@ -477,11 +539,9 @@ class _ViewTaskState extends State<ViewTask> {
                   loadingfour
                       ? Center(child: CircularProgressIndicator())
                       : completetask.length == 0
-                          ? Container(
-                              child: Center(
-                                child: Text("No data"),
-                              ),
-                            )
+                          ? Center(
+                            child: Text("No data"),
+                          )
                           : SingleChildScrollView(
                               child: Column(
                                 children: <Widget>[
@@ -494,10 +554,20 @@ class _ViewTaskState extends State<ViewTask> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
                                           child: ClientContainer(
-                                            TimeLineDoc: () {  }, AttachDoc: () {  },ChangeStatus: () {  },
+                                            TimeLineDoc: () {},
+                                            AttachDoc: () {},
+                                            ChangeStatus: () {},
+                                            Approve: () async {
+                                              print("Aprrove");
+                                              await  ApproveRequest( '${completetask[index].taskID}');
+                                            },
+                                            Reject: () async {
+                                              print("Reject");
+                                            await  RejectRequest( '${completetask[index].taskID}');
+                                            },
                                             who: 'manager',
-                                            fontColor: yellowColor,
-                                            backgrondColor: blueColor,
+                                            fontColor: greyColor,
+                                            backgrondColor: yellowColor,
                                             first: greyColor,
                                             second: greenColor,
                                             third: greenColor,
@@ -512,7 +582,6 @@ class _ViewTaskState extends State<ViewTask> {
                                                 '${completetask[index].taskID}',
                                             clientId:
                                                 '${mapClientIdName[completetask[index].clientId]}',
-                                            // '${completetask[index].clientId}',
                                             operatorId:
                                                 '${completetask[index].operatorId}',
                                             openDate:

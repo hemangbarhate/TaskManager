@@ -14,9 +14,9 @@ class home_operator extends StatefulWidget {
 }
 
 class _home_operatorState extends State<home_operator> {
-  int _ixd  = 0;
+  int _ixd = 0;
 
-  final tabs= [
+  final tabs = [
     OperatorVIewTasks(),
     OperatorProfile(),
   ];
@@ -37,12 +37,11 @@ class _home_operatorState extends State<home_operator> {
           ),
           BottomNavigationBarItem(
             label: "Profile",
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.account_circle),
             backgroundColor: blueColor,
           ),
         ],
-        onTap: (indx)
-        {
+        onTap: (indx) {
           setState(() {
             _ixd = indx;
           });
