@@ -27,15 +27,16 @@ class _AttachDataState extends State<AttachData> {
         .get('http://$ip/operator/getAttachments/${widget.Taskid}');
     print("response $response");
     print("response ${response['success'] }");
-    if (response['success'] == 'false') {
-      loadingfour = false;
-      setState(() {});
-      return completetask;
+    if(response['success'] == false)
+      {
+        loadingfour = false;
+        setState(() {});
+        return completetask;
+      };
+    for (dynamic i in response['data']) {
+      // print(i);
+      completetask.add(AttachModel.fromJson(i));
     }
-    // for (dynamic i in response['data']) {
-    //   print(i);
-    //   completetask.add(AttachModel.fromJson(response['data']));
-    // }
     if (completetask.length >= 1) print(completetask[0]);
     loadingfour = false;
     setState(() {});
@@ -57,7 +58,7 @@ class _AttachDataState extends State<AttachData> {
         shadowColor: Colors.white,
         title: const Center(
             child: Text(
-          "TimeLine",
+          "AttachedDoc",
           style: TextStyle(
               fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
         )),

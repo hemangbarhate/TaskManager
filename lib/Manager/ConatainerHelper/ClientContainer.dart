@@ -431,7 +431,7 @@ class _ClientContainerState extends State<ClientContainer> {
                         padding: const EdgeInsets.only(left: 10.0, right: 10),
                         child: Center(
                           child: Text(
-                            widget.who == 'manager' ? 'Add Link' : 'AttachDoc',
+                            widget.who == 'manager' ? 'Add Link' : 'ViewDoc',
                             style: TextStyle(
                               color: widget.sixth == greyColor
                                   ? yellowColor.withOpacity(0.9)

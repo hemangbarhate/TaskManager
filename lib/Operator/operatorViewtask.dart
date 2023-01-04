@@ -52,9 +52,11 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
     final response = await _session.get(operatortaskByOperatorId);
     // print(response);
     for (dynamic i in response['result']) {
-      if (TaskModel.fromJson(i).taskStatus == 'inProgress')
+      // if (TaskModel.fromJson(i).taskStatus == 'inProgress')
+        print(i);
         assignedtask.add(TaskModel.fromJson(i));
     }
+    print(assignedtask.length);
     for (var i in assignedtask) {
       print("${i.taskDescription} == ${i.taskStatus}");
     }
@@ -179,12 +181,9 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                   '${assignedtask[index].taskID}',
                                                 );
                                                 // home_operator
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        home_operator(),
-                                                  ),
-                                                );
+                                               setState(() {
+
+                                               });
                                               },
                                               who: 'operator',
                                               fontColor: greyColor,
