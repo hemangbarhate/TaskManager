@@ -1,10 +1,19 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:intership/Admin/model/session.dart';
+import 'package:intership/Manager/ApiCall/clientData.dart';
+import 'package:intership/Manager/managerViewtask.dart';
+import 'package:intership/Manager/model/clientmodel.dart';
+import 'package:intl/intl.dart';
 import '../constant/color.dart';
 
 TextEditingController TaskName = TextEditingController();
 TextEditingController ProjectName = TextEditingController();
 TextEditingController Description = TextEditingController();
+TextEditingController ClientNote = TextEditingController();
+TextEditingController opendate = TextEditingController();
+TextEditingController closedate = TextEditingController();
 
 class CreateTask extends StatefulWidget {
   const CreateTask({Key? key}) : super(key: key);
@@ -14,6 +23,64 @@ class CreateTask extends StatefulWidget {
 }
 
 class _CreateTaskState extends State<CreateTask> {
+  // "ProjectName" : "Project Name 1",
+  // "clientId" : "3c3646b1-9a69-4da2-b5f7-e80628543c60",
+  // "taskName" : "Task 2",
+  // "taskDescription" : "Task Description more.",
+  // "openDate" : "2022-10-10",
+  // "closeDate" : "2023-10-10",
+  // "clientNote" : "Task Created."
+  bool loading = false;
+  int select = -1;
+  Future<dynamic> createTask(String ProjectName, clientId, taskName,
+      taskDescription, openDate, closeDate, clientNote) async {
+    try {
+      Session _session = Session();
+      final data = jsonEncode(<String, String>{
+        "ProjectName": ProjectName,
+        "clientId": clientId,
+        "taskName": taskName,
+        "taskDescription": taskDescription,
+        "openDate": openDate,
+        "closeDate": closeDate,
+        "clientNote": clientNote
+      });
+      final response =
+          await _session.post('http://164.92.83.169/manager/createTask', data);
+      print(response.toString());
+      print('tasks is Added successfully');
+      return response;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  List<ClientModel> clientlist = [];
+  getclient() async {
+    ////>>>>>>>>>>>>>>>>>> client name  & id
+    setState(() {
+      loading = true;
+    });
+    clientlist = await getClientdata();
+    setState(() {
+      loading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    getclient();
+    super.initState();
+  }
+
+  TextEditingController TaskName = TextEditingController();
+  TextEditingController ProjectName = TextEditingController();
+  TextEditingController Description = TextEditingController();
+  TextEditingController ClientNote = TextEditingController();
+  TextEditingController opendate = TextEditingController();
+  TextEditingController closedate = TextEditingController();
+  String clientId = "not";
+
   @override
   final _formKey = GlobalKey<FormState>();
   Widget build(BuildContext context) {
@@ -49,32 +116,63 @@ class _CreateTaskState extends State<CreateTask> {
           child: ListView(
             children: [
               const SizedBox(
-                height: 25,
-              ),
-              TextFormField(
-                style: TextStyle(color: Colors.black),
-                controller: TaskName,
-                decoration: const InputDecoration(
-                  icon: Icon(
-                    Icons.account_circle,
-                    color: Colors.black,
+                  // height: 10,
                   ),
-                  hintText: 'Enter client name',
-                  hintStyle: TextStyle(color: Colors.black),
-                  labelText: 'ClientName',
-                  labelStyle: TextStyle(color: Colors.black),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black)),
-                ),
-                validator: (value) {
-                  if (value != null && value.length < 1) {
-                    return 'This field cant be null';
-                  }
-                  return null;
-                },
+              Container(
+                child: Text(""
+                    "Select Client"),
               ),
               const SizedBox(
                 height: 10,
+              ),
+              loading
+                  ? Center(child: CircularProgressIndicator())
+                  : Container(
+                      height: 250,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: blueColor.withOpacity(0.6),
+                        ),
+                        borderRadius: BorderRadius.circular(1),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: SingleChildScrollView(
+                          child: ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: clientlist.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    select = index;
+                                  });
+                                },
+                                child: Container(
+                                  color: select == index
+                                      ? greyColor.withOpacity(0.2)
+                                      : whiteColor.withOpacity(1),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      child: ListTile(
+                                        title:
+                                            Text("${clientlist[index].name}"),
+                                        subtitle:
+                                            Text("${clientlist[index].email}"),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+              SizedBox(
+                height: 25,
               ),
               TextFormField(
                 style: TextStyle(color: Colors.black),
@@ -128,15 +226,15 @@ class _CreateTaskState extends State<CreateTask> {
               ),
               TextFormField(
                 style: TextStyle(color: Colors.black),
-                controller: ProjectName,
+                controller: ClientNote,
                 decoration: const InputDecoration(
                   icon: Icon(
-                    Icons.link,
+                    Icons.description,
                     color: Colors.black,
                   ),
-                  hintText: 'Add Link',
+                  hintText: 'Add Client note',
                   hintStyle: TextStyle(color: Colors.black),
-                  labelText: 'Add link',
+                  labelText: 'Client note',
                   labelStyle: TextStyle(color: Colors.black),
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black)),
@@ -175,23 +273,49 @@ class _CreateTaskState extends State<CreateTask> {
                 },
               ),
               const SizedBox(
-                height: 10,
+                height: 25,
               ),
               TextFormField(
                 style: TextStyle(color: Colors.black),
-                controller: TaskName,
+                controller: opendate,
                 decoration: const InputDecoration(
                   icon: Icon(
-                    Icons.account_circle,
+                    Icons.calendar_today,
                     color: Colors.black,
                   ),
-                  hintText: 'Enter Operator name',
+                  hintText: 'Start Date',
                   hintStyle: TextStyle(color: Colors.black),
-                  labelText: 'OperatorName',
+                  labelText: 'OpenDate',
                   labelStyle: TextStyle(color: Colors.black),
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black)),
                 ),
+                readOnly: true,
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(
+                          2000), //DateTime.now() - not to allow to choose before today.
+                      lastDate: DateTime(2101));
+
+                  if (pickedDate != null) {
+                    print(
+                        pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                    String formattedDate =
+                        DateFormat('yyyy-MM-dd').format(pickedDate);
+                    print(
+                        formattedDate); //formatted date output using intl package =>  2021-03-16
+                    //you can implement different kind of Date Format here according to your requirement
+
+                    setState(() {
+                      opendate.text =
+                          formattedDate; //set output date to TextField value.
+                    });
+                  } else {
+                    print("Date is not selected");
+                  }
+                },
                 validator: (value) {
                   if (value != null && value.length < 1) {
                     return 'This field cant be null';
@@ -202,10 +326,111 @@ class _CreateTaskState extends State<CreateTask> {
               const SizedBox(
                 height: 10,
               ),
+              TextFormField(
+                style: TextStyle(color: Colors.black),
+                controller: closedate,
+                decoration: const InputDecoration(
+                  icon: Icon(
+                    Icons.calendar_today,
+                    color: Colors.black,
+                  ),
+                  hintText: 'Completion Date',
+                  hintStyle: TextStyle(color: Colors.black),
+                  labelText: 'CloseDate',
+                  labelStyle: TextStyle(color: Colors.black),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black)),
+                ),
+                readOnly: true,
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(
+                          2000), //DateTime.now() - not to allow to choose before today.
+                      lastDate: DateTime(2101));
+
+                  if (pickedDate != null) {
+                    print(
+                        pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                    String formattedDate =
+                        DateFormat('yyyy-MM-dd').format(pickedDate);
+                    print(
+                        formattedDate); //formatted date output using intl package =>  2021-03-16
+                    //you can implement different kind of Date Format here according to your requirement
+
+                    setState(() {
+                      closedate.text =
+                          formattedDate; //set output date to TextField value.
+                    });
+                  } else {
+                    print("Date is not selected");
+                  }
+                },
+                validator: (value) {
+                  if (value != null && value.length < 1) {
+                    return 'This field cant be null';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const SizedBox(
+                height: 25,
+              ),
               SizedBox(
                   height: 50,
                   child: ElevatedButton(
-                      onPressed: () {}, child: Text('Create Task'))),
+                      onPressed: () {
+                        final isValidForm = _formKey.currentState!.validate();
+                        // TextEditingController TaskName = TextEditingController();
+                        // TextEditingController ProjectName = TextEditingController();
+                        // TextEditingController Description = TextEditingController();
+                        // TextEditingController ClientNote = TextEditingController();
+                        // TextEditingController opendate = TextEditingController();
+                        // TextEditingController clientId = TextEditingController();
+                        if (select != -1 && isValidForm) {
+                          createTask(
+                              ProjectName.text,
+                              clientlist[select].clientId,
+                              TaskName.text,
+                              Description.text,
+                              opendate.text,
+                              closedate.text,
+                              closedate.text);
+                          final snackBar = SnackBar(
+                            content: Text("Please Refresh the page "),
+                            backgroundColor: (Colors.black12),
+                            action: SnackBarAction(
+                              label: 'dismiss',
+                              onPressed: () {},
+                            ),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ViewTask(),
+                            ),
+                          );
+                        } else {
+                          print(clientId);
+                          final snackBar = SnackBar(
+                            content: Text("Please select client name"),
+                            backgroundColor: (Colors.black12),
+                            action: SnackBarAction(
+                              label: 'dismiss',
+                              onPressed: () {},
+                            ),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      },
+                      child: Text('Create Task'))),
+              SizedBox(
+                height: 25,
+              ),
             ],
           ),
         ),

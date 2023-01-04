@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:intership/Admin/model/session.dart';
+import 'package:intership/constant/ApI.dart';
 
 import '../constant/color.dart';
+
+var name, email, mobile, organization;
 
 class ManagerProfile extends StatefulWidget {
   const ManagerProfile({Key? key}) : super(key: key);
@@ -12,6 +16,31 @@ class ManagerProfile extends StatefulWidget {
 }
 
 class _ManagerProfileState extends State<ManagerProfile> {
+  bool load = false;
+  @override
+  void initState() {
+    getProfile();
+    super.initState();
+  }
+
+  void getProfile() async {
+    setState(() {
+      load = true;
+    });
+    Session _session = Session();
+    final response = await _session.get(managerProfile);
+    print(response);
+    setState(() {
+      name = response['data']['manager']['name'];
+      email = response['data']['manager']['email'];
+      mobile = response['data']['manager']['mobile'];
+      organization = response['data']['manager']['organization'];
+    });
+    setState(() {
+      load = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +90,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                "Dhiraj Darakhe",
+                              load ? "name" :  "$name",
                                 style: TextStyle(
                                     color: blackColor.withOpacity(1),
                                     fontSize: 22),
@@ -129,7 +158,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    "dhiraj@gmail.com",
+                                 load ? "email":   "$email",
                                     style: TextStyle(
                                         color: blackColor.withOpacity(1),
                                         fontSize: 18),
@@ -189,7 +218,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    "7218724337",
+                                  load ? "mobile" :  "$mobile",
                                     style: TextStyle(
                                         color: blackColor.withOpacity(1),
                                         fontSize: 18),
@@ -207,8 +236,8 @@ class _ManagerProfileState extends State<ManagerProfile> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      Response response = await http.get(Uri.parse(
-                          'http://164.92.83.169/manager/logout'));
+                      Response response = await http.get(
+                          Uri.parse('http://164.92.83.169/manager/logout'));
                       if (response.statusCode == 200) {
                         print('LogOut successfully');
                         Navigator.pop(context);
@@ -237,7 +266,6 @@ class _ManagerProfileState extends State<ManagerProfile> {
                         ),
                         child: Center(
                           child: Container(
-
                             child: Text(
                               'LogOut',
                               textAlign: TextAlign.left,

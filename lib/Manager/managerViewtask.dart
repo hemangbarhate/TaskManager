@@ -44,7 +44,7 @@ class _ViewTaskState extends State<ViewTask> {
     clientlist = await getClientdata();
     for (ClientModel i in clientlist) {
       mapClientIdName['${i.clientId}'] = '${i.name}';
-      print('${i.clientId} == ${i.name}');
+      // print('${i.clientId} == ${i.name}');
     }
   }
 
@@ -85,8 +85,10 @@ class _ViewTaskState extends State<ViewTask> {
       assignedtasklist.add(TaskModel.fromJson(i));
     }
     // print(assignedtasklist[0]);
-    loadingsecond = false;
-    setState(() {});
+
+    setState(() {
+      loadingsecond = false;
+    });
     return assignedtasklist;
   }
 
@@ -142,11 +144,14 @@ class _ViewTaskState extends State<ViewTask> {
           backgroundColor: Colors.white,
           shadowColor: Colors.white,
           title: const Center(
-              child: Text(
-            "Tasks",
-            style: TextStyle(
-                fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
-          )),
+            child: Text(
+              "Tasks",
+              style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
+          ),
           elevation: 0.0,
           leading: Builder(
             builder: (BuildContext context) {
