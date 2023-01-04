@@ -305,7 +305,7 @@ class _ClientContainerState extends State<ClientContainer> {
                         padding: EdgeInsets.only(left: 10.0, right: 10),
                         child: Center(
                           child: Text(
-                            '${widget.closeDate}',
+                            '${widget.clientNote}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,
@@ -318,7 +318,7 @@ class _ClientContainerState extends State<ClientContainer> {
                   ),
 
                   GestureDetector(
-                    onTap:  (){},
+                    onTap:  widget.viewLink,
                     child: Container(
                       width: 100,
                       height: 46,
@@ -340,13 +340,11 @@ class _ClientContainerState extends State<ClientContainer> {
                           )
                         ],
                       ),
-                      child: Padding(
+                      child: const Padding(
                         padding: EdgeInsets.only(left: 10.0, right: 10),
                         child: Center(
                           child: Text(
-                            widget.backgrondColor == greenColor
-                                ? "ASSIGN"
-                                : widget.priority,
+                            'View Links',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,
@@ -358,9 +356,7 @@ class _ClientContainerState extends State<ClientContainer> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
-                    },
+                    onTap:  widget.addLink,
                     child: Container(
                       width: 100,
                       height: 46,

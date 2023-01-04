@@ -31,8 +31,8 @@ final createtask = 'http://$ip/client/createTask';
 final gettasktimeline = 'http://$ip/client/';
 final approvetask= 'http://$ip/client/';
 final rejecttask = 'http://$ip/client/';
-final addlinks= 'http://$ip/client/';
-final getlinks = 'http://$ip/client/';
+final addlinks= 'http://$ip/client/attachFiles';
+final getlinks = 'http://$ip/client/getAttachments';
 
 //Operator
 final operatortaskByOperatorId = 'http://$ip/operator/taskByOperatorId';

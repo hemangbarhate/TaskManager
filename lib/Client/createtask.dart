@@ -14,6 +14,7 @@ TextEditingController ClientNote = TextEditingController();
 TextEditingController opendate = TextEditingController();
 TextEditingController closedate = TextEditingController();
 
+
 class CreateTask extends StatefulWidget {
   const CreateTask({Key? key}) : super(key: key);
 
@@ -180,8 +181,8 @@ class _CreateTaskState extends State<CreateTask> {
                       borderSide: BorderSide(color: Colors.black)),
                 ),
                 validator: (value) {
-                  if (value != null && value.length < 1) {
-                    return 'This field cant be null';
+                  if (value != null && value.length < 6) {
+                    return 'Enter Low/Medium/Urgent';
                   }
                   return null;
                 },
