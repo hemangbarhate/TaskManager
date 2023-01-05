@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intership/Admin/model/session.dart';
 import 'package:intership/Manager/ApiCall/DepartmentANDOpratorData.dart';
+import 'package:intership/Manager/managerHome.dart';
 import 'package:intership/Manager/managerViewtask.dart';
 import 'package:intership/Manager/model/operatormodel.dart';
 import 'package:intership/constant/ApI.dart';
@@ -257,11 +258,8 @@ class _AssignTaskState extends State<AssignTask> {
                     return;
                   } else {
                     managerNOTE.clear();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ViewTask(),
-                      ),
-                    );
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const home_manager()));
                   }
                 } else {
                   final snackBar = SnackBar(

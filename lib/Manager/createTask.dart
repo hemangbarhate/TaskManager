@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intership/Admin/model/session.dart';
 import 'package:intership/Manager/ApiCall/clientData.dart';
+import 'package:intership/Manager/managerHome.dart';
 import 'package:intership/Manager/managerViewtask.dart';
 import 'package:intership/Manager/model/clientmodel.dart';
 import 'package:intl/intl.dart';
@@ -399,7 +400,8 @@ class _CreateTaskState extends State<CreateTask> {
                               Description.text,
                               opendate.text,
                               closedate.text,
-                              closedate.text);
+                              closedate.text
+                          );
                           final snackBar = SnackBar(
                             content: Text("Please Refresh the page "),
                             backgroundColor: (Colors.black12),
@@ -409,11 +411,16 @@ class _CreateTaskState extends State<CreateTask> {
                             ),
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => ViewTask(),
-                            ),
-                          );
+                          ProjectName.clear();
+                        select = -1;
+                        TaskName.clear();
+                        Description.clear();
+                        opendate.clear();
+                        closedate.clear();
+                        closedate.clear();
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const home_manager()));
+                          // );
                         } else {
                           print(clientId);
                           final snackBar = SnackBar(

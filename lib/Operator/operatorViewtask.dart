@@ -53,7 +53,7 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
     // print(response);
     for (dynamic i in response['result']) {
       if (TaskModel.fromJson(i).taskStatus == 'inProgress') {
-        print(i);
+      //   print(i);
         assignedtask.add(TaskModel.fromJson(i));
       }
     }
@@ -79,10 +79,8 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
       print(response.toString());
       print('status updated successfully');
       loading = false;
-      await gerInProgressTask();
-      setState(() {
-        //make loading true to show progressindicator
-      });
+      // await gerInProgressTask();
+      setState(() {});
       return response;
     } catch (e) {
       print(e.toString());
@@ -103,6 +101,7 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
 
   @override
   Widget build(BuildContext context) {
+    // gerInProgressTask();
     return Scaffold(
       backgroundColor: greyColor.withOpacity(0.1),
       appBar: AppBar(
@@ -160,7 +159,7 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                 shrinkWrap: true,
                                 itemCount: assignedtask.length,
                                 itemBuilder: (context, index) {
-                                  return assignedtask[index].priority == 'null'
+                                  return assignedtask[index].taskStatus != 'inProgress'
                                       ? Container()
                                       : Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -194,8 +193,8 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                 UpdateStatus(
                                                   '${assignedtask[index].taskID}',
                                                 );
-                                                // home_operator
-                                                // setState(() {});
+                                                Navigator.of(context).push(MaterialPageRoute(
+                                                    builder: (context) => const home_operator()));
                                               },
                                               who: 'operator',
                                               fontColor: greyColor,

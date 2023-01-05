@@ -36,6 +36,7 @@ class _CreateDeptState extends State<CreateDept> {
   @override
   void initState() {
     getDetp();
+    getOperator();
     super.initState();
   }
 

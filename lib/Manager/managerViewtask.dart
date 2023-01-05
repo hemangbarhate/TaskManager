@@ -9,6 +9,8 @@ import 'package:intership/Manager/createTask.dart';
 import 'package:intership/Manager/managerProfile.dart';
 import 'package:intership/Manager/model/TASKMODEL.dart';
 import 'package:intership/Manager/model/clientmodel.dart';
+import 'package:intership/Manager/timedatamnager.dart';
+import 'package:intership/Operator/timedata.dart';
 import 'package:intership/constant/color.dart';
 import 'package:intership/Manager/ConatainerHelper/ClientContainer.dart';
 import 'package:intership/Admin/model/session.dart';
@@ -342,8 +344,19 @@ class _ViewTaskState extends State<ViewTask> {
                                                       );
                                                     }
                                                   },
-                                                  TimeLineDoc: () {},
-                                                  AttachDoc: () {},
+                                                  TimeLineDoc: () {
+
+                                                  },
+                                                  AttachDoc: () {
+                                                    Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                             TimeDataMnager(
+                                                              Taskid:  '${noassignedtasklist[index].taskID}',
+                                                            ),
+                                                      ),
+                                                    );
+                                                  },
                                                   ChangeStatus: () {},
                                                 ),
                                               ),
@@ -434,7 +447,16 @@ class _ViewTaskState extends State<ViewTask> {
                                             },
                                             who: 'manager',
                                             TimeLineDoc: () {},
-                                            AttachDoc: () {},
+                                            AttachDoc: () {
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      TimeDataMnager(
+                                                        Taskid:  '${assignedtasklist[index].taskID}',
+                                                      ),
+                                                ),
+                                              );
+                                            },
                                             ChangeStatus: () {}, Approve: () {  }, Reject: () {  },
                                           ),
                                         ),
@@ -509,7 +531,16 @@ class _ViewTaskState extends State<ViewTask> {
                                             managerId:
                                                 '${inprogresstask[index].managerId}',
                                             TimeLineDoc: () {},
-                                            AttachDoc: () {},
+                                            AttachDoc: () {
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      TimeDataMnager(
+                                                        Taskid:  '${inprogresstask[index].taskID}',
+                                                      ),
+                                                ),
+                                              );
+                                            },
                                             ChangeStatus: () {},
                                             assignTask: () {
                                               if (inprogresstask[index]
@@ -555,14 +586,26 @@ class _ViewTaskState extends State<ViewTask> {
                                         child: Container(
                                           child: ClientContainer(
                                             TimeLineDoc: () {},
-                                            AttachDoc: () {},
+                                            AttachDoc: () {
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      TimeDataMnager(
+                                                        Taskid:  '${completetask[index].taskID}',
+                                                      ),
+                                                ),
+                                              );
+                                            },
                                             ChangeStatus: () {},
                                             Approve: () async {
                                               print("Aprrove");
+
                                               await  ApproveRequest( '${completetask[index].taskID}');
+
                                             },
                                             Reject: () async {
                                               print("Reject");
+                                              print('${completetask[index].taskStatus}',);
                                             await  RejectRequest( '${completetask[index].taskID}');
                                             },
                                             who: 'manager',
