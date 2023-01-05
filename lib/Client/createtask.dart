@@ -181,7 +181,7 @@ class _CreateTaskState extends State<CreateTask> {
                       borderSide: BorderSide(color: Colors.black)),
                 ),
                 validator: (value) {
-                  if (value != null && value.length < 6) {
+                  if (value != null && value.length < 3 ) {
                     return 'Enter Low/Medium/Urgent';
                   }
                   return null;

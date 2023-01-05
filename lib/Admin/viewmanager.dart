@@ -76,15 +76,18 @@ class _ViewManagerState extends State<ViewManager> {
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       margin: EdgeInsets.all(6),
-                      padding: EdgeInsets.all(10),
-                      color: Color(0xff282019),
+                      padding: EdgeInsets.all(12),
+                      color: Colors.black12,
                       // color: Color(0xfffed456),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text('Manager Name : ${managerlist[index].name}',style: TextStyle(color: Color(0xfffed456),),),
-                          Text('Email : ${managerlist[index].email}',style: TextStyle(color: Color(0xfffed456),),),
-                          Text('Mobile No : ${managerlist[index].mobile}',style: TextStyle(color: Color(0xfffed456),),),
+                          Text('Manager Name : ${managerlist[index].name}',),
+                          SizedBox(height: 3,),
+                          Text('Email : ${managerlist[index].email}',),
+                          SizedBox(height: 3,),
+                          Text('Mobile No : ${managerlist[index].mobile}',),
+
                         ],
                       ),
                     );

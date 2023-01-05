@@ -76,15 +76,15 @@ class _ViewClientState extends State<ViewClient> {
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       margin: EdgeInsets.all(6),
-                      padding: EdgeInsets.all(10),
-                      color: Color(0xff282019),
+                      padding: EdgeInsets.all(12),
+                      color: Colors.black12,
                       // color: Color(0xfffed456),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text('Operator Name : ${managerlist[index].name}',style: TextStyle(color: Color(0xfffed456),),),
-                          Text('Email : ${managerlist[index].email}',style: TextStyle(color: Color(0xfffed456),),),
-                          Text('Mobile No : ${managerlist[index].mobile}',style: TextStyle(color: Color(0xfffed456),),),
+                          Text('Operator Name : ${managerlist[index].name}'),
+                          Text('Email : ${managerlist[index].email}',),
+                          Text('Mobile No : ${managerlist[index].mobile}',),
                         ],
                       ),
                     );
