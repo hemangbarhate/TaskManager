@@ -26,6 +26,7 @@ class ViewTask extends StatefulWidget {
 
 class _ViewTaskState extends State<ViewTask> {
   bool loading = false;
+  bool loadingfour = false;
   @override
   void initState() {
     gettasklist();
@@ -33,9 +34,10 @@ class _ViewTaskState extends State<ViewTask> {
   }
 
   List<TaskModel> tasklist = [];
+  List<TaskModel> tasklist2 = [];
   Future<List<TaskModel>> gettasklist() async {
     setState(() {
-      loading = true; //make loading true to show progressindicator
+      loading = true;//make loading true to show progressindicator
     });
     Session _session = Session();
     final response = await _session.get(getcreatedtask);
@@ -44,9 +46,12 @@ class _ViewTaskState extends State<ViewTask> {
     for (dynamic i in response['result']) {
       print(i);
       tasklist.add(TaskModel.fromJson(i));
+      if(TaskModel.fromJson(i).managerApproval == 'Accepted'){
+        tasklist2.add(TaskModel.fromJson(i));
+      }
     }
     loading = false;
-    print(tasklist.length);
+    print(tasklist2.length);
     setState(() {});
     return tasklist;
   }
@@ -57,10 +62,52 @@ class _ViewTaskState extends State<ViewTask> {
       Session _session = Session();
       final data = jsonEncode(<String, List<Map<String, String>>>{'documentsList':encodelist});
       final response = await _session.post('$addlinks/$taskid', data);
-      print(response.toString());
-      print('task create funcn successfully');
       return response;
     } catch (e) {
+      print(e.toString());
+    }
+  }
+  Future<dynamic> RejectRequest(String taskid) async {
+    try {
+      setState(() {
+        loadingfour = true; //make loading true to show progressindicator
+      });
+      Session _session = Session();
+      final data = jsonEncode(<String, String>{"Note" : "Task Rejected by client"});
+      final response = await _session.post(
+          'http://$ip/client/rejectTask/${taskid}', data);
+      print(response.toString());
+      print('Rejected');
+      setState(() {
+        loadingfour = false; //make loading true to show progressindicator
+      });
+      return response;
+    } catch (e) {
+      setState(() {
+        loadingfour = false; //make loading true to show progressindicator
+      });
+      print(e.toString());
+    }
+  }
+  Future<dynamic> ApproveRequest(String taskid) async {
+    try {
+      setState(() {
+        loadingfour = true; //make loading true to show progressindicator
+      });
+      Session _session = Session();
+      final data = jsonEncode(<String, String>{"Note" : "Task accepted by client." });
+      final response = await _session.post(
+          'http://$ip/client/approveTask/${taskid}', data);
+      print(response.toString());
+      print('Accepted ${taskid}');
+      setState(() {
+        loadingfour = false; //make loading true to show progressindicator
+      });
+      return response;
+    } catch (e) {
+      setState(() {
+        loadingfour = false; //make loading true to show progressindicator
+      });
       print(e.toString());
     }
   }
@@ -146,7 +193,7 @@ class _ViewTaskState extends State<ViewTask> {
                     child: TabBarView(
                   children: [
                     loading
-                        ? CircularProgressIndicator()
+                        ? Center(child: SizedBox(height:100,width:100,child: CircularProgressIndicator()))
                         : SingleChildScrollView(
                             child: Column(
                               children: <Widget>[
@@ -195,6 +242,8 @@ class _ViewTaskState extends State<ViewTask> {
                                                 managerApproval: '',
                                                 taskCategory: '',
                                                 managerId: '',
+                                                approve: (){},
+                                                reject: (){},
                                                 addLink: () {
                                                   // Navigator.push(context, MaterialPageRoute(builder: (builder)=>AddLinks()));
                                                   showDialog(
@@ -284,68 +333,6 @@ class _ViewTaskState extends State<ViewTask> {
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) => ViewLinks(taskid: tasklist[index].taskID)));
-                                                  // attachlist.clear();
-                                                  // await getattachments(tasklist[index].taskID);
-                                                  // showDialog(
-                                                  //   context: context,
-                                                  //   builder:
-                                                  //       (BuildContext context) {
-                                                  //     return AlertDialog(
-                                                  //       title: const Text(
-                                                  //           "Attachment List"),
-                                                  //       content: SizedBox(
-                                                  //         width: 250,
-                                                  //         child:
-                                                  //             SingleChildScrollView(
-                                                  //           child: ListView.builder(
-                                                  //                   itemCount:
-                                                  //                       attachlist
-                                                  //                           .length,
-                                                  //                   shrinkWrap:
-                                                  //                       true,
-                                                  //                   itemBuilder:
-                                                  //                       (context,
-                                                  //                           index) {
-                                                  //                     return Container(
-                                                  //                       color: Colors
-                                                  //                           .black12,
-                                                  //                       padding:
-                                                  //                           EdgeInsets.all(8),
-                                                  //                       margin:
-                                                  //                           EdgeInsets.all(6),
-                                                  //                       child:
-                                                  //                           Column(
-                                                  //                         crossAxisAlignment:
-                                                  //                             CrossAxisAlignment.start,
-                                                  //                         children: [
-                                                  //                           Text(attachlist[index].documentName),
-                                                  //                           Text(attachlist[index].driveLink),
-                                                  //                           TextButton(
-                                                  //                               onPressed: () {
-                                                  //                                 Clipboard.setData(ClipboardData(text: attachlist[index].driveLink));
-                                                  //                               },
-                                                  //                               child: Text('Copy')),
-                                                  //                         ],
-                                                  //                       ),
-                                                  //                     );
-                                                  //                   }),
-                                                  //         ),
-                                                  //       ),
-                                                  //       actions: [
-                                                  //         TextButton(
-                                                  //           onPressed: () {
-                                                  //             Navigator.of(
-                                                  //                     context)
-                                                  //                 .pop();
-                                                  //           },
-                                                  //           child: const Text(
-                                                  //               "Ok"),
-                                                  //         ),
-                                                  //       ],
-                                                  //     );
-                                                  //   },
-                                                  // );
-                                                  // Navigator.push(context, MaterialPageRoute(builder: (builder)=>ViewLinks()));
                                                 },
                                               ),
                                             ),
@@ -366,55 +353,61 @@ class _ViewTaskState extends State<ViewTask> {
                                 ListView.builder(
                                   physics: NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
-                                  itemCount: tasklist.length,
+                                  itemCount: tasklist2.length,
                                   itemBuilder: (context, index) {
                                     return Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Container(
                                         child: ClientContainer(
                                           fontColor: greyColor,
-                                          backgrondColor: orangeColor,
-                                          first: greyColor,
-                                          second: greenColor,
-                                          third: greenColor,
-                                          forth: redColor,
-                                          fifth: redColor,
-                                          sixth: greyColor,
+                                          backgrondColor: greenColor,
+                                            first: yellowColor,
+                                            second: blackColor,
+                                            third: greenColor,
+                                            forth: redColor,
+                                            fifth: redColor,
+                                            sixth: yellowColor,
                                           taskName:
-                                              '${tasklist[index].taskName}',
+                                              '${tasklist2[index].taskName}',
                                           ProjectName:
-                                              '${tasklist[index].ProjectName}',
-                                          taskId: '${tasklist[index].taskID}',
+                                              '${tasklist2[index].ProjectName}',
+                                          taskId: '${tasklist2[index].taskID}',
                                           clientId:
-                                              '${tasklist[index].clientId}',
+                                              '${tasklist2[index].clientId}',
                                           operatorId:
-                                              '${tasklist[index].operatorId}',
+                                              '${tasklist2[index].operatorId}',
                                           openDate:
-                                              '${tasklist[index].openDate?.substring(0, 10)}',
+                                              '${tasklist2[index].openDate?.substring(0, 10)}',
                                           taskDescription:
-                                              '${tasklist[index].taskDescription}',
+                                              '${tasklist2[index].taskDescription}',
                                           closeDate:
-                                              '${tasklist[index].closeDate?.substring(0, 10)}',
+                                              '${tasklist2[index].closeDate?.substring(0, 10)}',
                                           clientNote:
-                                              '${tasklist[index].clientNote}',
+                                              '${tasklist2[index].clientNote}',
                                           managerNote:
-                                              '${tasklist[index].managerNote}',
+                                              '${tasklist2[index].managerNote}',
                                           AssignationStatus:
-                                              '${tasklist[index].AssignationStatus}',
+                                              '${tasklist2[index].AssignationStatus}',
                                           priority:
-                                              '${tasklist[index].priority}',
+                                              '${tasklist2[index].priority}',
                                           clientApproval:
-                                              '${tasklist[index].clientApproval}',
+                                              '${tasklist2[index].clientApproval}',
                                           taskStatus:
-                                              '${tasklist[index].taskStatus}',
+                                              '${tasklist2[index].taskStatus}',
                                           managerApproval:
-                                              '${tasklist[index].managerApproval}',
+                                              '${tasklist2[index].managerApproval}',
                                           taskCategory:
-                                              '${tasklist[index].taskCategory}',
+                                              '${tasklist2[index].taskCategory}',
                                           managerId:
-                                              '${tasklist[index].managerId}',
+                                              '${tasklist2[index].managerId}',
                                           addLink: () {},
                                           viewLink: () {},
+                                          approve: () async {
+                                            await ApproveRequest(tasklist2[index].taskID);
+                                          },
+                                          reject: () async {
+                                            await RejectRequest(tasklist2[index].taskID);
+                                          },
                                         ),
                                       ),
                                     );

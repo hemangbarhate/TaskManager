@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
+import '../constant/color.dart';
 import 'constant.dart';
 import 'model/session.dart';
 
@@ -23,7 +24,7 @@ class AddOperator extends StatefulWidget {
 
 class _AddOperatorState extends State<AddOperator> {
   final _formKey = GlobalKey<FormState>();
-
+  bool loading = false;
   Future<dynamic> addOperator(String email, name,password,departmentid,mobile) async {
     try {
       Session _session = Session();
@@ -37,6 +38,38 @@ class _AddOperatorState extends State<AddOperator> {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  List<String> departlist = [];
+  List<String> departlistID = [];
+  Map<dynamic,String> deptmap = {};
+  int select = -1;
+  getDetp() async {
+    setState(() {
+      loading = true;
+    });
+    Session _session = Session();
+    final response =
+    await _session.get('http://164.92.83.169/admin/getDepartments');
+    for (dynamic i in response['data']['departments']) {
+      if (!departlist.contains(i['departmentName'])) {
+        departlist.add(i['departmentName']);
+        departlistID.add(i['departmentId']);
+        deptmap[i['departmentName']]=i['departmentId'];
+      }
+    }
+    print(departlist);
+    print(departlistID);
+    print(deptmap);
+    setState(() {
+      loading = false;
+    });
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    getDetp();
+    super.initState();
   }
   @override
   Widget build(BuildContext context) {
@@ -139,26 +172,79 @@ class _AddOperatorState extends State<AddOperator> {
               const SizedBox(
                 height: 10,
               ),
-              TextFormField(
-                style: TextStyle(color: Colors.black),
-                controller: departmentcontroller,
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.password,color: Colors.black,),
-                  hintText: 'Enter Departmentid',
-                  hintStyle: TextStyle(color: Colors.black),
-                  labelText: 'Department',
-                  labelStyle: TextStyle(color: Colors.black),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black)
-                  ),
+              // TextFormField(
+              //   style: TextStyle(color: Colors.black),
+              //   controller: departmentcontroller,
+              //   decoration: const InputDecoration(
+              //     icon: Icon(Icons.work,color: Colors.black,),
+              //     hintText: 'Enter Departmentid',
+              //     hintStyle: TextStyle(color: Colors.black),
+              //     labelText: 'Department',
+              //     labelStyle: TextStyle(color: Colors.black),
+              //     border: OutlineInputBorder(
+              //         borderSide: BorderSide(color: Colors.black)
+              //     ),
+              //   ),
+              //   readOnly: true,
+              //   onTap: () {
+              //
+              //   },
+              //   validator: (value) {
+              //     if (value != null && value.length < 4) {
+              //       return 'Enter min. 4 characters';
+              //     }
+              //     return null;
+              //   },
+              // ),
+              Text('Select Department'),
+              SizedBox(height: 4,),
+              loading
+                  ? Center(child: CircularProgressIndicator())
+                  : Padding(
+                    padding: const EdgeInsets.fromLTRB(40,0,10,0),
+                    child: Container(
+                height: 250,
+                decoration: BoxDecoration(
+                    border: Border.all(
+                      color: blueColor.withOpacity(0.6),
+                    ),
+                    borderRadius: BorderRadius.circular(1),
                 ),
-                validator: (value) {
-                  if (value != null && value.length < 4) {
-                    return 'Enter min. 4 characters';
-                  }
-                  return null;
-                },
+                child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SingleChildScrollView(
+                      child: ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: departlist.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                select = index;
+                              });
+                            },
+                            child: Container(
+                              color: select == index
+                                  ? greyColor.withOpacity(0.2)
+                                  : whiteColor.withOpacity(1),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  child: ListTile(
+                                    title:
+                                    Text("${departlist[index]}"),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                ),
               ),
+                  ),
               const SizedBox(
                 height: 10,
               ),
@@ -189,12 +275,12 @@ class _AddOperatorState extends State<AddOperator> {
                   child: ElevatedButton(
                       onPressed: () async {
                         final isValidForm = _formKey.currentState!.validate();
-                        if (isValidForm) {
+                        if (isValidForm && select != -1) {
                           var response = await addOperator(
                               emailcontroller.text.toString(),
                               namecontroller.text.toString(),
                               passwordcontroller.text.toString(),
-                              departmentcontroller.text.toString(),
+                              departlistID[select],
                               mobilecontroller.text.toString()
                           ).catchError((err) {});
                           if (response == null) {

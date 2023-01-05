@@ -30,6 +30,8 @@ class ClientContainer extends StatefulWidget {
   final String taskCategory;
   final VoidCallback addLink;
   final VoidCallback viewLink;
+  final VoidCallback approve;
+  final VoidCallback reject;
 
   const ClientContainer(
       {Key? key,
@@ -56,7 +58,7 @@ class ClientContainer extends StatefulWidget {
         required this.taskStatus,
         required this.clientApproval,
         required this.managerApproval,
-        required this.taskCategory, required this.addLink, required this.viewLink, required this.ProjectName
+        required this.taskCategory, required this.addLink, required this.viewLink, required this.ProjectName, required this.approve, required this.reject
       })
       : super(key: key);
 
@@ -400,12 +402,12 @@ class _ClientContainerState extends State<ClientContainer> {
               const SizedBox(
                 height: 15,
               ),
-              if (widget.backgrondColor == yellowColor)
+              if (widget.backgrondColor == greenColor)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     GestureDetector(
-                      onTap: () {},
+                      onTap: widget.approve,
                       child: Container(
                         width: 130,
                         height: 60,
@@ -443,7 +445,7 @@ class _ClientContainerState extends State<ClientContainer> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: widget.reject,
                       child: Container(
                         width: 130,
                         height: 60,
