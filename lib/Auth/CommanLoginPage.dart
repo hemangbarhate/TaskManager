@@ -30,20 +30,29 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
     'operator': 'Operator',
     'admin' : 'Admin',
   };
-
+  bool loading = false;
   String _selectedGender = genderMap.keys.first;
   Future<dynamic> login(String email, String password, String api) async {
     try {
+      setState(() {
+        loading = true;
+      });
       Session _session = Session();
       final data =
       jsonEncode(<String, String>{'email': email, 'password': password});
       final response = await _session.post(api , data);
       print(_session.cookies);
       print(response.toString());
+      setState(() {
+        loading = false;
+      });
       return response;
     } catch (e) {
       print(e.toString());
     }
+    setState(() {
+      loading = false;
+    });
   }
   // String _selectedGender = genderMap.keys.first;
   @override
@@ -214,7 +223,7 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                               return null;
                             }
                           },
-                          child: Container(
+                          child: loading ? CircularProgressIndicator() : Container(
                             height: 50,
                             margin: const EdgeInsets.symmetric(horizontal: 50),
                             decoration: BoxDecoration(
