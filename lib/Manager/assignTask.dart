@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intership/Admin/model/session.dart';
 import 'package:intership/Manager/ApiCall/DepartmentANDOpratorData.dart';
 import 'package:intership/Manager/managerHome.dart';
@@ -67,7 +68,7 @@ class _AssignTaskState extends State<AssignTask> {
   }
 
   TextEditingController managerNOTE = TextEditingController();
-  int select = -1;
+  int select = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -203,45 +204,74 @@ class _AssignTaskState extends State<AssignTask> {
               ),
             ),
             loading
-                ? CircularProgressIndicator()
-                : Container(
-                    height: 350,
-                    child: SingleChildScrollView(
+                ?  Column(
+                  children: [
+                    SpinKitDancingSquare(
+              color: greyColor.withOpacity(1),
+
+            ),
+                    Text("Loading...")
+                  ],
+                )
+                : Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+              height: 250,
+              decoration: BoxDecoration(
+                  border: Border.all(
+                    color: blueColor.withOpacity(0.6),
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+              ),
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10),
-                        child: ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: operaortlist.length,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  select = index;
-                                  print("${operaortlist[index].operatorId} = ${operaortlist[index].email}");
-                                });
-                              },
-                              child: Container(
-                                color: select == index
-                                    ? greyColor.withOpacity(0.2)
-                                    : whiteColor.withOpacity(1),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    child: ListTile(
-                                      title: Text("${operaortlist[index].name}"),
-                                      subtitle:
-                                          Text("${operaortlist[index].email}"),
+                        padding: const EdgeInsets.all(10.0),
+                        child: Scrollbar(
+                          isAlwaysShown: true, //always show scrollbar
+                          thickness: 10, //width of scrollbar
+                          radius: Radius.circular(20), //corner radius of scrollbar
+                          scrollbarOrientation: ScrollbarOrientation.left,
+                          child: SingleChildScrollView(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10.0, right: 10),
+                              child: ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: operaortlist.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        select = index;
+                                        print("${operaortlist[index].operatorId} = ${operaortlist[index].email}");
+                                      });
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: select == index
+                                              ? greyColor.withOpacity(0.2)
+                                              : whiteColor.withOpacity(1),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10))),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          child: ListTile(
+                                            title: Text("${operaortlist[index].name}"),
+                                            subtitle:
+                                                Text("${operaortlist[index].email}"),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
+                                  );
+                                },
                               ),
-                            );
-                          },
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                ),
             SizedBox(
               height: 25,
             ),

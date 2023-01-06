@@ -364,7 +364,7 @@ class _ClientContainerState extends State<ClientContainer> {
                       ),
                     ),
                   ),
-                  GestureDetector(
+             if(widget.who != 'operator')     GestureDetector(
                     onTap: widget.assignTask,
                     child: Container(
                       width: 100,

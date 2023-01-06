@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intership/Admin/model/session.dart';
 import 'package:intership/Manager/ApiCall/clientData.dart';
 import 'package:intership/Manager/ConatainerHelper/ManagerContainer.dart';
@@ -53,7 +54,7 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
     // print(response);
     for (dynamic i in response['result']) {
       if (TaskModel.fromJson(i).taskStatus == 'inProgress') {
-      //   print(i);
+        //   print(i);
         assignedtask.add(TaskModel.fromJson(i));
       }
     }
@@ -102,155 +103,787 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
   @override
   Widget build(BuildContext context) {
     // gerInProgressTask();
-    return Scaffold(
-      backgroundColor: greyColor.withOpacity(0.1),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        shadowColor: Colors.white,
-        title: const Center(
-            child: Text(
-          "Tasks",
-          style: TextStyle(
-              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
-        )),
-        elevation: 0.0,
-        leading: Builder(
-          builder: (BuildContext context) {
-            return Padding(
-              padding: const EdgeInsets.only(left: 15.0),
-              child: IconButton(
-                icon: Image.asset("assets/images/bigmouth_icon.png"),
-                iconSize: 70,
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              ),
-            );
-          },
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        backgroundColor: greyColor.withOpacity(0.1),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          shadowColor: Colors.white,
+          title: const Center(
+              child: Text(
+            "Tasks",
+            style: TextStyle(
+                fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+          )),
+          elevation: 0.0,
+          leading: Builder(
+            builder: (BuildContext context) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: IconButton(
+                  icon: Image.asset("assets/images/bigmouth_icon.png"),
+                  iconSize: 70,
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                ),
+              );
+            },
+          ),
+          actions: <Widget>[
+            Padding(
+                padding: const EdgeInsets.only(right: 18.0),
+                child: Container(
+                  height: 25,
+                  child: CircleAvatar(
+                      child: Image.asset("assets/images/download.png")),
+                ))
+          ],
         ),
-        actions: <Widget>[
-          Padding(
-              padding: const EdgeInsets.only(right: 18.0),
-              child: Container(
-                height: 25,
-                child: CircleAvatar(
-                    child: Image.asset("assets/images/download.png")),
-              ))
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        // child: SingleChildScrollView(
-        // children:  [
-        child: SingleChildScrollView(
+        body: Padding(
+          padding: EdgeInsets.all(8.0),
           child: Column(
-            children: <Widget>[
-              loading
-                  ? const Center(child: CircularProgressIndicator())
-                  : assignedtask.isEmpty
-                      ? const Center(
-                          child: Text("Tasks aren't Assigned yet"),
-                        )
-                      : SingleChildScrollView(
-                          child: Column(
-                            children: <Widget>[
-                              ListView.builder(
-                                physics: const NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: assignedtask.length,
-                                itemBuilder: (context, index) {
-                                  return assignedtask[index].taskStatus != 'inProgress'
-                                      ? Container()
-                                      : Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            child: ClientContainer(
-                                              Approve: () {}, Reject: () {},
-                                              TimeLineDoc: () {
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        TimeData(
-                                                      Taskid:
-                                                          '${assignedtask[index].taskID}',
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              AttachDoc: () {
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        AttachData(
-                                                      Taskid:
-                                                          '${assignedtask[index].taskID}',
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              ChangeStatus: () {
-                                                // print('object');
-                                                UpdateStatus(
-                                                  '${assignedtask[index].taskID}',
-                                                );
-                                                Navigator.of(context).push(MaterialPageRoute(
-                                                    builder: (context) => const home_operator()));
-                                              },
-                                              who: 'operator',
-                                              fontColor: greyColor,
-                                              backgrondColor: greenColor,
-                                              first: yellowColor,
-                                              second: blackColor,
-                                              third: greenColor,
-                                              forth: redColor,
-                                              fifth: redColor,
-                                              sixth: yellowColor,
-                                              taskName:
-                                                  '${assignedtask[index].taskName}',
-                                              ProjectName:
-                                                  '${assignedtask[index].ProjectName}',
-                                              taskId:
-                                                  '${assignedtask[index].taskID}',
-                                              clientId:
-                                                  '${assignedtask[index].clientId}',
-                                              // '${mapClientIdName[assignedtask[index].clientId]}',
-                                              operatorId: '',
-                                              openDate:
-                                                  '${assignedtask[index].openDate?.substring(0, 10)}',
-                                              taskDescription:
-                                                  '${assignedtask[index].taskDescription}',
-                                              closeDate:
-                                                  '${assignedtask[index].closeDate?.substring(0, 10)}',
-                                              clientNote:
-                                                  '${assignedtask[index].clientNote}',
-                                              managerNote: '',
-                                              AssignationStatus: '',
-                                              priority: '',
-                                              clientApproval: '',
-                                              taskStatus:
-                                                  '${assignedtask[index].taskStatus}',
-                                              managerApproval: '',
-                                              taskCategory: '',
-                                              managerId: '',
-                                              assignTask: () {
-                                                if (assignedtask[index]
-                                                        .taskStatus ==
-                                                    'Pending') {}
-                                              },
-                                            ),
-                                          ),
-                                        );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-              const SizedBox(
-                height: 30,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Container(
+                height: 45,
+                width: MediaQuery.of(context).size.width - 2,
+                decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(25.0)),
+                child: TabBar(
+                  indicator: BoxDecoration(
+                      color: Colors.grey[700],
+                      borderRadius: BorderRadius.circular(25.0)),
+                  labelColor: Colors.white,
+                  unselectedLabelColor: Colors.black,
+                  tabs: const [
+                    // Assigned Task
+                    // Waiting for Manager Approval
+                    // Waiting for Client Approval
+                    // Closed Task
+                    Tab(
+                      text: 'Assigned',
+                    ),
+                    Tab(
+                      text: 'WaitingManager',
+                    ),
+                    Tab(
+                      text: 'WaitingClient',
+                    ),
+                    Tab(
+                      text: 'Closed',
+                    )
+                  ],
+                ),
               ),
+              Expanded(
+                  child: TabBarView(
+                children: [
+                  SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        loading
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 80.0),
+                                child: Center(
+                                  child: Column(
+                                    children: [
+                                      SpinKitDoubleBounce(
+                                        color: blackColor.withOpacity(1),
+                                        size: 50.0,
+                                      ),
+                                      Text("Loading....")
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : assignedtask.isEmpty
+                                ? Container(
+                                    height: 100,
+                                    child: const Center(
+                                      child: Text("Tasks aren't Assigned yet"),
+                                    ),
+                                  )
+                                : SingleChildScrollView(
+                                    child: Column(
+                                      children: <Widget>[
+                                        ListView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: assignedtask.length,
+                                          itemBuilder: (context, index) {
+                                            return assignedtask[index]
+                                                        .taskStatus !=
+                                                    'inProgress'
+                                                ? Container()
+                                                : (assignedtask[index]
+                                                                    .AssignationStatus ==
+                                                                'Assigned' ||
+                                                            assignedtask[index]
+                                                                    .AssignationStatus ==
+                                                                'Reassinged') &&
+                                                        assignedtask[index]
+                                                                .taskStatus ==
+                                                            'inProgress' &&
+                                                        (assignedtask[index]
+                                                                    .managerApproval ==
+                                                                'Pending' ||
+                                                            assignedtask[index]
+                                                                    .managerApproval ==
+                                                                'Rejected') &&
+                                                        (assignedtask[index]
+                                                                    .clientApproval ==
+                                                                'Pending' ||
+                                                            assignedtask[index]
+                                                                    .clientApproval ==
+                                                                'Rejected')
+                                                    ? Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Container(
+                                                          child:
+                                                              ClientContainer(
+                                                            Approve: () {},
+                                                            Reject: () {},
+                                                            TimeLineDoc: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .push(
+                                                                MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          TimeData(
+                                                                    Taskid:
+                                                                        '${assignedtask[index].taskID}',
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
+                                                            AttachDoc: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .push(
+                                                                MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          AttachData(
+                                                                    Taskid:
+                                                                        '${assignedtask[index].taskID}',
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
+                                                            ChangeStatus: () {
+                                                              // print('object');
+
+                                                              showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                                  return AlertDialog(
+                                                                    title: const Text(
+                                                                        "Really ?"),
+                                                                    content:
+                                                                        const Text(
+                                                                            "Are sure about completed task ?"),
+                                                                    actions: [
+                                                                      TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                        },
+                                                                        child: const Text(
+                                                                            "No"),
+                                                                      ),
+                                                                      TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          UpdateStatus(
+                                                                            '${assignedtask[index].taskID}',
+                                                                          );
+
+                                                                          Navigator.of(context)
+                                                                              .push(MaterialPageRoute(builder: (context) => const home_operator()));
+                                                                        },
+                                                                        child: const Text(
+                                                                            "Yes"),
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                            who: 'operator',
+                                                            fontColor:
+                                                                greyColor,
+                                                            backgrondColor:
+                                                                greenColor,
+                                                            first: yellowColor,
+                                                            second: blackColor,
+                                                            third: greenColor,
+                                                            forth: redColor,
+                                                            fifth: redColor,
+                                                            sixth: yellowColor,
+                                                            taskName:
+                                                                '${assignedtask[index].taskName}',
+                                                            ProjectName:
+                                                                '${assignedtask[index].ProjectName}',
+                                                            taskId:
+                                                                '${assignedtask[index].taskID}',
+                                                            clientId:
+                                                                '${assignedtask[index].clientId}',
+                                                            // '${mapClientIdName[assignedtask[index].clientId]}',
+                                                            operatorId: '',
+                                                            openDate:
+                                                                '${assignedtask[index].openDate?.substring(0, 10)}',
+                                                            taskDescription:
+                                                                '${assignedtask[index].taskDescription}',
+                                                            closeDate:
+                                                                '${assignedtask[index].closeDate?.substring(0, 10)}',
+                                                            clientNote:
+                                                                '${assignedtask[index].clientNote}',
+                                                            managerNote: '',
+                                                            AssignationStatus:
+                                                                '',
+                                                            priority: '',
+                                                            clientApproval: '',
+                                                            taskStatus:
+                                                                '${assignedtask[index].taskStatus}',
+                                                            managerApproval: '',
+                                                            taskCategory: '',
+                                                            managerId: '',
+                                                            assignTask: () {
+                                                              if (assignedtask[
+                                                                          index]
+                                                                      .taskStatus ==
+                                                                  'Pending') {}
+                                                            },
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : Container(
+                                                        child: Text(""),
+                                                      );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        loading
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 80.0),
+                                child: Center(
+                                  child: Column(
+                                    children: [
+                                      SpinKitDoubleBounce(
+                                        color: blackColor.withOpacity(1),
+                                        size: 50.0,
+                                      ),
+                                      Text("Loading....")
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : assignedtask.isEmpty
+                                ? Container(
+                                    height: 100,
+                                    child: const Center(
+                                      child: Text(
+                                          "There are no tasks waiting for \n manager approval"),
+                                    ),
+                                  )
+                                : SingleChildScrollView(
+                                    child: Column(
+                                      children: <Widget>[
+                                        ListView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: assignedtask.length,
+                                          itemBuilder: (context, index) {
+                                            return (assignedtask[index]
+                                                            .taskStatus ==
+                                                        'Completed') &&
+                                                    (assignedtask[index]
+                                                                .managerApproval ==
+                                                            'Pending' ||
+                                                        assignedtask[index]
+                                                                .managerApproval ==
+                                                            'Rejected') &&
+                                                    (assignedtask[index]
+                                                                .clientApproval ==
+                                                            'Pending' ||
+                                                        assignedtask[index]
+                                                                .clientApproval ==
+                                                            'Rejected')
+                                                ? Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Container(
+                                                      child: ClientContainer(
+                                                        Approve: () {},
+                                                        Reject: () {},
+                                                        TimeLineDoc: () {
+                                                          Navigator.of(context)
+                                                              .push(
+                                                            MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      TimeData(
+                                                                Taskid:
+                                                                    '${assignedtask[index].taskID}',
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        AttachDoc: () {
+                                                          Navigator.of(context)
+                                                              .push(
+                                                            MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      AttachData(
+                                                                Taskid:
+                                                                    '${assignedtask[index].taskID}',
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        ChangeStatus: () {},
+                                                        who: 'operator',
+                                                        fontColor: greyColor,
+                                                        backgrondColor:
+                                                            greenColor,
+                                                        first: yellowColor,
+                                                        second: blackColor,
+                                                        third: greenColor,
+                                                        forth: redColor,
+                                                        fifth: redColor,
+                                                        sixth: yellowColor,
+                                                        taskName:
+                                                            '${assignedtask[index].taskName}',
+                                                        ProjectName:
+                                                            '${assignedtask[index].ProjectName}',
+                                                        taskId:
+                                                            '${assignedtask[index].taskID}',
+                                                        clientId:
+                                                            '${assignedtask[index].clientId}',
+                                                        // '${mapClientIdName[assignedtask[index].clientId]}',
+                                                        operatorId: '',
+                                                        openDate:
+                                                            '${assignedtask[index].openDate?.substring(0, 10)}',
+                                                        taskDescription:
+                                                            '${assignedtask[index].taskDescription}',
+                                                        closeDate:
+                                                            '${assignedtask[index].closeDate?.substring(0, 10)}',
+                                                        clientNote:
+                                                            '${assignedtask[index].clientNote}',
+                                                        managerNote: '',
+                                                        AssignationStatus: '',
+                                                        priority: '',
+                                                        clientApproval: '',
+                                                        taskStatus:
+                                                            '${assignedtask[index].taskStatus}',
+                                                        managerApproval: '',
+                                                        taskCategory: '',
+                                                        managerId: '',
+                                                        assignTask: () {
+                                                          if (assignedtask[
+                                                                      index]
+                                                                  .taskStatus ==
+                                                              'Pending') {}
+                                                        },
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 80.0),
+                                                    child: Container(
+                                                      child: Center(
+                                                        child: Text(
+                                                            "There are no tasks waiting for \n manager approval..."),
+                                                      ),
+                                                    ),
+                                                  );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        loading
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 80.0),
+                                child: Center(
+                                  child: Column(
+                                    children: [
+                                      SpinKitDoubleBounce(
+                                        color: blackColor.withOpacity(1),
+                                        size: 50.0,
+                                      ),
+                                      Text("Loading....")
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : assignedtask.isEmpty
+                                ? Container(
+                                    height: 100,
+                                    child: const Center(
+                                      child: Text(
+                                          "There are no tasks waiting for \n client approval"),
+                                    ),
+                                  )
+                                : SingleChildScrollView(
+                                    child: Column(
+                                      children: <Widget>[
+                                        ListView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: assignedtask.length,
+                                          itemBuilder: (context, index) {
+                                            return assignedtask[index]
+                                                                .taskStatus ==
+                                                            'Completed' &&
+                                                        (assignedtask[index]
+                                                                .managerApproval ==
+                                                            'Accepted') &&
+                                                        (assignedtask[index]
+                                                                    .clientApproval ==
+                                                                'Pending' ||
+                                                            assignedtask[index]
+                                                                    .clientApproval ==
+                                                                'Rejected')
+                                                    ? Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Container(
+                                                          child:
+                                                              ClientContainer(
+                                                            Approve: () {},
+                                                            Reject: () {},
+                                                            TimeLineDoc: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .push(
+                                                                MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          TimeData(
+                                                                    Taskid:
+                                                                        '${assignedtask[index].taskID}',
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
+                                                            AttachDoc: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .push(
+                                                                MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          AttachData(
+                                                                    Taskid:
+                                                                        '${assignedtask[index].taskID}',
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
+                                                            ChangeStatus: () {},
+                                                            who: 'operator',
+                                                            fontColor:
+                                                                greyColor,
+                                                            backgrondColor:
+                                                                greenColor,
+                                                            first: yellowColor,
+                                                            second: blackColor,
+                                                            third: greenColor,
+                                                            forth: redColor,
+                                                            fifth: redColor,
+                                                            sixth: yellowColor,
+                                                            taskName:
+                                                                '${assignedtask[index].taskName}',
+                                                            ProjectName:
+                                                                '${assignedtask[index].ProjectName}',
+                                                            taskId:
+                                                                '${assignedtask[index].taskID}',
+                                                            clientId:
+                                                                '${assignedtask[index].clientId}',
+                                                            // '${mapClientIdName[assignedtask[index].clientId]}',
+                                                            operatorId: '',
+                                                            openDate:
+                                                                '${assignedtask[index].openDate?.substring(0, 10)}',
+                                                            taskDescription:
+                                                                '${assignedtask[index].taskDescription}',
+                                                            closeDate:
+                                                                '${assignedtask[index].closeDate?.substring(0, 10)}',
+                                                            clientNote:
+                                                                '${assignedtask[index].clientNote}',
+                                                            managerNote: '',
+                                                            AssignationStatus:
+                                                                '',
+                                                            priority: '',
+                                                            clientApproval: '',
+                                                            taskStatus:
+                                                                '${assignedtask[index].taskStatus}',
+                                                            managerApproval: '',
+                                                            taskCategory: '',
+                                                            managerId: '',
+                                                            assignTask: () {
+                                                              if (assignedtask[
+                                                                          index]
+                                                                      .taskStatus ==
+                                                                  'Pending') {}
+                                                            },
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                top: 80.0),
+                                                        child: Container(
+                                                          child: Center(
+                                                            child: Text(
+                                                                "There are no tasks waiting for \n client approval..."),
+                                                          ),
+                                                        ),
+                                                      );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        loading
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 80.0),
+                                child: Center(
+                                  child: Column(
+                                    children: [
+                                      SpinKitDoubleBounce(
+                                        color: blackColor.withOpacity(1),
+                                        size: 50.0,
+                                      ),
+                                      Text("Loading....")
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : assignedtask.isEmpty
+                                ? Container(
+                                    height: 100,
+                                    child: const Center(
+                                      child: Text("Tasks aren't Assigned yet"),
+                                    ),
+                                  )
+                                : SingleChildScrollView(
+                                    child: Column(
+                                      children: <Widget>[
+                                        ListView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: assignedtask.length,
+                                          itemBuilder: (context, index) {
+                                            return
+                                             ( assignedtask[index].taskStatus=='Closed' &&
+                                            assignedtask[index].managerApproval=='Accepted'
+                                            && assignedtask[index].clientApproval=='Accepted') ?
+                                              Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Container(
+                                                      child: ClientContainer(
+                                                        Approve: () {},
+                                                        Reject: () {},
+                                                        TimeLineDoc: () {
+                                                          Navigator.of(context)
+                                                              .push(
+                                                            MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      TimeData(
+                                                                Taskid:
+                                                                    '${assignedtask[index].taskID}',
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        AttachDoc: () {
+                                                          Navigator.of(context)
+                                                              .push(
+                                                            MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      AttachData(
+                                                                Taskid:
+                                                                    '${assignedtask[index].taskID}',
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        ChangeStatus: () {
+                                                          // print('object');
+
+                                                          showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                title: const Text(
+                                                                    "Really ?"),
+                                                                content: const Text(
+                                                                    "Are sure about completed task ?"),
+                                                                actions: [
+                                                                  TextButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child:
+                                                                        const Text(
+                                                                            "No"),
+                                                                  ),
+                                                                  TextButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      UpdateStatus(
+                                                                        '${assignedtask[index].taskID}',
+                                                                      );
+
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .push(
+                                                                              MaterialPageRoute(builder: (context) => const home_operator()));
+                                                                    },
+                                                                    child: const Text(
+                                                                        "Yes"),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                        who: 'operator',
+                                                        fontColor: greyColor,
+                                                        backgrondColor:
+                                                            greenColor,
+                                                        first: yellowColor,
+                                                        second: blackColor,
+                                                        third: greenColor,
+                                                        forth: redColor,
+                                                        fifth: redColor,
+                                                        sixth: yellowColor,
+                                                        taskName:
+                                                            '${assignedtask[index].taskName}',
+                                                        ProjectName:
+                                                            '${assignedtask[index].ProjectName}',
+                                                        taskId:
+                                                            '${assignedtask[index].taskID}',
+                                                        clientId:
+                                                            '${assignedtask[index].clientId}',
+                                                        // '${mapClientIdName[assignedtask[index].clientId]}',
+                                                        operatorId: '',
+                                                        openDate:
+                                                            '${assignedtask[index].openDate?.substring(0, 10)}',
+                                                        taskDescription:
+                                                            '${assignedtask[index].taskDescription}',
+                                                        closeDate:
+                                                            '${assignedtask[index].closeDate?.substring(0, 10)}',
+                                                        clientNote:
+                                                            '${assignedtask[index].clientNote}',
+                                                        managerNote: '',
+                                                        AssignationStatus: '',
+                                                        priority: '',
+                                                        clientApproval: '',
+                                                        taskStatus:
+                                                            '${assignedtask[index].taskStatus}',
+                                                        managerApproval: '',
+                                                        taskCategory: '',
+                                                        managerId: '',
+                                                        assignTask: () {
+                                                          if (assignedtask[
+                                                                      index]
+                                                                  .taskStatus ==
+                                                              'Pending') {}
+                                                        },
+                                                      ),
+                                                    ),
+                                                  )
+                                            :Padding(
+                                              padding: const EdgeInsets.only(top: 80.0),
+                                              child: Center(
+                                                child: Container(
+                                                  child: Text("No task is completed")
+                                                 ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )),
             ],
           ),
         ),
+        // body: Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   // child: SingleChildScrollView(
+        //   // children:  [
+        //   child:
+        // ),
       ),
     );
   }

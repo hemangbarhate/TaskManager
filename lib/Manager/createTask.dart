@@ -32,7 +32,7 @@ class _CreateTaskState extends State<CreateTask> {
   // "closeDate" : "2023-10-10",
   // "clientNote" : "Task Created."
   bool loading = false;
-  int select = -1;
+  int select = 1;
   Future<dynamic> createTask(String ProjectName, clientId, taskName,
       taskDescription, openDate, closeDate, clientNote) async {
     try {
@@ -134,40 +134,53 @@ class _CreateTaskState extends State<CreateTask> {
                         border: Border.all(
                           color: blueColor.withOpacity(0.6),
                         ),
-                        borderRadius: BorderRadius.circular(1),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: SingleChildScrollView(
-                          child: ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: clientlist.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    select = index;
-                                  });
-                                },
-                                child: Container(
-                                  color: select == index
-                                      ? greyColor.withOpacity(0.2)
-                                      : whiteColor.withOpacity(1),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      child: ListTile(
-                                        title:
-                                            Text("${clientlist[index].name}"),
-                                        subtitle:
-                                            Text("${clientlist[index].email}"),
+                        child: Scrollbar(
+                          // scrollController != null,
+                          isAlwaysShown: true, //always show scrollbar
+                          thickness: 10, //width of scrollbar
+                          radius: Radius.circular(20), //corner radius of scrollbar
+                          scrollbarOrientation: ScrollbarOrientation.left,
+                          child: SingleChildScrollView(
+                            child: ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: clientlist.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      select = index;
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: select == index
+                                            ? greyColor.withOpacity(0.2)
+                                            : whiteColor.withOpacity(1),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        // height: 50,
+
+                                        child: ListTile(
+                                          leading: Icon(Icons.account_circle),
+                                          title:
+                                              Text("${clientlist[index].name}"),
+                                          subtitle:
+                                              Text("${clientlist[index].email}"),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           ),
                         ),
                       ),
@@ -400,8 +413,7 @@ class _CreateTaskState extends State<CreateTask> {
                               Description.text,
                               opendate.text,
                               closedate.text,
-                              closedate.text
-                          );
+                              closedate.text);
                           final snackBar = SnackBar(
                             content: Text("Please Refresh the page "),
                             backgroundColor: (Colors.black12),
@@ -412,14 +424,14 @@ class _CreateTaskState extends State<CreateTask> {
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                           ProjectName.clear();
-                        select = -1;
-                        TaskName.clear();
-                        Description.clear();
-                        opendate.clear();
-                        closedate.clear();
-                        closedate.clear();
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const home_manager()));
+                          select = -1;
+                          TaskName.clear();
+                          Description.clear();
+                          opendate.clear();
+                          closedate.clear();
+                          closedate.clear();
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const home_manager()));
                           // );
                         } else {
                           print(clientId);

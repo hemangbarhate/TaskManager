@@ -27,7 +27,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
   bool loading = false;
   List<String> departlist = [];
   List<String> departlistID = [];
-  int select = -1;
+  int select = 1;
   getDetp() async {
     setState(() {
       loading = true;
@@ -89,9 +89,9 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
     super.initState();
   }
 
+  ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey[200],
@@ -126,7 +126,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                   border: Border.all(),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
                     "Add Department",
                     style: TextStyle(
@@ -238,47 +238,67 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
             ),
             loading
                 ? Center(child: CircularProgressIndicator())
-                : Container(
-                    height: 250,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: blueColor.withOpacity(0.6),
+                : Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                      height: 250,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: blueColor.withOpacity(0.6),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      borderRadius: BorderRadius.circular(1),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: SingleChildScrollView(
-                        child: ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: departlist.length,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  select = index;
-                                });
-                              },
-                              child: Container(
-                                color: select == index
-                                    ? greyColor.withOpacity(0.2)
-                                    : whiteColor.withOpacity(1),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Scrollbar(
+                          controller: _scrollController,
+                          isAlwaysShown: true, //always show scrollbar
+                          thickness: 10, //width of scrollbar
+                          radius:
+                              Radius.circular(20), //corner radius of scrollbar
+                          scrollbarOrientation: ScrollbarOrientation.left,
+                          child: SingleChildScrollView(
+                            child: ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: departlist.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      select = index;
+                                    });
+                                  },
                                   child: Container(
-                                    child: ListTile(
-                                      title: Text("${departlist[index]}"),
+                                    decoration: BoxDecoration(
+                                        color: select == index
+                                            ? greyColor.withOpacity(0.2)
+                                            : whiteColor.withOpacity(1),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        // height: 50,
+
+                                        child: ListTile(
+                                          leading: Icon(Icons.add_chart ),
+                                          title:
+                                              Text("${departlist[index]}"),
+                                          // subtitle:
+                                              // Text("${clientlist[index].email}"),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            );
-                          },
+                                );
+                              },
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextFormField(
