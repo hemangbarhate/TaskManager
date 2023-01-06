@@ -10,7 +10,7 @@ import 'package:cupertino_radio_choice/cupertino_radio_choice.dart';
 import 'package:intership/Operator/operatorHome.dart';
 import 'package:intership/constant/ApI.dart';
 import 'package:intership/constant/color.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -73,7 +73,7 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
               ),
               Header(),
               SizedBox(
-                height: MediaQuery.of(context).size.height / 17,
+                height: MediaQuery.of(context).size.height / 15,
               ),
               Container(
                 // height: MediaQuery.of(context).size.height / 1.8,
@@ -122,7 +122,7 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                               TextFormField(
                                 controller: emailController,
                                 cursorColor: Colors.black87,
-                                style: TextStyle(color: Colors.black),
+                                style: const TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
                                   hintText: "Email",
                                   filled: true,
@@ -152,7 +152,7 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                           ),
                         ),
                         const SizedBox(
-                          height: 40,
+                          height: 45,
                         ),
                         GestureDetector(
                           onTap: () async {
@@ -174,30 +174,30 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => home_manager()));
+                                          builder: (context) => const home_manager()));
                                 }
                                 else if (_selectedGender == "operator"){
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => home_operator()));
+                                          builder: (context) => const home_operator()));
                                 }
                                 else if (_selectedGender == "admin"){
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => HomePage()));
+                                          builder: (context) => const HomePage()));
                                 }
                                 else {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => home_client()));
+                                          builder: (context) => const home_client()));
                                 }
                               }
                               else {
                                 final snackBar = SnackBar(
-                                  content: Text("response['data']"),
+                                  content: const Text("Enter Correct Credentials"),
                                   backgroundColor: (Colors.black12),
                                   action: SnackBarAction(
                                     label: 'dismiss',
@@ -223,7 +223,16 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                               return null;
                             }
                           },
-                          child: loading ? CircularProgressIndicator() : Container(
+                          child: loading ?
+                          SpinKitCircle(
+                            color: Colors.white,
+                            size: 50.0,
+                          )
+                          // Container(
+                          //     height: 50,
+                          //     width: 50,
+                          //     child: const CircularProgressIndicator())
+                              : Container(
                             height: 50,
                             margin: const EdgeInsets.symmetric(horizontal: 50),
                             decoration: BoxDecoration(
@@ -234,7 +243,7 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                               ),
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 "Login",
                                 style: TextStyle(

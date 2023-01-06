@@ -247,16 +247,16 @@ class _ViewTaskState extends State<ViewTask> {
                   unselectedLabelColor: Colors.black,
                   tabs: const [
                     Tab(
-                      text: 'Reque..',
+                      text: 'Request',
                     ),
                     Tab(
-                      text: 'Assig..',
+                      text: 'Ongoing',
                     ),
                     Tab(
-                      text: 'InProg..',
+                      text: 'Waiting..',
                     ),
                     Tab(
-                      text: 'Compl..',
+                      text: 'Completed',
                     )
                   ],
                 ),
@@ -469,7 +469,8 @@ class _ViewTaskState extends State<ViewTask> {
                   loadingthird
                       ? Center(child: CircularProgressIndicator())
                       : inprogresstask.length == 0
-                          ? Container(
+                          ?
+                  Container(
                               child: Center(
                                 child: Text("No data"),
                               ),
@@ -485,7 +486,10 @@ class _ViewTaskState extends State<ViewTask> {
                                       return Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
-                                          child: ClientContainer(
+                                          child:
+                                          '${inprogresstask[index].managerApproval}' == 'Completed'  && '${inprogresstask[index].clientApproval}' =='Pending'
+                                          ?
+                                          ClientContainer(
                                             who: 'manager',
                                             fontColor: yellowColor,
                                             backgrondColor: blueColor,
@@ -559,6 +563,10 @@ class _ViewTaskState extends State<ViewTask> {
                                             },
                                             Approve: () {},
                                             Reject: () {},
+                                          )
+                                          :
+                                          Container(
+
                                           ),
                                         ),
                                       );
