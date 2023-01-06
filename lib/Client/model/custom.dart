@@ -25,6 +25,7 @@ class ClientContainer extends StatefulWidget {
   final String priority;
   final String AssignationStatus;
   final String taskStatus;
+  final String forthbuttontext;
   final String clientApproval;
   final String managerApproval;
   final String taskCategory;
@@ -58,7 +59,7 @@ class ClientContainer extends StatefulWidget {
         required this.taskStatus,
         required this.clientApproval,
         required this.managerApproval,
-        required this.taskCategory, required this.addLink, required this.viewLink, required this.ProjectName, required this.approve, required this.reject
+        required this.taskCategory, required this.addLink, required this.viewLink, required this.ProjectName, required this.approve, required this.reject, required this.forthbuttontext
       })
       : super(key: key);
 
@@ -307,7 +308,7 @@ class _ClientContainerState extends State<ClientContainer> {
                         padding: EdgeInsets.only(left: 10.0, right: 10),
                         child: Center(
                           child: Text(
-                            '${widget.clientNote}',
+                            '${widget.forthbuttontext}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,

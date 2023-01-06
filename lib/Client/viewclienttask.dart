@@ -16,7 +16,7 @@ import 'package:intership/Client/model/custom.dart';
 
 TextEditingController linkcontroller = TextEditingController();
 TextEditingController docnamecontroller = TextEditingController();
-
+TextEditingController clientnotecontroller = TextEditingController();
 class ViewTask extends StatefulWidget {
   const ViewTask({Key? key}) : super(key: key);
 
@@ -32,9 +32,13 @@ class _ViewTaskState extends State<ViewTask> {
     gettasklist();
     super.initState();
   }
-
+  var forthbuttontest;
   List<TaskModel> tasklist = [];
-  List<TaskModel> tasklist2 = [];
+  List<TaskModel> createdTasks = [];
+  List<TaskModel> assignedTasks = [];
+  List<TaskModel> completedTasks = [];
+  List<TaskModel> acceptRejectTasks = [];
+  List<TaskModel> closedtasks = [];
   Future<List<TaskModel>> gettasklist() async {
     setState(() {
       loading = true;//make loading true to show progressindicator
@@ -46,12 +50,24 @@ class _ViewTaskState extends State<ViewTask> {
     for (dynamic i in response['result']) {
       print(i);
       tasklist.add(TaskModel.fromJson(i));
-      if(TaskModel.fromJson(i).managerApproval == 'Accepted'){
-        tasklist2.add(TaskModel.fromJson(i));
+      if(TaskModel.fromJson(i).AssignationStatus == 'Pending'){
+        createdTasks.add(TaskModel.fromJson(i));
+      }
+      if(TaskModel.fromJson(i).managerApproval == 'Accepted' && (TaskModel.fromJson(i).clientApproval == 'Pending' || TaskModel.fromJson(i).clientApproval == 'Rejected') && TaskModel.fromJson(i).taskStatus=='Completed'){
+        acceptRejectTasks.add(TaskModel.fromJson(i));
+      }
+      if(TaskModel.fromJson(i).managerApproval == 'Accepted' && TaskModel.fromJson(i).clientApproval == 'Accepted' && TaskModel.fromJson(i).taskStatus=='Closed'){
+        closedtasks.add(TaskModel.fromJson(i));
+      }
+      if(TaskModel.fromJson(i).taskStatus == 'Completed' && (TaskModel.fromJson(i).managerApproval == 'Pending' || TaskModel.fromJson(i).managerApproval == 'Rejected') && (TaskModel.fromJson(i).clientApproval == 'Pending' || TaskModel.fromJson(i).clientApproval == 'Rejected')){
+        completedTasks.add(TaskModel.fromJson(i));
+      }
+      if(TaskModel.fromJson(i).taskStatus == 'inProgress' && (TaskModel.fromJson(i).managerApproval == 'Pending' || TaskModel.fromJson(i).managerApproval == 'Rejected')&&(TaskModel.fromJson(i).clientApproval=='Pending' || TaskModel.fromJson(i).clientApproval=='Rejected')){
+        assignedTasks.add(TaskModel.fromJson(i));
       }
     }
     loading = false;
-    print(tasklist2.length);
+    print(acceptRejectTasks.length);
     setState(() {});
     return tasklist;
   }
@@ -67,13 +83,13 @@ class _ViewTaskState extends State<ViewTask> {
       print(e.toString());
     }
   }
-  Future<dynamic> RejectRequest(String taskid) async {
+  Future<dynamic> RejectRequest(String taskid,String ClientNote) async {
     try {
       setState(() {
         loadingfour = true; //make loading true to show progressindicator
       });
       Session _session = Session();
-      final data = jsonEncode(<String, String>{"Note" : "Task Rejected by client"});
+      final data = jsonEncode(<String, String>{"Note" : ClientNote});
       final response = await _session.post(
           'http://$ip/client/rejectTask/${taskid}', data);
       print(response.toString());
@@ -115,7 +131,7 @@ class _ViewTaskState extends State<ViewTask> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 2,
+        length: 5,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.white,
@@ -179,12 +195,22 @@ class _ViewTaskState extends State<ViewTask> {
                         borderRadius: BorderRadius.circular(25.0)),
                     labelColor: Colors.white,
                     unselectedLabelColor: Colors.black,
+                    isScrollable: true,
                     tabs: const [
                       Tab(
-                        text: 'All Tasks',
+                        text: 'Created Tasks',
                       ),
                       Tab(
-                        text: 'Accept/Reject task',
+                        text: 'Assigned Tasks',
+                      ),
+                      Tab(
+                        text: 'Completed Tasks',
+                      ),
+                      Tab(
+                        text: 'Accept/Reject Tasks',
+                      ),
+                      Tab(
+                        text: 'Closed Tasks',
                       ),
                     ],
                   ),
@@ -200,9 +226,22 @@ class _ViewTaskState extends State<ViewTask> {
                                 ListView.builder(
                                   physics: NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
-                                  itemCount: tasklist.length,
+                                  itemCount: createdTasks.length,
                                   itemBuilder: (context, index) {
-                                    return tasklist[index].priority == 'null'
+                                    if(createdTasks[index].taskStatus == "inProgress"){
+                                      forthbuttontest = "Operator Assigned";
+                                    }
+                                    else if(createdTasks[index].taskStatus == "Pending"){
+                                      forthbuttontest = "Operator Not Assigned";
+                                    }
+                                    else if(createdTasks[index].taskStatus == "Completed"){
+                                      if(createdTasks[index].clientApproval =="Rejected" && createdTasks[index].managerApproval=="Pending"){forthbuttontest = "Waiting for approvals";}
+                                      else  if(createdTasks[index].managerApproval =="Pending"){forthbuttontest = "Waiting for Manager Approval";}
+                                      else if(createdTasks[index].managerApproval =="Accepted"){forthbuttontest = "Waiting for Client Approval";}
+                                      else if(createdTasks[index].managerApproval =="Rejected"){forthbuttontest = "Rejected by Manager";}
+
+                                    }
+                                    return createdTasks[index].priority == 'null'
                                         ? Container()
                                         : Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -217,28 +256,28 @@ class _ViewTaskState extends State<ViewTask> {
                                                 fifth: redColor,
                                                 sixth: greyColor,
                                                 taskName:
-                                                    '${tasklist[index].taskName}',
+                                                    '${createdTasks[index].taskName}',
                                                 ProjectName:
-                                                    '${tasklist[index].ProjectName}',
+                                                    '${createdTasks[index].ProjectName}',
                                                 taskId:
-                                                    '${tasklist[index].taskID}',
+                                                    '${createdTasks[index].taskID}',
                                                 clientId:
-                                                    '${tasklist[index].clientId}',
+                                                    '${createdTasks[index].clientId}',
                                                 operatorId: '',
                                                 openDate:
-                                                    '${tasklist[index].openDate?.substring(0, 10)}',
+                                                    '${createdTasks[index].openDate?.substring(0, 10)}',
                                                 taskDescription:
-                                                    '${tasklist[index].taskDescription}',
+                                                    '${createdTasks[index].taskDescription}',
                                                 closeDate:
-                                                    '${tasklist[index].closeDate?.substring(0, 10)}',
+                                                    '${createdTasks[index].closeDate?.substring(0, 10)}',
                                                 clientNote:
-                                                    '${tasklist[index].clientNote}',
+                                                    '${createdTasks[index].clientNote}',
                                                 managerNote: '',
                                                 AssignationStatus: '',
                                                 priority: '',
                                                 clientApproval: '',
                                                 taskStatus:
-                                                    '${tasklist[index].taskStatus}',
+                                                    '${createdTasks[index].taskStatus}',
                                                 managerApproval: '',
                                                 taskCategory: '',
                                                 managerId: '',
@@ -311,7 +350,7 @@ class _ViewTaskState extends State<ViewTask> {
                                                                   linkcontroller
                                                                       .text
                                                                       .toString(),
-                                                                  tasklist[
+                                                                  createdTasks[
                                                                           index]
                                                                       .taskID);
                                                               print(
@@ -332,8 +371,8 @@ class _ViewTaskState extends State<ViewTask> {
                                                   Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
-                                                          builder: (context) => ViewLinks(taskid: tasklist[index].taskID)));
-                                                },
+                                                          builder: (context) => ViewLinks(taskid: createdTasks[index].taskID)));
+                                                }, forthbuttontext: '$forthbuttontest',
                                               ),
                                             ),
                                           );
@@ -342,80 +381,348 @@ class _ViewTaskState extends State<ViewTask> {
                               ],
                             ),
                           ),
+
                     loading
                         ? const SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: CircularProgressIndicator())
+                        height: 100,
+                        width: 100,
+                        child: CircularProgressIndicator())
                         : SingleChildScrollView(
-                            child: Column(
-                              children: <Widget>[
-                                ListView.builder(
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: tasklist2.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        child: ClientContainer(
-                                          fontColor: greyColor,
-                                          backgrondColor: greenColor,
-                                            first: yellowColor,
-                                            second: blackColor,
-                                            third: greenColor,
-                                            forth: redColor,
-                                            fifth: redColor,
-                                            sixth: yellowColor,
-                                          taskName:
-                                              '${tasklist2[index].taskName}',
-                                          ProjectName:
-                                              '${tasklist2[index].ProjectName}',
-                                          taskId: '${tasklist2[index].taskID}',
-                                          clientId:
-                                              '${tasklist2[index].clientId}',
-                                          operatorId:
-                                              '${tasklist2[index].operatorId}',
-                                          openDate:
-                                              '${tasklist2[index].openDate?.substring(0, 10)}',
-                                          taskDescription:
-                                              '${tasklist2[index].taskDescription}',
-                                          closeDate:
-                                              '${tasklist2[index].closeDate?.substring(0, 10)}',
-                                          clientNote:
-                                              '${tasklist2[index].clientNote}',
-                                          managerNote:
-                                              '${tasklist2[index].managerNote}',
-                                          AssignationStatus:
-                                              '${tasklist2[index].AssignationStatus}',
-                                          priority:
-                                              '${tasklist2[index].priority}',
-                                          clientApproval:
-                                              '${tasklist2[index].clientApproval}',
-                                          taskStatus:
-                                              '${tasklist2[index].taskStatus}',
-                                          managerApproval:
-                                              '${tasklist2[index].managerApproval}',
-                                          taskCategory:
-                                              '${tasklist2[index].taskCategory}',
-                                          managerId:
-                                              '${tasklist2[index].managerId}',
-                                          addLink: () {},
-                                          viewLink: () {},
-                                          approve: () async {
-                                            await ApproveRequest(tasklist2[index].taskID);
-                                          },
-                                          reject: () async {
-                                            await RejectRequest(tasklist2[index].taskID);
-                                          },
-                                        ),
-                                      ),
-                                    );
-                                  },
+                      child: Column(
+                        children: <Widget>[
+                          ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: assignedTasks.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  child: ClientContainer(
+                                    fontColor: orangeColor,
+                                    backgrondColor: blueColor,
+                                    first: yellowColor,
+                                    second: blackColor,
+                                    third: greenColor,
+                                    forth: redColor,
+                                    fifth: redColor,
+                                    sixth: yellowColor,
+                                    taskName:
+                                    '${assignedTasks[index].taskName}',
+                                    ProjectName:
+                                    '${assignedTasks[index].ProjectName}',
+                                    taskId: '${assignedTasks[index].taskID}',
+                                    clientId:
+                                    '${assignedTasks[index].clientId}',
+                                    operatorId:
+                                    '${assignedTasks[index].operatorId}',
+                                    openDate:
+                                    '${assignedTasks[index].openDate?.substring(0, 10)}',
+                                    taskDescription:
+                                    '${assignedTasks[index].taskDescription}',
+                                    closeDate:
+                                    '${assignedTasks[index].closeDate?.substring(0, 10)}',
+                                    clientNote:
+                                    '${assignedTasks[index].clientNote}',
+                                    managerNote:
+                                    '${assignedTasks[index].managerNote}',
+                                    AssignationStatus:
+                                    '${assignedTasks[index].AssignationStatus}',
+                                    priority:
+                                    '${assignedTasks[index].priority}',
+                                    clientApproval:
+                                    '${assignedTasks[index].clientApproval}',
+                                    taskStatus:
+                                    '${assignedTasks[index].taskStatus}',
+                                    managerApproval:
+                                    '${assignedTasks[index].managerApproval}',
+                                    taskCategory:
+                                    '${assignedTasks[index].taskCategory}',
+                                    managerId:
+                                    '${assignedTasks[index].managerId}',
+                                    addLink: () {},
+                                    viewLink: () {},
+                                    approve: () {},
+                                    reject: () {}, forthbuttontext: '',
+                                  ),
                                 ),
-                              ],
-                            ),
+                              );
+                            },
                           ),
+                        ],
+                      ),
+                    ),
+
+                    loading
+                        ? const SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: CircularProgressIndicator())
+                        : SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: completedTasks.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  child: ClientContainer(
+                                    fontColor: orangeColor,
+                                    backgrondColor: blueColor,
+                                    first: yellowColor,
+                                    second: blackColor,
+                                    third: greenColor,
+                                    forth: redColor,
+                                    fifth: redColor,
+                                    sixth: yellowColor,
+                                    taskName:
+                                    '${completedTasks[index].taskName}',
+                                    ProjectName:
+                                    '${completedTasks[index].ProjectName}',
+                                    taskId: '${completedTasks[index].taskID}',
+                                    clientId:
+                                    '${completedTasks[index].clientId}',
+                                    operatorId:
+                                    '${completedTasks[index].operatorId}',
+                                    openDate:
+                                    '${completedTasks[index].openDate?.substring(0, 10)}',
+                                    taskDescription:
+                                    '${completedTasks[index].taskDescription}',
+                                    closeDate:
+                                    '${completedTasks[index].closeDate?.substring(0, 10)}',
+                                    clientNote:
+                                    '${completedTasks[index].clientNote}',
+                                    managerNote:
+                                    '${completedTasks[index].managerNote}',
+                                    AssignationStatus:
+                                    '${completedTasks[index].AssignationStatus}',
+                                    priority:
+                                    '${completedTasks[index].priority}',
+                                    clientApproval:
+                                    '${completedTasks[index].clientApproval}',
+                                    taskStatus:
+                                    '${completedTasks[index].taskStatus}',
+                                    managerApproval:
+                                    '${completedTasks[index].managerApproval}',
+                                    taskCategory:
+                                    '${completedTasks[index].taskCategory}',
+                                    managerId:
+                                    '${completedTasks[index].managerId}',
+                                    addLink: () {},
+                                    viewLink: () {},
+                                    approve: () {},
+                                    reject: () {}, forthbuttontext: '',
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    loading
+                        ? const SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: CircularProgressIndicator())
+                        : SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: acceptRejectTasks.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  child: ClientContainer(
+                                    fontColor: greyColor,
+                                    backgrondColor: greenColor,
+                                    first: yellowColor,
+                                    second: blackColor,
+                                    third: greenColor,
+                                    forth: redColor,
+                                    fifth: redColor,
+                                    sixth: yellowColor,
+                                    taskName:
+                                    '${acceptRejectTasks[index].taskName}',
+                                    ProjectName:
+                                    '${acceptRejectTasks[index].ProjectName}',
+                                    taskId: '${acceptRejectTasks[index].taskID}',
+                                    clientId:
+                                    '${acceptRejectTasks[index].clientId}',
+                                    operatorId:
+                                    '${acceptRejectTasks[index].operatorId}',
+                                    openDate:
+                                    '${acceptRejectTasks[index].openDate?.substring(0, 10)}',
+                                    taskDescription:
+                                    '${acceptRejectTasks[index].taskDescription}',
+                                    closeDate:
+                                    '${acceptRejectTasks[index].closeDate?.substring(0, 10)}',
+                                    clientNote:
+                                    '${acceptRejectTasks[index].clientNote}',
+                                    managerNote:
+                                    '${acceptRejectTasks[index].managerNote}',
+                                    AssignationStatus:
+                                    '${acceptRejectTasks[index].AssignationStatus}',
+                                    priority:
+                                    '${acceptRejectTasks[index].priority}',
+                                    clientApproval:
+                                    '${acceptRejectTasks[index].clientApproval}',
+                                    taskStatus:
+                                    '${acceptRejectTasks[index].taskStatus}',
+                                    managerApproval:
+                                    '${acceptRejectTasks[index].managerApproval}',
+                                    taskCategory:
+                                    '${acceptRejectTasks[index].taskCategory}',
+                                    managerId:
+                                    '${acceptRejectTasks[index].managerId}',
+                                    addLink: () {},
+                                    viewLink: () {},
+                                    approve: () async {
+                                      await ApproveRequest(acceptRejectTasks[index].taskID);
+                                    },
+                                    reject: () async {
+                                      showDialog(
+                                        context: context,
+                                        builder:
+                                            (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text(
+                                                "Add Note"),
+                                            content:
+                                            SingleChildScrollView(
+                                              child: Column(
+                                                children: [
+                                                  const SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  TextField(
+                                                    controller:
+                                                    clientnotecontroller,
+                                                    decoration:
+                                                    const InputDecoration(
+                                                      hintText:
+                                                      'Add reason for rejection',
+                                                      labelText:
+                                                      'ClientNote',
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed:
+                                                    () async {
+                                                  Navigator.of(
+                                                      context)
+                                                      .pop();
+                                                },
+                                                child: const Text(
+                                                    "No"),
+                                              ),
+                                              TextButton(
+                                                onPressed:
+                                                    () async {
+                                                  await RejectRequest(acceptRejectTasks[index].taskID,clientnotecontroller.text.toString());
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text(
+                                                    "Yes"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                      // await RejectRequest(tasklist2[index].taskID,clientnotecontroller.text.toString());
+                                    }, forthbuttontext: '',
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    loading
+                        ? const SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: CircularProgressIndicator())
+                        : SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: closedtasks.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  child: ClientContainer(
+                                    fontColor: orangeColor,
+                                    backgrondColor: blueColor,
+                                    first: yellowColor,
+                                    second: blackColor,
+                                    third: greenColor,
+                                    forth: redColor,
+                                    fifth: redColor,
+                                    sixth: yellowColor,
+                                    taskName:
+                                    '${closedtasks[index].taskName}',
+                                    ProjectName:
+                                    '${closedtasks[index].ProjectName}',
+                                    taskId: '${closedtasks[index].taskID}',
+                                    clientId:
+                                    '${closedtasks[index].clientId}',
+                                    operatorId:
+                                    '${closedtasks[index].operatorId}',
+                                    openDate:
+                                    '${closedtasks[index].openDate?.substring(0, 10)}',
+                                    taskDescription:
+                                    '${closedtasks[index].taskDescription}',
+                                    closeDate:
+                                    '${closedtasks[index].closeDate?.substring(0, 10)}',
+                                    clientNote:
+                                    '${closedtasks[index].clientNote}',
+                                    managerNote:
+                                    '${closedtasks[index].managerNote}',
+                                    AssignationStatus:
+                                    '${closedtasks[index].AssignationStatus}',
+                                    priority:
+                                    '${closedtasks[index].priority}',
+                                    clientApproval:
+                                    '${closedtasks[index].clientApproval}',
+                                    taskStatus:
+                                    '${closedtasks[index].taskStatus}',
+                                    managerApproval:
+                                    '${closedtasks[index].managerApproval}',
+                                    taskCategory:
+                                    '${closedtasks[index].taskCategory}',
+                                    managerId:
+                                    '${closedtasks[index].managerId}',
+                                    addLink: () {},
+                                    viewLink: () {},
+                                    approve: () {},
+                                    reject: () {}, forthbuttontext: '',
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 )),
               ],

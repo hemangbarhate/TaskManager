@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:developer';
+// import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intership/Admin/model/session.dart';
@@ -45,6 +47,11 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
     }
   }
 
+  List<TaskModel> assignedtask1 = [];
+  List<TaskModel> managerApprovalPending = [];
+  List<TaskModel> clientApprovalPending = [];
+  List<TaskModel> closedTask = [];
+
   Future<List<TaskModel>> gerInProgressTask() async {
     setState(() {
       loading = true; //make loading true to show progressindicator
@@ -53,15 +60,29 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
     final response = await _session.get(operatortaskByOperatorId);
     // print(response);
     for (dynamic i in response['result']) {
-      if (TaskModel.fromJson(i).taskStatus == 'inProgress') {
-        //   print(i);
-        assignedtask.add(TaskModel.fromJson(i));
+      // if (TaskModel.fromJson(i).taskStatus == 'inProgress') {
+      //   //   print(i);
+      //   assignedtask.add(TaskModel.fromJson(i));
+      // }
+      assignedtask.add(TaskModel.fromJson(i));
+      if((TaskModel.fromJson(i).AssignationStatus == 'Assigned' || TaskModel.fromJson(i).AssignationStatus == 'Reassigned') && TaskModel.fromJson(i).taskStatus == 'inProgress' && (TaskModel.fromJson(i).managerApproval == 'Pending' || TaskModel.fromJson(i).managerApproval == 'Rejected') && (TaskModel.fromJson(i).clientApproval == 'Pending' || TaskModel.fromJson(i).clientApproval == 'Rejected')){
+        assignedtask1.add(TaskModel.fromJson(i));
+      }
+      if(TaskModel.fromJson(i).taskStatus == 'Completed' && TaskModel.fromJson(i).taskStatus == 'inProgress' && (TaskModel.fromJson(i).managerApproval == 'Pending' || TaskModel.fromJson(i).managerApproval == 'Rejected') && (TaskModel.fromJson(i).clientApproval == 'Pending' || TaskModel.fromJson(i).clientApproval == 'Rejected')){
+        managerApprovalPending.add(TaskModel.fromJson(i));
+      }
+      if(TaskModel.fromJson(i).taskStatus == 'Completed' && TaskModel.fromJson(i).taskStatus == 'inProgress' && TaskModel.fromJson(i).managerApproval == 'Accepted'&& (TaskModel.fromJson(i).clientApproval == 'Pending' || TaskModel.fromJson(i).clientApproval == 'Rejected')){
+clientApprovalPending.add(TaskModel.fromJson(i));
+      }
+      if(TaskModel.fromJson(i).taskStatus == 'Closed' && TaskModel.fromJson(i).managerApproval == 'Accepted' && TaskModel.fromJson(i).clientApproval == 'Accepted'){
+        closedTask.add(TaskModel.fromJson(i));
       }
     }
-    print(assignedtask.length);
-    for (var i in assignedtask) {
-      print("${i.taskDescription} == ${i.taskStatus}");
-    }
+    // print('aaaaaa');
+    // print(assignedtask.length);
+    // for (var i in assignedtask) {
+    //   print("${i.taskDescription} == ${i.taskStatus}");
+    // }
     loading = false;
     setState(() {});
     return assignedtask;
@@ -153,6 +174,7 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.circular(25.0)),
                 child: TabBar(
+                  isScrollable: true,
                   indicator: BoxDecoration(
                       color: Colors.grey[700],
                       borderRadius: BorderRadius.circular(25.0)),
@@ -164,16 +186,16 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                     // Waiting for Client Approval
                     // Closed Task
                     Tab(
-                      text: 'Assigned',
+                      text: 'Assigned Tasks',
                     ),
                     Tab(
-                      text: 'WaitingManager',
+                      text: 'Manager Approval Pending',
                     ),
                     Tab(
-                      text: 'WaitingClient',
+                      text: 'Client Approval Pending',
                     ),
                     Tab(
-                      text: 'Closed',
+                      text: 'Closed Tasks',
                     )
                   ],
                 ),

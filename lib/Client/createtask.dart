@@ -7,13 +7,8 @@ import 'package:intl/intl.dart';
 import '../Admin/constant.dart';
 import '../Admin/model/session.dart';
 
-TextEditingController TaskName = TextEditingController();
-TextEditingController ProjectName = TextEditingController();
-TextEditingController Description = TextEditingController();
-TextEditingController ClientNote = TextEditingController();
 TextEditingController opendate = TextEditingController();
 TextEditingController closedate = TextEditingController();
-
 
 class CreateTask extends StatefulWidget {
   const CreateTask({Key? key}) : super(key: key);
@@ -23,6 +18,10 @@ class CreateTask extends StatefulWidget {
 }
 
 class _CreateTaskState extends State<CreateTask> {
+  TextEditingController TaskName = TextEditingController();
+  TextEditingController ProjectName = TextEditingController();
+  TextEditingController Description = TextEditingController();
+  TextEditingController ClientNote = TextEditingController();
   @override
   void initState() {
     opendate.text = ""; //set the initial value of text field
@@ -55,6 +54,7 @@ class _CreateTaskState extends State<CreateTask> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       // backgroundColor: greyColor.withOpacity(0.1),
       appBar: AppBar(
