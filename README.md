@@ -1,4 +1,4 @@
-# Task Manager Mobile Apllication
+# Task Manager Mobile Application
 
 ## Getting Started
 
