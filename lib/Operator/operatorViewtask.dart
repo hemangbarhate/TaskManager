@@ -68,10 +68,10 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
       if((TaskModel.fromJson(i).AssignationStatus == 'Assigned' || TaskModel.fromJson(i).AssignationStatus == 'Reassigned') && TaskModel.fromJson(i).taskStatus == 'inProgress' && (TaskModel.fromJson(i).managerApproval == 'Pending' || TaskModel.fromJson(i).managerApproval == 'Rejected') && (TaskModel.fromJson(i).clientApproval == 'Pending' || TaskModel.fromJson(i).clientApproval == 'Rejected')){
         assignedtask1.add(TaskModel.fromJson(i));
       }
-      if(TaskModel.fromJson(i).taskStatus == 'Completed' && TaskModel.fromJson(i).taskStatus == 'inProgress' && (TaskModel.fromJson(i).managerApproval == 'Pending' || TaskModel.fromJson(i).managerApproval == 'Rejected') && (TaskModel.fromJson(i).clientApproval == 'Pending' || TaskModel.fromJson(i).clientApproval == 'Rejected')){
+      if(TaskModel.fromJson(i).taskStatus == 'Completed' && (TaskModel.fromJson(i).managerApproval == 'Pending' || TaskModel.fromJson(i).managerApproval == 'Rejected') && (TaskModel.fromJson(i).clientApproval == 'Pending' || TaskModel.fromJson(i).clientApproval == 'Rejected')){
         managerApprovalPending.add(TaskModel.fromJson(i));
       }
-      if(TaskModel.fromJson(i).taskStatus == 'Completed' && TaskModel.fromJson(i).taskStatus == 'inProgress' && TaskModel.fromJson(i).managerApproval == 'Accepted'&& (TaskModel.fromJson(i).clientApproval == 'Pending' || TaskModel.fromJson(i).clientApproval == 'Rejected')){
+      if(TaskModel.fromJson(i).taskStatus == 'Completed' && TaskModel.fromJson(i).managerApproval == 'Accepted'&& (TaskModel.fromJson(i).clientApproval == 'Pending' || TaskModel.fromJson(i).clientApproval == 'Rejected')){
 clientApprovalPending.add(TaskModel.fromJson(i));
       }
       if(TaskModel.fromJson(i).taskStatus == 'Closed' && TaskModel.fromJson(i).managerApproval == 'Accepted' && TaskModel.fromJson(i).clientApproval == 'Accepted'){
@@ -221,7 +221,7 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                   ),
                                 ),
                               )
-                            : assignedtask.isEmpty
+                            : assignedtask1.isEmpty
                                 ? Container(
                                     height: 100,
                                     child: const Center(
@@ -235,164 +235,138 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                           physics:
                                               const NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
-                                          itemCount: assignedtask.length,
+                                          itemCount: assignedtask1.length,
                                           itemBuilder: (context, index) {
-                                            return assignedtask[index]
-                                                        .taskStatus !=
-                                                    'inProgress'
-                                                ? Container()
-                                                : (assignedtask[index]
-                                                                    .AssignationStatus ==
-                                                                'Assigned' ||
-                                                            assignedtask[index]
-                                                                    .AssignationStatus ==
-                                                                'Reassinged') &&
-                                                        assignedtask[index]
-                                                                .taskStatus ==
-                                                            'inProgress' &&
-                                                        (assignedtask[index]
-                                                                    .managerApproval ==
-                                                                'Pending' ||
-                                                            assignedtask[index]
-                                                                    .managerApproval ==
-                                                                'Rejected') &&
-                                                        (assignedtask[index]
-                                                                    .clientApproval ==
-                                                                'Pending' ||
-                                                            assignedtask[index]
-                                                                    .clientApproval ==
-                                                                'Rejected')
-                                                    ? Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Container(
-                                                          child:
-                                                              ClientContainer(
-                                                            Approve: () {},
-                                                            Reject: () {},
-                                                            TimeLineDoc: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .push(
-                                                                MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          TimeData(
-                                                                    Taskid:
-                                                                        '${assignedtask[index].taskID}',
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            },
-                                                            AttachDoc: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .push(
-                                                                MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          AttachData(
-                                                                    Taskid:
-                                                                        '${assignedtask[index].taskID}',
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            },
-                                                            ChangeStatus: () {
-                                                              // print('object');
+                                            return
+                                                Padding(
+                                              padding:
+                                              const EdgeInsets
+                                                  .all(8.0),
+                                              child: Container(
+                                                child:
+                                                ClientContainer(
+                                                  Approve: () {},
+                                                  Reject: () {},
+                                                  TimeLineDoc: () {
+                                                    Navigator.of(
+                                                        context)
+                                                        .push(
+                                                      MaterialPageRoute(
+                                                        builder:
+                                                            (context) =>
+                                                            TimeData(
+                                                              Taskid:
+                                                              '${assignedtask1[index].taskID}',
+                                                            ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  AttachDoc: () {
+                                                    Navigator.of(
+                                                        context)
+                                                        .push(
+                                                      MaterialPageRoute(
+                                                        builder:
+                                                            (context) =>
+                                                            AttachData(
+                                                              Taskid:
+                                                              '${assignedtask1[index].taskID}',
+                                                            ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  ChangeStatus: () {
+                                                    // print('object');
 
-                                                              showDialog(
-                                                                context:
-                                                                    context,
-                                                                builder:
-                                                                    (BuildContext
-                                                                        context) {
-                                                                  return AlertDialog(
-                                                                    title: const Text(
-                                                                        "Really ?"),
-                                                                    content:
-                                                                        const Text(
-                                                                            "Are sure about completed task ?"),
-                                                                    actions: [
-                                                                      TextButton(
-                                                                        onPressed:
-                                                                            () {
-                                                                          Navigator.of(context)
-                                                                              .pop();
-                                                                        },
-                                                                        child: const Text(
-                                                                            "No"),
-                                                                      ),
-                                                                      TextButton(
-                                                                        onPressed:
-                                                                            () {
-                                                                          UpdateStatus(
-                                                                            '${assignedtask[index].taskID}',
-                                                                          );
+                                                    showDialog(
+                                                      context:
+                                                      context,
+                                                      builder:
+                                                          (BuildContext
+                                                      context) {
+                                                        return AlertDialog(
+                                                          title: const Text(
+                                                              "Really ?"),
+                                                          content:
+                                                          const Text(
+                                                              "Are sure about completed task ?"),
+                                                          actions: [
+                                                            TextButton(
+                                                              onPressed:
+                                                                  () {
+                                                                Navigator.of(context)
+                                                                    .pop();
+                                                              },
+                                                              child: const Text(
+                                                                  "No"),
+                                                            ),
+                                                            TextButton(
+                                                              onPressed:
+                                                                  () {
+                                                                UpdateStatus(
+                                                                  '${assignedtask1[index].taskID}',
+                                                                );
 
-                                                                          Navigator.of(context)
-                                                                              .push(MaterialPageRoute(builder: (context) => const home_operator()));
-                                                                        },
-                                                                        child: const Text(
-                                                                            "Yes"),
-                                                                      ),
-                                                                    ],
-                                                                  );
-                                                                },
-                                                              );
-                                                            },
-                                                            who: 'operator',
-                                                            fontColor:
-                                                                greyColor,
-                                                            backgrondColor:
-                                                                greenColor,
-                                                            first: yellowColor,
-                                                            second: blackColor,
-                                                            third: greenColor,
-                                                            forth: redColor,
-                                                            fifth: redColor,
-                                                            sixth: yellowColor,
-                                                            taskName:
-                                                                '${assignedtask[index].taskName}',
-                                                            ProjectName:
-                                                                '${assignedtask[index].ProjectName}',
-                                                            taskId:
-                                                                '${assignedtask[index].taskID}',
-                                                            clientId:
-                                                                '${assignedtask[index].clientId}',
-                                                            // '${mapClientIdName[assignedtask[index].clientId]}',
-                                                            operatorId: '',
-                                                            openDate:
-                                                                '${assignedtask[index].openDate?.substring(0, 10)}',
-                                                            taskDescription:
-                                                                '${assignedtask[index].taskDescription}',
-                                                            closeDate:
-                                                                '${assignedtask[index].closeDate?.substring(0, 10)}',
-                                                            clientNote:
-                                                                '${assignedtask[index].clientNote}',
-                                                            managerNote: '',
-                                                            AssignationStatus:
-                                                                '',
-                                                            priority: '',
-                                                            clientApproval: '',
-                                                            taskStatus:
-                                                                '${assignedtask[index].taskStatus}',
-                                                            managerApproval: '',
-                                                            taskCategory: '',
-                                                            managerId: '',
-                                                            assignTask: () {
-                                                              if (assignedtask[
-                                                                          index]
-                                                                      .taskStatus ==
-                                                                  'Pending') {}
-                                                            },
-                                                          ),
-                                                        ),
-                                                      )
-                                                    : Container(
-                                                        child: Text(""),
-                                                      );
+                                                                Navigator.of(context)
+                                                                    .push(MaterialPageRoute(builder: (context) => const home_operator()));
+                                                              },
+                                                              child: const Text(
+                                                                  "Yes"),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                  who: 'operator',
+                                                  fontColor:
+                                                  greyColor,
+                                                  backgrondColor:
+                                                  greenColor,
+                                                  first: yellowColor,
+                                                  second: blackColor,
+                                                  third: greenColor,
+                                                  forth: redColor,
+                                                  fifth: redColor,
+                                                  sixth: yellowColor,
+                                                  taskName:
+                                                  '${assignedtask1[index].taskName}',
+                                                  ProjectName:
+                                                  '${assignedtask1[index].ProjectName}',
+                                                  taskId:
+                                                  '${assignedtask1[index].taskID}',
+                                                  clientId:
+                                                  '${assignedtask1[index].clientId}',
+                                                  // '${mapClientIdName[assignedtask[index].clientId]}',
+                                                  operatorId: '',
+                                                  openDate:
+                                                  '${assignedtask1[index].openDate?.substring(0, 10)}',
+                                                  taskDescription:
+                                                  '${assignedtask1[index].taskDescription}',
+                                                  closeDate:
+                                                  '${assignedtask1[index].closeDate?.substring(0, 10)}',
+                                                  clientNote:
+                                                  '${assignedtask1[index].clientNote}',
+                                                  managerNote: '',
+                                                  AssignationStatus:
+                                                  '',
+                                                  priority: '',
+                                                  clientApproval: '',
+                                                  taskStatus:
+                                                  '${assignedtask1[index].taskStatus}',
+                                                  managerApproval: '',
+                                                  taskCategory: '',
+                                                  managerId: '',
+                                                  assignTask: () {
+                                                    if (assignedtask1[
+                                                    index]
+                                                        .taskStatus ==
+                                                        'Pending') {}
+                                                  },
+                                                ),
+                                              ),
+                                            );
+
                                           },
                                         ),
                                       ],
@@ -422,7 +396,7 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                   ),
                                 ),
                               )
-                            : assignedtask.isEmpty
+                            : managerApprovalPending.isEmpty
                                 ? Container(
                                     height: 100,
                                     child: const Center(
@@ -437,24 +411,9 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                           physics:
                                               const NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
-                                          itemCount: assignedtask.length,
+                                          itemCount: managerApprovalPending.length,
                                           itemBuilder: (context, index) {
-                                            return (assignedtask[index]
-                                                            .taskStatus ==
-                                                        'Completed') &&
-                                                    (assignedtask[index]
-                                                                .managerApproval ==
-                                                            'Pending' ||
-                                                        assignedtask[index]
-                                                                .managerApproval ==
-                                                            'Rejected') &&
-                                                    (assignedtask[index]
-                                                                .clientApproval ==
-                                                            'Pending' ||
-                                                        assignedtask[index]
-                                                                .clientApproval ==
-                                                            'Rejected')
-                                                ? Padding(
+                                            return  Padding(
                                                     padding:
                                                         const EdgeInsets.all(
                                                             8.0),
@@ -470,7 +429,7 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                                                   (context) =>
                                                                       TimeData(
                                                                 Taskid:
-                                                                    '${assignedtask[index].taskID}',
+                                                                    '${managerApprovalPending[index].taskID}',
                                                               ),
                                                             ),
                                                           );
@@ -483,7 +442,7 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                                                   (context) =>
                                                                       AttachData(
                                                                 Taskid:
-                                                                    '${assignedtask[index].taskID}',
+                                                                    '${managerApprovalPending[index].taskID}',
                                                               ),
                                                             ),
                                                           );
@@ -500,52 +459,42 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                                         fifth: redColor,
                                                         sixth: yellowColor,
                                                         taskName:
-                                                            '${assignedtask[index].taskName}',
+                                                            '${managerApprovalPending[index].taskName}',
                                                         ProjectName:
-                                                            '${assignedtask[index].ProjectName}',
+                                                            '${managerApprovalPending[index].ProjectName}',
                                                         taskId:
-                                                            '${assignedtask[index].taskID}',
+                                                            '${managerApprovalPending[index].taskID}',
                                                         clientId:
-                                                            '${assignedtask[index].clientId}',
+                                                            '${managerApprovalPending[index].clientId}',
                                                         // '${mapClientIdName[assignedtask[index].clientId]}',
                                                         operatorId: '',
                                                         openDate:
-                                                            '${assignedtask[index].openDate?.substring(0, 10)}',
+                                                            '${managerApprovalPending[index].openDate?.substring(0, 10)}',
                                                         taskDescription:
-                                                            '${assignedtask[index].taskDescription}',
+                                                            '${managerApprovalPending[index].taskDescription}',
                                                         closeDate:
-                                                            '${assignedtask[index].closeDate?.substring(0, 10)}',
+                                                            '${managerApprovalPending[index].closeDate?.substring(0, 10)}',
                                                         clientNote:
-                                                            '${assignedtask[index].clientNote}',
+                                                            '${managerApprovalPending[index].clientNote}',
                                                         managerNote: '',
                                                         AssignationStatus: '',
                                                         priority: '',
                                                         clientApproval: '',
                                                         taskStatus:
-                                                            '${assignedtask[index].taskStatus}',
+                                                            '${managerApprovalPending[index].taskStatus}',
                                                         managerApproval: '',
                                                         taskCategory: '',
                                                         managerId: '',
                                                         assignTask: () {
-                                                          if (assignedtask[
+                                                          if (managerApprovalPending[
                                                                       index]
                                                                   .taskStatus ==
                                                               'Pending') {}
                                                         },
                                                       ),
                                                     ),
-                                                  )
-                                                : Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 80.0),
-                                                    child: Container(
-                                                      child: Center(
-                                                        child: Text(
-                                                            "There are no tasks waiting for \n manager approval..."),
-                                                      ),
-                                                    ),
                                                   );
+
                                           },
                                         ),
                                       ],
@@ -575,7 +524,7 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                   ),
                                 ),
                               )
-                            : assignedtask.isEmpty
+                            : clientApprovalPending.isEmpty
                                 ? Container(
                                     height: 100,
                                     child: const Center(
@@ -590,21 +539,9 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                           physics:
                                               const NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
-                                          itemCount: assignedtask.length,
+                                          itemCount: clientApprovalPending.length,
                                           itemBuilder: (context, index) {
-                                            return assignedtask[index]
-                                                                .taskStatus ==
-                                                            'Completed' &&
-                                                        (assignedtask[index]
-                                                                .managerApproval ==
-                                                            'Accepted') &&
-                                                        (assignedtask[index]
-                                                                    .clientApproval ==
-                                                                'Pending' ||
-                                                            assignedtask[index]
-                                                                    .clientApproval ==
-                                                                'Rejected')
-                                                    ? Padding(
+                                            return Padding(
                                                         padding:
                                                             const EdgeInsets
                                                                 .all(8.0),
@@ -622,7 +559,7 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                                                       (context) =>
                                                                           TimeData(
                                                                     Taskid:
-                                                                        '${assignedtask[index].taskID}',
+                                                                        '${clientApprovalPending[index].taskID}',
                                                                   ),
                                                                 ),
                                                               );
@@ -636,7 +573,7 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                                                       (context) =>
                                                                           AttachData(
                                                                     Taskid:
-                                                                        '${assignedtask[index].taskID}',
+                                                                        '${clientApprovalPending[index].taskID}',
                                                                   ),
                                                                 ),
                                                               );
@@ -654,51 +591,39 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                                             fifth: redColor,
                                                             sixth: yellowColor,
                                                             taskName:
-                                                                '${assignedtask[index].taskName}',
+                                                                '${clientApprovalPending[index].taskName}',
                                                             ProjectName:
-                                                                '${assignedtask[index].ProjectName}',
+                                                                '${clientApprovalPending[index].ProjectName}',
                                                             taskId:
-                                                                '${assignedtask[index].taskID}',
+                                                                '${clientApprovalPending[index].taskID}',
                                                             clientId:
-                                                                '${assignedtask[index].clientId}',
+                                                                '${clientApprovalPending[index].clientId}',
                                                             // '${mapClientIdName[assignedtask[index].clientId]}',
                                                             operatorId: '',
                                                             openDate:
-                                                                '${assignedtask[index].openDate?.substring(0, 10)}',
+                                                                '${clientApprovalPending[index].openDate?.substring(0, 10)}',
                                                             taskDescription:
-                                                                '${assignedtask[index].taskDescription}',
+                                                                '${clientApprovalPending[index].taskDescription}',
                                                             closeDate:
-                                                                '${assignedtask[index].closeDate?.substring(0, 10)}',
+                                                                '${clientApprovalPending[index].closeDate?.substring(0, 10)}',
                                                             clientNote:
-                                                                '${assignedtask[index].clientNote}',
+                                                                '${clientApprovalPending[index].clientNote}',
                                                             managerNote: '',
                                                             AssignationStatus:
                                                                 '',
                                                             priority: '',
                                                             clientApproval: '',
                                                             taskStatus:
-                                                                '${assignedtask[index].taskStatus}',
+                                                                '${clientApprovalPending[index].taskStatus}',
                                                             managerApproval: '',
                                                             taskCategory: '',
                                                             managerId: '',
                                                             assignTask: () {
-                                                              if (assignedtask[
+                                                              if (clientApprovalPending[
                                                                           index]
                                                                       .taskStatus ==
                                                                   'Pending') {}
                                                             },
-                                                          ),
-                                                        ),
-                                                      )
-                                                    : Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                top: 80.0),
-                                                        child: Container(
-                                                          child: Center(
-                                                            child: Text(
-                                                                "There are no tasks waiting for \n client approval..."),
                                                           ),
                                                         ),
                                                       );
@@ -731,7 +656,7 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                   ),
                                 ),
                               )
-                            : assignedtask.isEmpty
+                            : closedTask.isEmpty
                                 ? Container(
                                     height: 100,
                                     child: const Center(
@@ -745,13 +670,9 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                           physics:
                                               const NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
-                                          itemCount: assignedtask.length,
+                                          itemCount: closedTask.length,
                                           itemBuilder: (context, index) {
-                                            return
-                                             ( assignedtask[index].taskStatus=='Closed' &&
-                                            assignedtask[index].managerApproval=='Accepted'
-                                            && assignedtask[index].clientApproval=='Accepted') ?
-                                              Padding(
+                                            return Padding(
                                                     padding:
                                                         const EdgeInsets.all(
                                                             8.0),
@@ -767,7 +688,7 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                                                   (context) =>
                                                                       TimeData(
                                                                 Taskid:
-                                                                    '${assignedtask[index].taskID}',
+                                                                    '${closedTask[index].taskID}',
                                                               ),
                                                             ),
                                                           );
@@ -780,7 +701,7 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                                                   (context) =>
                                                                       AttachData(
                                                                 Taskid:
-                                                                    '${assignedtask[index].taskID}',
+                                                                    '${closedTask[index].taskID}',
                                                               ),
                                                             ),
                                                           );
@@ -814,7 +735,7 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                                                     onPressed:
                                                                         () {
                                                                       UpdateStatus(
-                                                                        '${assignedtask[index].taskID}',
+                                                                        '${closedTask[index].taskID}',
                                                                       );
 
                                                                       Navigator.of(
@@ -841,49 +762,42 @@ clientApprovalPending.add(TaskModel.fromJson(i));
                                                         fifth: redColor,
                                                         sixth: yellowColor,
                                                         taskName:
-                                                            '${assignedtask[index].taskName}',
+                                                            '${closedTask[index].taskName}',
                                                         ProjectName:
-                                                            '${assignedtask[index].ProjectName}',
+                                                            '${closedTask[index].ProjectName}',
                                                         taskId:
-                                                            '${assignedtask[index].taskID}',
+                                                            '${closedTask[index].taskID}',
                                                         clientId:
-                                                            '${assignedtask[index].clientId}',
+                                                            '${closedTask[index].clientId}',
                                                         // '${mapClientIdName[assignedtask[index].clientId]}',
                                                         operatorId: '',
                                                         openDate:
-                                                            '${assignedtask[index].openDate?.substring(0, 10)}',
+                                                            '${closedTask[index].openDate?.substring(0, 10)}',
                                                         taskDescription:
-                                                            '${assignedtask[index].taskDescription}',
+                                                            '${closedTask[index].taskDescription}',
                                                         closeDate:
-                                                            '${assignedtask[index].closeDate?.substring(0, 10)}',
+                                                            '${closedTask[index].closeDate?.substring(0, 10)}',
                                                         clientNote:
-                                                            '${assignedtask[index].clientNote}',
+                                                            '${closedTask[index].clientNote}',
                                                         managerNote: '',
                                                         AssignationStatus: '',
                                                         priority: '',
                                                         clientApproval: '',
                                                         taskStatus:
-                                                            '${assignedtask[index].taskStatus}',
+                                                            '${closedTask[index].taskStatus}',
                                                         managerApproval: '',
                                                         taskCategory: '',
                                                         managerId: '',
                                                         assignTask: () {
-                                                          if (assignedtask[
+                                                          if (closedTask[
                                                                       index]
                                                                   .taskStatus ==
                                                               'Pending') {}
                                                         },
                                                       ),
                                                     ),
-                                                  )
-                                            :Padding(
-                                              padding: const EdgeInsets.only(top: 80.0),
-                                              child: Center(
-                                                child: Container(
-                                                  child: Text("No task is completed")
-                                                 ),
-                                              ),
-                                            );
+                                                  );
+
                                           },
                                         ),
                                       ],

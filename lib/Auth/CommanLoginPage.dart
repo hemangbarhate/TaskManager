@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:intership/Admin/homepage.dart';
+import 'package:intership/Admin/model/userstate.dart';
 import 'package:intership/Manager/managerHome.dart';
 import 'package:intership/Admin/model/session.dart';
 import 'dart:convert';
@@ -11,10 +12,97 @@ import 'package:intership/Operator/operatorHome.dart';
 import 'package:intership/constant/ApI.dart';
 import 'package:intership/constant/color.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Client/home_client.dart';
+
+
+final Map<String, String> genderMap = {
+    'manager': 'Manager',
+    'client': 'Client',
+    'operator': 'Operator',
+    'admin': 'Admin',
+  };
+  String _selectedGender = genderMap.keys.first;
+
+class Home extends StatefulWidget {
+  const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  bool isLoading = true;
+  late bool userLoggedIn;
+  late String userType;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void checkState() async {
+    // Provider.of<UserState>(context,).initSP();
+
+    // userType = await Provider.of<UserState>(context, listen: false).fetchCookieandUser();
+
+    // if (userType == "null") {
+    //   userLoggedIn = false;
+    // } else {
+    //   userLoggedIn = true;
+    // }
+
+    // setState(() {
+    //   isLoading = false;
+    // });
+
+    final sp = await SharedPreferences.getInstance();
+
+    String? userType, userToken;
+
+    userToken = sp.getString('cookie');
+    userType = sp.getString('userType');
+
+    if (userType == null || userToken == null) {
+      userLoggedIn = false;
+    } else {
+      userLoggedIn = true;
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    checkState();
+
+    if (isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      if (userLoggedIn && _selectedGender == 'manager') {
+        return home_manager();
+      }
+      else if (userLoggedIn && _selectedGender == 'client') {
+        return home_client();
+      }
+      else if (userLoggedIn && _selectedGender == 'admin') {
+        return HomePage();
+      }
+      else if (userLoggedIn && _selectedGender == 'operator') {
+        return home_operator();
+      }
+       else {
+        return CommanLoginPage();
+      }
+    }
+  }
+}
 
 class CommanLoginPage extends StatefulWidget {
   @override
@@ -24,14 +112,9 @@ class CommanLoginPage extends StatefulWidget {
 class _CommanLoginPageState extends State<CommanLoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController pwdController = TextEditingController();
-  static final Map<String, String> genderMap = {
-    'manager': 'Manager',
-    'client': 'Client',
-    'operator': 'Operator',
-    'admin' : 'Admin',
-  };
+  //map
   bool loading = false;
-  String _selectedGender = genderMap.keys.first;
+  
   Future<dynamic> login(String email, String password, String api) async {
     try {
       setState(() {
@@ -39,8 +122,8 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
       });
       Session _session = Session();
       final data =
-      jsonEncode(<String, String>{'email': email, 'password': password});
-      final response = await _session.post(api , data);
+          jsonEncode(<String, String>{'email': email, 'password': password});
+      final response = await _session.post(api, data);
       print(_session.cookies);
       print(response.toString());
       setState(() {
@@ -54,9 +137,21 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
       loading = false;
     });
   }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  late final sp;
+  void initSP() async {
+    sp = await SharedPreferences.getInstance();
+  }
+
   // String _selectedGender = genderMap.keys.first;
   @override
   Widget build(BuildContext context) {
+    initSP();
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -105,8 +200,7 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                             selectedColor: yellowColor.withOpacity(1),
                             notSelectedColor: greyColor,
                             choices: genderMap,
-                            onChange: (genderKey)
-                            {
+                            onChange: (genderKey) {
                               setState(() {
                                 _selectedGender = genderKey;
                                 print(_selectedGender);
@@ -156,108 +250,115 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                         ),
                         GestureDetector(
                           onTap: () async {
-                            if(!emailController.text.isEmpty && !pwdController.text.isEmpty) {
+                            if (!emailController.text.isEmpty &&
+                                !pwdController.text.isEmpty) {
                               String api = "";
                               // print(_selectedGender == "manager");
-                              if(_selectedGender == "manager") api = managerlogin;
-                              else if (_selectedGender == "operator") api = operatorlogin;
-                              else if (_selectedGender == "admin") api = adminlogin;
-                              else api = clientlogin;
+                              if (_selectedGender == "manager")
+                                api = managerlogin;
+                              else if (_selectedGender == "operator")
+                                api = operatorlogin;
+                              else if (_selectedGender == "admin")
+                                api = adminlogin;
+                              else if (_selectedGender == 'client')
+                                api = clientlogin;
                               print(_selectedGender);
                               var response = await login(
-                                  emailController.text.toString(),
-                                  pwdController.text.toString(),
-                                  api)
+                                      emailController.text.toString(),
+                                      pwdController.text.toString(),
+                                      api)
                                   .catchError((err) {});
-                              if (response['success'] == true) {
-                                if(_selectedGender == "manager"){
+                              if (mounted && response['success'] == true) {
+                                sp.setString('userType',_selectedGender);
+                                if (_selectedGender == "manager") {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => const home_manager()));
-                                }
-                                else if (_selectedGender == "operator"){
+                                          builder: (context) =>
+                                              const home_manager()));
+                                } else if (_selectedGender == "operator") {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => const home_operator()));
-                                }
-                                else if (_selectedGender == "admin"){
+                                          builder: (context) =>
+                                              const home_operator()));
+                                } else if (_selectedGender == "admin") {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => const HomePage()));
-                                }
-                                else {
+                                          builder: (context) =>
+                                              const HomePage()));
+                                } else if (_selectedGender == "client") {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => const home_client()));
+                                          builder: (context) =>
+                                              const home_client()));
                                 }
-                              }
-                              else {
+                              } else {
                                 final snackBar = SnackBar(
-                                  content: const Text("Enter Correct Credentials"),
+                                  content:
+                                      const Text("Enter Correct Credentials"),
                                   backgroundColor: (Colors.black12),
                                   action: SnackBarAction(
                                     label: 'dismiss',
-                                    onPressed: () {
-                                    },
+                                    onPressed: () {},
                                   ),
                                 );
-                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
                                 return;
                               }
-                            }else {
+                            } else {
                               print("ddddd");
                               final snackBar = SnackBar(
                                 content: const Text('Please Enter Credentials'),
                                 backgroundColor: (Colors.black12),
                                 action: SnackBarAction(
                                   label: 'dismiss',
-                                  onPressed: () {
-                                  },
+                                  onPressed: () {},
                                 ),
                               );
-                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
                               return null;
                             }
                           },
-                          child: loading ?
-                          SpinKitCircle(
-                            color: Colors.white,
-                            size: 50.0,
-                          )
-                          // Container(
-                          //     height: 50,
-                          //     width: 50,
-                          //     child: const CircularProgressIndicator())
+                          child: loading
+                              ? SpinKitCircle(
+                                  color: Colors.white,
+                                  size: 50.0,
+                                )
+                              // Container(
+                              //     height: 50,
+                              //     width: 50,
+                              //     child: const CircularProgressIndicator())
                               : Container(
-                            height: 50,
-                            margin: const EdgeInsets.symmetric(horizontal: 50),
-                            decoration: BoxDecoration(
-                              // color: Colors.cyan[500],
-                              border: Border.all(
-                                color: Colors.yellowAccent,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                "Login",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
+                                  height: 50,
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 50),
+                                  decoration: BoxDecoration(
+                                    // color: Colors.cyan[500],
+                                    border: Border.all(
+                                      color: Colors.yellowAccent,
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      "Login",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
                         ),
                         // const SizedBox(
                         //   height: 25,
                         // ),
-
                       ],
                     ),
                   ),

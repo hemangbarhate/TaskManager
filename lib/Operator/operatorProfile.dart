@@ -120,7 +120,7 @@ class _OperatorProfileState extends State<OperatorProfile> {
                                     fontSize: 22),
                               ),
                               Text(
-                                "Manager",
+                                "Operator",
                                 style: TextStyle(
                                     color: blackColor.withOpacity(0.6),
                                     fontSize: 18),
@@ -262,7 +262,7 @@ class _OperatorProfileState extends State<OperatorProfile> {
                   GestureDetector(
                     onTap: () async {
                       Response response =
-                      await http.get(Uri.parse(managerLogout));
+                      await http.get(Uri.parse(clientlogout));
                       if (response.statusCode == 200) {
                         print('LogOut successfully');
                         Navigator.pop(context);
