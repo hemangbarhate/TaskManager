@@ -1,8 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:intership/Manager/assignTask.dart';
 import 'package:intership/constant/color.dart';
 
-class ClientContainer extends StatefulWidget {
+class MyContainer extends StatefulWidget {
   final Color fontColor;
   final Color backgrondColor;
   final Color first;
@@ -12,6 +13,9 @@ class ClientContainer extends StatefulWidget {
   final Color fifth;
   final Color sixth;
   final String taskId;
+  final String managername;
+  final String operatorname;
+
   final String clientId;
   final String operatorId;
   final String managerId;
@@ -23,8 +27,6 @@ class ClientContainer extends StatefulWidget {
   final String clientNote;
   final String managerNote;
   final String priority;
-  final String managername;
-  final String operatorname;
   final String AssignationStatus;
   final String taskStatus;
   final String forthbuttontext;
@@ -36,7 +38,7 @@ class ClientContainer extends StatefulWidget {
   final VoidCallback approve;
   final VoidCallback reject;
 
-  const ClientContainer(
+  const MyContainer(
       {Key? key,
         required this.fontColor,
         required this.backgrondColor,
@@ -66,10 +68,10 @@ class ClientContainer extends StatefulWidget {
       : super(key: key);
 
   @override
-  _ClientContainerState createState() => _ClientContainerState();
+  _MyContainerState createState() => _MyContainerState();
 }
 
-class _ClientContainerState extends State<ClientContainer> {
+class _MyContainerState extends State<MyContainer> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -132,6 +134,33 @@ class _ClientContainerState extends State<ClientContainer> {
                 child: Container(
                   child: Text(
                     "Client Note : ${widget.clientNote}",
+                    style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(7),
+                child: Container(
+                  child: Text(
+                    "Manager Note : ${widget.managerNote}",
+                    style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(7),
+                child: Container(
+                  child: Text(
+                    "Assigned Manager : ${widget.managername}",
+                    style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(7),
+                child: Container(
+                  child: Text(
+                    "Assigned Operator : ${widget.operatorname}",
                     style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
                   ),
                 ),
@@ -311,7 +340,7 @@ class _ClientContainerState extends State<ClientContainer> {
                         padding: EdgeInsets.only(left: 10.0, right: 10),
                         child: Center(
                           child: Text(
-                            '${widget.forthbuttontext}',
+                            '${widget.priority}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,
@@ -361,46 +390,46 @@ class _ClientContainerState extends State<ClientContainer> {
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap:  widget.addLink,
-                    child: Container(
-                      width: 100,
-                      height: 46,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            widget.sixth.withOpacity(0.9),
-                            widget.sixth.withOpacity(0.9)
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(5, 5),
-                            blurRadius: 10,
-                          )
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10),
-                        child: Center(
-                          child: Text(
-                            'Add Link',
-                            style: TextStyle(
-                              color: widget.sixth == greyColor
-                                  ? yellowColor.withOpacity(0.9)
-                                  : greyColor.withOpacity(0.9),
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap:  widget.addLink,
+                  //   child: Container(
+                  //     width: 100,
+                  //     height: 46,
+                  //     decoration: BoxDecoration(
+                  //       gradient: LinearGradient(
+                  //         colors: [
+                  //           widget.sixth.withOpacity(0.9),
+                  //           widget.sixth.withOpacity(0.9)
+                  //         ],
+                  //         begin: Alignment.topLeft,
+                  //         end: Alignment.bottomRight,
+                  //       ),
+                  //       borderRadius: BorderRadius.circular(20),
+                  //       boxShadow: const [
+                  //         BoxShadow(
+                  //           color: Colors.black12,
+                  //           offset: Offset(5, 5),
+                  //           blurRadius: 10,
+                  //         )
+                  //       ],
+                  //     ),
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.only(left: 10.0, right: 10),
+                  //       child: Center(
+                  //         child: Text(
+                  //           'Add Link',
+                  //           style: TextStyle(
+                  //             color: widget.sixth == greyColor
+                  //                 ? yellowColor.withOpacity(0.9)
+                  //                 : greyColor.withOpacity(0.9),
+                  //             fontSize: 13,
+                  //             fontWeight: FontWeight.bold,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
               const SizedBox(

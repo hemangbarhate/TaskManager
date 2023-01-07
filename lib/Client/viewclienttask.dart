@@ -14,6 +14,9 @@ import '../constant/ApI.dart';
 import '../constant/color.dart';
 import 'package:intership/Client/model/custom.dart';
 
+import 'model/custom2.dart';
+import 'model/customwithnotes.dart';
+
 TextEditingController linkcontroller = TextEditingController();
 TextEditingController docnamecontroller = TextEditingController();
 TextEditingController clientnotecontroller = TextEditingController();
@@ -32,6 +35,21 @@ class _ViewTaskState extends State<ViewTask> {
   void initState() {
     gettasklist();
     super.initState();
+  }
+
+  var mapOperatorName = Map<String, dynamic>();
+  getOperatorName(String s) async {
+    Session _session = Session();
+    final response = await _session.get('http://$ip/client/getOperator/$s');
+    // print(response);
+    mapOperatorName[s] = response['operator']['name'];
+  }
+  var mapManagerName = Map<String, dynamic>();
+  getmanagerName(String s) async {
+    Session _session = Session();
+    final response = await _session.get('http://$ip/client/getManager/$s');
+    print("ResponseNAME ${response['manager']['name']}");
+    mapManagerName[s] = response['manager']['name'];
   }
 
   var forthbuttontest;
@@ -53,10 +71,10 @@ class _ViewTaskState extends State<ViewTask> {
     });
     Session _session = Session();
     final response = await _session.get(getcreatedtask);
-    print(response);
+    // print(response);
 
     for (dynamic i in response['result']) {
-      print(i);
+      // print(i);
       tasklist.add(TaskModel.fromJson(i));
       if (TaskModel.fromJson(i).AssignationStatus == 'Pending') {
         createdTasks.add(TaskModel.fromJson(i));
@@ -66,11 +84,15 @@ class _ViewTaskState extends State<ViewTask> {
               TaskModel.fromJson(i).clientApproval == 'Rejected') &&
           TaskModel.fromJson(i).taskStatus == 'Completed') {
         acceptRejectTasks.add(TaskModel.fromJson(i));
+        await  getOperatorName('${TaskModel.fromJson(i).operatorId}');
+        await getmanagerName('${TaskModel.fromJson(i).managerId}');
       }
       if (TaskModel.fromJson(i).managerApproval == 'Accepted' &&
           TaskModel.fromJson(i).clientApproval == 'Accepted' &&
           TaskModel.fromJson(i).taskStatus == 'Closed') {
         closedtasks.add(TaskModel.fromJson(i));
+        await  getOperatorName('${TaskModel.fromJson(i).operatorId}');
+        await getmanagerName('${TaskModel.fromJson(i).managerId}');
       }
       if (TaskModel.fromJson(i).taskStatus == 'Completed' &&
           (TaskModel.fromJson(i).managerApproval == 'Pending' ||
@@ -78,6 +100,8 @@ class _ViewTaskState extends State<ViewTask> {
           (TaskModel.fromJson(i).clientApproval == 'Pending' ||
               TaskModel.fromJson(i).clientApproval == 'Rejected')) {
         completedTasks.add(TaskModel.fromJson(i));
+        await  getOperatorName('${TaskModel.fromJson(i).operatorId}');
+        await getmanagerName('${TaskModel.fromJson(i).managerId}');
       }
       if (TaskModel.fromJson(i).taskStatus == 'inProgress' &&
           (TaskModel.fromJson(i).managerApproval == 'Pending' ||
@@ -85,10 +109,12 @@ class _ViewTaskState extends State<ViewTask> {
           (TaskModel.fromJson(i).clientApproval == 'Pending' ||
               TaskModel.fromJson(i).clientApproval == 'Rejected')) {
         assignedTasks.add(TaskModel.fromJson(i));
+      await  getOperatorName('${TaskModel.fromJson(i).operatorId}');
+        await getmanagerName('${TaskModel.fromJson(i).managerId}');
       }
     }
     loading = false;
-    print(acceptRejectTasks.length);
+    // print(acceptRejectTasks.length);
     setState(() {});
     return tasklist;
   }
@@ -117,8 +143,8 @@ class _ViewTaskState extends State<ViewTask> {
       final data = jsonEncode(<String, String>{"Note": ClientNote});
       final response =
           await _session.post('http://$ip/client/rejectTask/${taskid}', data);
-      print(response.toString());
-      print('Rejected');
+      // print(response.toString());
+      // print('Rejected');
       await gettasklist();
       setState(() {
         loadingfour = false; //make loading true to show progressindicator
@@ -427,6 +453,8 @@ class _ViewTaskState extends State<ViewTask> {
                                                   },
                                                   forthbuttontext:
                                                       '$forthbuttontest',
+                                                  managername: '',
+                                                  operatorname: '',
                                                 ),
                                               ),
                                             );
@@ -453,10 +481,11 @@ class _ViewTaskState extends State<ViewTask> {
                                     shrinkWrap: true,
                                     itemCount: assignedTasks.length,
                                     itemBuilder: (context, index) {
+
                                       return Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
-                                          child: ClientContainer(
+                                          child: CustomWithNote(
                                             fontColor: orangeColor,
                                             backgrondColor: blueColor,
                                             first: yellowColor,
@@ -499,11 +528,104 @@ class _ViewTaskState extends State<ViewTask> {
                                                 '${assignedTasks[index].taskCategory}',
                                             managerId:
                                                 '${assignedTasks[index].managerId}',
-                                            addLink: () {},
-                                            viewLink: () {},
+                                            addLink: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext
+                                                context) {
+                                                  return AlertDialog(
+                                                    title: const Text(
+                                                        "Add Submission Link"),
+                                                    content:
+                                                    SingleChildScrollView(
+                                                      child: Column(
+                                                        children: [
+                                                          const Text(
+                                                              'Multiple Links Can be added'),
+                                                          const SizedBox(
+                                                            height: 8,
+                                                          ),
+                                                          TextField(
+                                                            controller:
+                                                            docnamecontroller,
+                                                            decoration:
+                                                            const InputDecoration(
+                                                              hintText:
+                                                              'Document Name',
+                                                              labelText:
+                                                              'DocName',
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 8,
+                                                          ),
+                                                          TextField(
+                                                            controller:
+                                                            linkcontroller,
+                                                            decoration:
+                                                            const InputDecoration(
+                                                              hintText:
+                                                              'Add Link',
+                                                              labelText:
+                                                              'Link',
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed:
+                                                            () async {
+                                                          Navigator.of(
+                                                              context)
+                                                              .pop();
+                                                        },
+                                                        child: const Text(
+                                                            "No"),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed:
+                                                            () async {
+                                                          final response = await addAttachments(
+                                                              docnamecontroller
+                                                                  .text
+                                                                  .toString(),
+                                                              linkcontroller
+                                                                  .text
+                                                                  .toString(),
+                                                              createdTasks[
+                                                              index]
+                                                                  .taskID);
+                                                          print(
+                                                              'dcccscsdc$response');
+                                                          Navigator.of(
+                                                              context)
+                                                              .pop();
+                                                        },
+                                                        child: const Text(
+                                                            "Yes"),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            viewLink: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ViewLinks(
+                                                              taskid: createdTasks[
+                                                              index]
+                                                                  .taskID)));
+                                            },
                                             approve: () {},
                                             reject: () {},
-                                            forthbuttontext: '',
+                                            forthbuttontext: '${assignedTasks[index].priority}',
+                                            operatorname: '${mapOperatorName[assignedTasks[index].operatorId]}', managername: '${mapManagerName[assignedTasks[index].managerId]}',
+                                            // managername: '${mapManagerName[assignedTasks[index].managerId]}', operatorname: '${mapOperatorName[assignedTasks[index].operatorId]}',
                                           ),
                                         ),
                                       );
@@ -533,14 +655,14 @@ class _ViewTaskState extends State<ViewTask> {
                                       return Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
-                                          child: ClientContainer(
+                                          child: MyContainer(
                                             fontColor: orangeColor,
                                             backgrondColor: blueColor,
-                                            first: yellowColor,
+                                            first: orangeColor,
                                             second: blackColor,
                                             third: greenColor,
                                             forth: redColor,
-                                            fifth: redColor,
+                                            fifth: orangeColor,
                                             sixth: yellowColor,
                                             taskName:
                                                 '${completedTasks[index].taskName}',
@@ -577,10 +699,21 @@ class _ViewTaskState extends State<ViewTask> {
                                             managerId:
                                                 '${completedTasks[index].managerId}',
                                             addLink: () {},
-                                            viewLink: () {},
+                                            viewLink: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ViewLinks(
+                                                              taskid: completedTasks[
+                                                              index]
+                                                                  .taskID)));
+                                            },
                                             approve: () {},
                                             reject: () {},
-                                            forthbuttontext: '',
+                                            forthbuttontext: 'Completed by Operator',
+                                            operatorname: '${mapOperatorName[completedTasks[index].operatorId]}', managername: '${mapManagerName[completedTasks[index].managerId]}',
+                                            // managername: '${mapManagerName[completedTasks[index].managerId]}', operatorname: '${mapManagerName[completedTasks[index].operatorId]}',
                                           ),
                                         ),
                                       );
@@ -610,7 +743,7 @@ class _ViewTaskState extends State<ViewTask> {
                                       return Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
-                                          child: ClientContainer(
+                                          child: MyContainer(
                                             fontColor: greyColor,
                                             backgrondColor: greenColor,
                                             first: yellowColor,
@@ -654,7 +787,16 @@ class _ViewTaskState extends State<ViewTask> {
                                             managerId:
                                                 '${acceptRejectTasks[index].managerId}',
                                             addLink: () {},
-                                            viewLink: () {},
+                                            viewLink: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ViewLinks(
+                                                              taskid: createdTasks[
+                                                              index]
+                                                                  .taskID)));
+                                            },
                                             approve: () async {
                                               await ApproveRequest(
                                                   acceptRejectTasks[index]
@@ -721,7 +863,9 @@ class _ViewTaskState extends State<ViewTask> {
                                               );
                                               // await RejectRequest(tasklist2[index].taskID,clientnotecontroller.text.toString());
                                             },
-                                            forthbuttontext: '',
+                                            forthbuttontext: 'Approved by Manager',
+                                            operatorname: '${mapOperatorName[acceptRejectTasks[index].operatorId]}', managername: '${mapManagerName[acceptRejectTasks[index].managerId]}',
+                                            // managername: '${mapManagerName[acceptRejectTasks[index].managerId]}', operatorname: '${mapManagerName[acceptRejectTasks[index].operatorId]}',
                                           ),
                                         ),
                                       );
@@ -751,15 +895,15 @@ class _ViewTaskState extends State<ViewTask> {
                                       return Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
-                                          child: ClientContainer(
-                                            fontColor: orangeColor,
-                                            backgrondColor: blueColor,
-                                            first: yellowColor,
-                                            second: blackColor,
-                                            third: greenColor,
-                                            forth: redColor,
+                                          child: MyContainer(
+                                            fontColor: greyColor,
+                                            backgrondColor: orangeColor,
+                                            first: greyColor,
+                                            second: greenColor,
+                                            third: redColor,
+                                            forth: greenColor,
                                             fifth: redColor,
-                                            sixth: yellowColor,
+                                            sixth: greyColor,
                                             taskName:
                                                 '${closedtasks[index].taskName}',
                                             ProjectName:
@@ -795,10 +939,19 @@ class _ViewTaskState extends State<ViewTask> {
                                             managerId:
                                                 '${closedtasks[index].managerId}',
                                             addLink: () {},
-                                            viewLink: () {},
+                                            viewLink: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ViewLinks(
+                                                              taskid: createdTasks[
+                                                              index]
+                                                                  .taskID)));
+                                            },
                                             approve: () {},
                                             reject: () {},
-                                            forthbuttontext: '',
+                                            forthbuttontext: 'Task Completed', operatorname: '${mapOperatorName[closedtasks[index].operatorId]}', managername: '${mapManagerName[closedtasks[index].managerId]}',
                                           ),
                                         ),
                                       );

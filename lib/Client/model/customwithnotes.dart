@@ -1,8 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:intership/Manager/assignTask.dart';
 import 'package:intership/constant/color.dart';
 
-class ClientContainer extends StatefulWidget {
+class CustomWithNote extends StatefulWidget {
   final Color fontColor;
   final Color backgrondColor;
   final Color first;
@@ -11,6 +12,8 @@ class ClientContainer extends StatefulWidget {
   final Color forth;
   final Color fifth;
   final Color sixth;
+  final String managername;
+  final String operatorname;
   final String taskId;
   final String clientId;
   final String operatorId;
@@ -23,8 +26,6 @@ class ClientContainer extends StatefulWidget {
   final String clientNote;
   final String managerNote;
   final String priority;
-  final String managername;
-  final String operatorname;
   final String AssignationStatus;
   final String taskStatus;
   final String forthbuttontext;
@@ -36,7 +37,7 @@ class ClientContainer extends StatefulWidget {
   final VoidCallback approve;
   final VoidCallback reject;
 
-  const ClientContainer(
+  const CustomWithNote(
       {Key? key,
         required this.fontColor,
         required this.backgrondColor,
@@ -66,10 +67,10 @@ class ClientContainer extends StatefulWidget {
       : super(key: key);
 
   @override
-  _ClientContainerState createState() => _ClientContainerState();
+  _CustomWithNoteState createState() => _CustomWithNoteState();
 }
 
-class _ClientContainerState extends State<ClientContainer> {
+class _CustomWithNoteState extends State<CustomWithNote> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -132,6 +133,33 @@ class _ClientContainerState extends State<ClientContainer> {
                 child: Container(
                   child: Text(
                     "Client Note : ${widget.clientNote}",
+                    style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(7),
+                child: Container(
+                  child: Text(
+                    "Manager Note : ${widget.managerNote}",
+                    style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(7),
+                child: Container(
+                  child: Text(
+                    "Assigned Manager : ${widget.managername} ",
+                    style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(7),
+                child: Container(
+                  child: Text(
+                    "Assigned Operator : ${widget.operatorname}",
                     style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
                   ),
                 ),
