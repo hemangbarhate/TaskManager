@@ -3,7 +3,9 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:intership/Admin/model/session.dart';
 import 'package:intership/constant/ApI.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Auth/CommanLoginPage.dart';
 import '../constant/color.dart';
 
 var name, email, mobile, organization;
@@ -50,10 +52,10 @@ class _OperatorProfileState extends State<OperatorProfile> {
         shadowColor: Colors.white,
         title: Container(
             child: const Text(
-              "Manager Profile",
-              style: TextStyle(
-                  fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
-            )),
+          "Operator Profile",
+          style: TextStyle(
+              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+        )),
         elevation: 0.0,
         leading: Builder(builder: (BuildContext context) {
           return Padding(
@@ -169,12 +171,12 @@ class _OperatorProfileState extends State<OperatorProfile> {
                         child: Row(
                           children: <Widget>[
                             Container(
-                              // height: 40,
-                              // width: 22,
+                                // height: 40,
+                                // width: 22,
                                 child: const Icon(
-                                  Icons.email,
-                                  size: 35,
-                                )),
+                              Icons.email,
+                              size: 35,
+                            )),
                             Padding(
                               padding: const EdgeInsets.all(18.0),
                               child: Column(
@@ -229,12 +231,12 @@ class _OperatorProfileState extends State<OperatorProfile> {
                         child: Row(
                           children: <Widget>[
                             Container(
-                              // height: 40,
-                              // width: 22,
+                                // height: 40,
+                                // width: 22,
                                 child: const Icon(
-                                  Icons.mobile_screen_share,
-                                  size: 35,
-                                )),
+                              Icons.mobile_screen_share,
+                              size: 35,
+                            )),
                             Padding(
                               padding: const EdgeInsets.all(18.0),
                               child: Column(
@@ -262,10 +264,18 @@ class _OperatorProfileState extends State<OperatorProfile> {
                   GestureDetector(
                     onTap: () async {
                       Response response =
-                      await http.get(Uri.parse(clientlogout));
+                          await http.get(Uri.parse(operatorlogout));
                       if (response.statusCode == 200) {
                         print('LogOut successfully');
-                        Navigator.pop(context);
+                        final sp = await SharedPreferences.getInstance();
+                        sp.remove('cookie');
+                        sp.remove('userType');
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CommanLoginPage(),
+                            ),
+                            (route) => false);
                       } else {
                         print('LogOut Failed');
                         return;

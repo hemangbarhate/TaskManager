@@ -3,7 +3,9 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:intership/Admin/model/session.dart';
 import 'package:intership/constant/ApI.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Auth/CommanLoginPage.dart';
 import '../constant/color.dart';
 
 var name, email, mobile, organization;
@@ -264,7 +266,15 @@ class _ManagerProfileState extends State<ManagerProfile> {
                           await http.get(Uri.parse(managerLogout));
                       if (response.statusCode == 200) {
                         print('LogOut successfully');
-                        Navigator.pop(context);
+                        final sp = await SharedPreferences.getInstance();
+                        sp.remove('cookie');
+                        sp.remove('userType');
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CommanLoginPage(),
+                            ),
+                            (route) => false);
                       } else {
                         print('LogOut Failed');
                         return;

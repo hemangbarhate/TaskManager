@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:intership/Admin/model/session.dart';
+import 'package:intership/Auth/CommanLoginPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constant/ApI.dart';
 import '../constant/color.dart';
 
-var name,email,mobile,organization;
+var name, email, mobile, organization;
+
 class ClientProfile extends StatefulWidget {
   const ClientProfile({Key? key}) : super(key: key);
 
@@ -16,11 +19,11 @@ class ClientProfile extends StatefulWidget {
 
 class _ClientProfileState extends State<ClientProfile> {
   @override
-  @override
   void initState() {
     getProfile();
     super.initState();
   }
+
   void getProfile() async {
     Session _session = Session();
     final response = await _session.get(clientprofile);
@@ -32,6 +35,7 @@ class _ClientProfileState extends State<ClientProfile> {
       organization = response['data']['client']['organization'];
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,10 +45,10 @@ class _ClientProfileState extends State<ClientProfile> {
         shadowColor: Colors.white,
         title: Container(
             child: const Text(
-              "Client Profile",
-              style: TextStyle(
-                  fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
-            )),
+          "Client Profile",
+          style: TextStyle(
+              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+        )),
         elevation: 0.0,
         leading: Builder(builder: (BuildContext context) {
           return Padding(
@@ -160,12 +164,12 @@ class _ClientProfileState extends State<ClientProfile> {
                         child: Row(
                           children: <Widget>[
                             Container(
-                              // height: 40,
-                              // width: 22,
+                                // height: 40,
+                                // width: 22,
                                 child: Icon(
-                                  Icons.email,
-                                  size: 35,
-                                )),
+                              Icons.email,
+                              size: 35,
+                            )),
                             Padding(
                               padding: const EdgeInsets.all(18.0),
                               child: Column(
@@ -220,12 +224,12 @@ class _ClientProfileState extends State<ClientProfile> {
                         child: Row(
                           children: <Widget>[
                             Container(
-                              // height: 40,
-                              // width: 22,
+                                // height: 40,
+                                // width: 22,
                                 child: Icon(
-                                  Icons.mobile_screen_share,
-                                  size: 35,
-                                )),
+                              Icons.mobile_screen_share,
+                              size: 35,
+                            )),
                             Padding(
                               padding: const EdgeInsets.all(18.0),
                               child: Column(
@@ -280,12 +284,12 @@ class _ClientProfileState extends State<ClientProfile> {
                         child: Row(
                           children: <Widget>[
                             Container(
-                              // height: 40,
-                              // width: 22,
+                                // height: 40,
+                                // width: 22,
                                 child: Icon(
-                                  Icons.work,
-                                  size: 35,
-                                )),
+                              Icons.work,
+                              size: 35,
+                            )),
                             Padding(
                               padding: const EdgeInsets.all(18.0),
                               child: Column(
@@ -311,10 +315,19 @@ class _ClientProfileState extends State<ClientProfile> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      Response response = await http.get(Uri.parse(clientlogout));
+                      Response response =
+                          await http.get(Uri.parse(clientlogout));
                       if (response.statusCode == 200) {
                         print('LogOut successfully');
-                        Navigator.pop(context);
+                        final sp = await SharedPreferences.getInstance();
+                        sp.remove('cookie');
+                        sp.remove('userType');
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CommanLoginPage(),
+                            ),
+                            (route) => false);
                       } else {
                         print('LogOut Failed');
                         return;
@@ -340,7 +353,6 @@ class _ClientProfileState extends State<ClientProfile> {
                         ),
                         child: Center(
                           child: Container(
-
                             child: const Text(
                               'LogOut',
                               textAlign: TextAlign.left,

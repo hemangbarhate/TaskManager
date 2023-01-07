@@ -142,7 +142,8 @@ class _CreateTaskState extends State<CreateTask> {
                           // scrollController != null,
                           isAlwaysShown: true, //always show scrollbar
                           thickness: 10, //width of scrollbar
-                          radius: Radius.circular(20), //corner radius of scrollbar
+                          radius:
+                              Radius.circular(20), //corner radius of scrollbar
                           scrollbarOrientation: ScrollbarOrientation.left,
                           child: SingleChildScrollView(
                             child: ListView.builder(
@@ -172,8 +173,8 @@ class _CreateTaskState extends State<CreateTask> {
                                           leading: Icon(Icons.account_circle),
                                           title:
                                               Text("${clientlist[index].name}"),
-                                          subtitle:
-                                              Text("${clientlist[index].email}"),
+                                          subtitle: Text(
+                                              "${clientlist[index].email}"),
                                         ),
                                       ),
                                     ),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intership/Client/viewclienttask.dart';
 import 'package:intership/constant/ApI.dart';
 import 'package:intl/intl.dart';
 
@@ -36,12 +37,12 @@ class _CreateTaskState extends State<CreateTask> {
     try {
       Session _session = Session();
       final data = jsonEncode(<String, String>{
-        "ProjectName" : projectname,
-        "taskName" : taskname,
-        "taskDescription" : taskdesc,
-        "openDate" : opendate,
-        "closeDate" : closedate,
-        "clientNote" : clientnote
+        "ProjectName": projectname,
+        "taskName": taskname,
+        "taskDescription": taskdesc,
+        "openDate": opendate,
+        "closeDate": closedate,
+        "clientNote": clientnote
       });
       final response = await _session.post(createtask, data);
       print(response.toString());
@@ -54,7 +55,6 @@ class _CreateTaskState extends State<CreateTask> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       // backgroundColor: greyColor.withOpacity(0.1),
       appBar: AppBar(
@@ -181,7 +181,7 @@ class _CreateTaskState extends State<CreateTask> {
                       borderSide: BorderSide(color: Colors.black)),
                 ),
                 validator: (value) {
-                  if (value != null && value.length < 3 ) {
+                  if (value != null && value.length < 3) {
                     return 'Enter Low/Medium/Urgent';
                   }
                   return null;
@@ -299,12 +299,12 @@ class _CreateTaskState extends State<CreateTask> {
                         final isValidForm = _formKey.currentState!.validate();
                         if (isValidForm) {
                           var response = await createTask(
-                              ProjectName.text.toString(),
-                          TaskName.text.toString(),
-                          Description.text.toString(),
-                          opendate.text.toString(),
-                          closedate.text.toString(),
-                          ClientNote.text.toString())
+                                  ProjectName.text.toString(),
+                                  TaskName.text.toString(),
+                                  Description.text.toString(),
+                                  opendate.text.toString(),
+                                  closedate.text.toString(),
+                                  ClientNote.text.toString())
                               .catchError((err) {});
                           if (response["success"] == true) {
                             setState(() {
@@ -320,17 +320,18 @@ class _CreateTaskState extends State<CreateTask> {
                               backgroundColor: (Colors.black12),
                               action: SnackBarAction(
                                 label: 'dismiss',
-                                onPressed: () {
-                                },
+                                onPressed: () {},
                               ),
                             );
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
                             return;
                           } else {
                             return;
                           }
                         }
-                      }, child: Text('Create Task'))),
+                      },
+                      child: Text('Create Task'))),
             ],
           ),
         ),

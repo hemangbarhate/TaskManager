@@ -9,6 +9,9 @@ import 'package:intership/Admin/viewclient.dart';
 import 'package:intership/Admin/viewmanager.dart';
 import 'package:intership/Admin/viewoperator.dart';
 import 'package:intership/constant/ApI.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Auth/CommanLoginPage.dart';
 // import 'package:superadmin/constant.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,7 +22,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -48,11 +50,18 @@ class _HomePageState extends State<HomePage> {
         actions: [
           TextButton(
               onPressed: () async {
-                Response response =
-                    await http.get(Uri.parse(adminlogout));
+                Response response = await http.get(Uri.parse(adminlogout));
                 if (response.statusCode == 200) {
                   print('LogOut successfully');
-                  Navigator.pop(context);
+                  final sp = await SharedPreferences.getInstance();
+                  sp.remove('cookie');
+                  sp.remove('userType');
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CommanLoginPage(),
+                      ),
+                      (route) => false);
                 } else {
                   return;
                 }
@@ -71,23 +80,43 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                CustomWidget(routename: (){Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AddManager()));}, size: size, imagename: 'manager', boxcolor: kpblue, boxname: 'Add Manager'),
-                CustomWidget(routename: (){Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AddClient()));}, size: size, boxcolor: kpred, boxname: 'Add Client', imagename: 'client',),
+                CustomWidget(
+                    routename: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddManager()));
+                    },
+                    size: size,
+                    imagename: 'manager',
+                    boxcolor: kpblue,
+                    boxname: 'Add Manager'),
+                CustomWidget(
+                  routename: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AddClient()));
+                  },
+                  size: size,
+                  boxcolor: kpred,
+                  boxname: 'Add Client',
+                  imagename: 'client',
+                ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                CustomWidget(routename: (){Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AddOperator()));}, size: size, imagename: 'operator', boxcolor: kpyellow, boxname: 'Add Operator'),
+                CustomWidget(
+                    routename: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddOperator()));
+                    },
+                    size: size,
+                    imagename: 'operator',
+                    boxcolor: kpyellow,
+                    boxname: 'Add Operator'),
               ],
             ),
             Container(
@@ -98,23 +127,43 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                CustomWidget(routename: (){Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ViewManager()));}, size: size, imagename: 'manager', boxcolor: kpred, boxname: 'View Managers'),
-                CustomWidget(routename: (){Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ViewClient()));}, size: size, boxcolor: kpblue, boxname: 'View Clients', imagename: 'client',),
+                CustomWidget(
+                    routename: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ViewManager()));
+                    },
+                    size: size,
+                    imagename: 'manager',
+                    boxcolor: kpred,
+                    boxname: 'View Managers'),
+                CustomWidget(
+                  routename: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ViewClient()));
+                  },
+                  size: size,
+                  boxcolor: kpblue,
+                  boxname: 'View Clients',
+                  imagename: 'client',
+                ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                CustomWidget(routename: (){Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ViewOperator()));}, size: size, imagename: 'operator', boxcolor: kpyellow, boxname: 'View Operators'),
+                CustomWidget(
+                    routename: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ViewOperator()));
+                    },
+                    size: size,
+                    imagename: 'operator',
+                    boxcolor: kpyellow,
+                    boxname: 'View Operators'),
               ],
             ),
           ],
@@ -156,8 +205,7 @@ class CustomWidget extends StatelessWidget {
                   image: AssetImage('assets/images/$imagename.png'),
                   fit: BoxFit.cover),
               borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(25),
-                  topLeft: Radius.circular(25)),
+                  topRight: Radius.circular(25), topLeft: Radius.circular(25)),
             ),
           ),
           Container(
@@ -172,8 +220,8 @@ class CustomWidget extends StatelessWidget {
             child: Center(
                 child: Text(
               '$boxname',
-              style: TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             )),
           ),
         ],

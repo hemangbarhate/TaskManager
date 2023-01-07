@@ -37,7 +37,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   bool isLoading = true;
   late bool userLoggedIn;
-  late String userType;
+  // late String userType;
+  String? userType;
+  String? userToken;
   @override
   void initState() {
     super.initState();
@@ -60,10 +62,10 @@ class _HomeState extends State<Home> {
 
     final sp = await SharedPreferences.getInstance();
 
-    String? userType, userToken;
+    // String? userType, userToken;
 
     userToken = sp.getString('cookie');
-    userType = sp.getString('userType');
+     userType = sp.getString('userType');
 
     if (userType == null || userToken == null) {
       userLoggedIn = false;
@@ -85,16 +87,16 @@ class _HomeState extends State<Home> {
         child: CircularProgressIndicator(),
       );
     } else {
-      if (userLoggedIn && _selectedGender == 'manager') {
+      if (userLoggedIn && userType == 'manager') {
         return home_manager();
       }
-      else if (userLoggedIn && _selectedGender == 'client') {
+      else if (userLoggedIn && userType == 'client') {
         return home_client();
       }
-      else if (userLoggedIn && _selectedGender == 'admin') {
+      else if (userLoggedIn && userType == 'admin') {
         return HomePage();
       }
-      else if (userLoggedIn && _selectedGender == 'operator') {
+      else if (userLoggedIn && userType == 'operator') {
         return home_operator();
       }
        else {
@@ -143,7 +145,7 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
     super.initState();
   }
 
-  late final sp;
+  dynamic sp;
   void initSP() async {
     sp = await SharedPreferences.getInstance();
   }
