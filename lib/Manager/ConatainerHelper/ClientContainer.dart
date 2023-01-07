@@ -35,6 +35,8 @@ class ClientContainer extends StatefulWidget {
   final VoidCallback Approve;
   final VoidCallback Reject;
   final String who;
+  final String OperatorNmae;
+  final String Clientanme;
 
   const ClientContainer({
     Key? key,
@@ -69,7 +71,7 @@ class ClientContainer extends StatefulWidget {
     required this.AttachDoc,
     required this.ChangeStatus,
     required this.Approve,
-    required this.Reject,
+    required this.Reject, required this.OperatorNmae, required this.Clientanme,
   }) : super(key: key);
 
   @override
@@ -102,42 +104,22 @@ class _ClientContainerState extends State<ClientContainer> {
               Padding(
                 padding: const EdgeInsets.all(6.0),
                 child: Stack(children: [
-                  widget.who == 'operator'
-                      ? Container()
-                      : Row(
-                          children: <Widget>[
-                            CircleAvatar(
-                                radius: 20,
-                                backgroundColor:
-                                    widget.fontColor.withOpacity(01)),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Text(
-                              widget.who == 'operator'
-                                  ? "Operator"
-                                  : "${widget.clientId}",
-                              style: TextStyle(
-                                  // #FED457
-                                  fontWeight: FontWeight.w600,
-                                  color: widget.fontColor.withOpacity(0.9),
-                                  fontSize: 20),
-                            ),
-                          ],
-                        ),
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.task, size: 35,),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Text( '${widget.taskName}',
+                        style: TextStyle(
+                          // #FED457
+                            fontWeight: FontWeight.w600,
+                            color: widget.fontColor.withOpacity(0.9),
+                            fontSize: 20),
+                      ),
+                    ],
+                  ),
                 ]),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Tasks Name : ${widget.taskName} ",
-                  style: TextStyle(
-                      // #FED457
-                      fontWeight: FontWeight.w600,
-                      // color: Color(0xFED457),
-                      color: widget.fontColor.withOpacity(1),
-                      fontSize: 15),
-                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -155,11 +137,22 @@ class _ClientContainerState extends State<ClientContainer> {
                 padding: const EdgeInsets.all(10),
                 child: Container(
                   child: Text(
-                    "Description :   ${widget.taskDescription}",
+                    "Client name :  ${widget.Clientanme}",
                     style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
                   ),
                 ),
               ),
+              widget.backgrondColor != greenColor
+              ?
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Container(
+                  child: Text(
+                    "Operator name :  ${widget.OperatorNmae}",
+                    style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
+                  ),
+                ),
+              ) : Container(),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Container(
@@ -181,6 +174,18 @@ class _ClientContainerState extends State<ClientContainer> {
                       ),
                     )
                   : Container(),
+              const SizedBox(
+                height: 0,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Container(
+                  child: Text(
+                    "Description :   ${widget.taskDescription}",
+                    style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
+                  ),
+                ),
+              ),
               const SizedBox(
                 height: 10,
               ),
@@ -237,44 +242,44 @@ class _ClientContainerState extends State<ClientContainer> {
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: widget.TimeLineDoc,
-                    child: Container(
-                      width: 100,
-                      height: 46,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            widget.second.withOpacity(0.7),
-                            widget.second.withOpacity(0.7)
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(5, 5),
-                            blurRadius: 10,
-                          )
-                        ],
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 10.0, right: 10),
-                        child: Center(
-                          child: Text(
-                            widget.who == 'manager' ? 'Open' : 'TimeLine',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: widget.TimeLineDoc,
+                  //   child: Container(
+                  //     width: 100,
+                  //     height: 46,
+                  //     decoration: BoxDecoration(
+                  //       gradient: LinearGradient(
+                  //         colors: [
+                  //           widget.second.withOpacity(0.7),
+                  //           widget.second.withOpacity(0.7)
+                  //         ],
+                  //         begin: Alignment.topLeft,
+                  //         end: Alignment.bottomRight,
+                  //       ),
+                  //       borderRadius: BorderRadius.circular(20),
+                  //       boxShadow: const [
+                  //         BoxShadow(
+                  //           color: Colors.black12,
+                  //           offset: Offset(5, 5),
+                  //           blurRadius: 10,
+                  //         )
+                  //       ],
+                  //     ),
+                  //     child: Padding(
+                  //       padding: EdgeInsets.only(left: 10.0, right: 10),
+                  //       child: Center(
+                  //         child: Text(
+                  //           widget.who == 'operator' ? 'Open' : 'TimeLine',
+                  //           style: TextStyle(
+                  //             color: Colors.white,
+                  //             fontSize: 15,
+                  //             fontWeight: FontWeight.bold,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   GestureDetector(
                     onTap: () {
                       // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));

@@ -33,7 +33,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
     final response = await _session.get(managerProfile);
     print(response);
     setState(() {
-      name = response['data']['manager']['name'];
+      name =  response['data']['manager']['name'];
       email = response['data']['manager']['email'];
       mobile = response['data']['manager']['mobile'];
       organization = response['data']['manager']['organization'];
