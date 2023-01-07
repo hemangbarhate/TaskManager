@@ -37,18 +37,26 @@ class _ViewTaskState extends State<ViewTask> {
     // getCompleteTask();
     getclient();
     gettasklist();
+
     super.initState();
   }
 
   List<ClientModel> clientlist = [];
   var mapClientIdName = Map<String, dynamic>();
   getclient() async {
-    ////>>>>>>>>>>>>>>>>>> client name  & id
     clientlist = await getClientdata();
     for (ClientModel i in clientlist) {
       mapClientIdName['${i.clientId}'] = '${i.name}';
       // print('${i.clientId} == ${i.name}');
     }
+  }
+
+  var mapOperatorName = Map<String, dynamic>();
+  getOperatorName(String s) async {
+    Session _session = Session();
+    final response = await _session.get('http://$ip/manager/getOperator/$s');
+    print("Response ${response['operator']['name']}");
+    mapOperatorName[s] = response['operator']['name'];
   }
 
   //??????????????????????????????? client id
@@ -104,6 +112,7 @@ class _ViewTaskState extends State<ViewTask> {
           (TaskModel.fromJson(i).clientApproval == 'Pending' ||
               TaskModel.fromJson(i).clientApproval == 'Rejected')) {
         assignedlist.add(TaskModel.fromJson(i));
+        await getOperatorName("${TaskModel.fromJson(i).operatorId}");
       }
       if ((TaskModel.fromJson(i).managerApproval == 'Pending' ||
               TaskModel.fromJson(i).managerApproval == 'Rejected') &&
@@ -111,17 +120,20 @@ class _ViewTaskState extends State<ViewTask> {
               TaskModel.fromJson(i).clientApproval == 'Rejected') &&
           TaskModel.fromJson(i).taskStatus == 'Completed') {
         acceptRejectList.add(TaskModel.fromJson(i));
+        await getOperatorName("${TaskModel.fromJson(i).operatorId}");
       }
       if (TaskModel.fromJson(i).managerApproval == 'Accepted' &&
           (TaskModel.fromJson(i).clientApproval == 'Pending' ||
               TaskModel.fromJson(i).clientApproval == 'Rejected') &&
           TaskModel.fromJson(i).taskStatus == 'Completed') {
         clientApprovalPendingList.add(TaskModel.fromJson(i));
+        await getOperatorName("${TaskModel.fromJson(i).operatorId}");
       }
       if (TaskModel.fromJson(i).taskStatus == 'Closed' &&
           TaskModel.fromJson(i).managerApproval == 'Accepted' &&
           TaskModel.fromJson(i).clientApproval == 'Accepted') {
         closedTasksList.add(TaskModel.fromJson(i));
+        await getOperatorName("${TaskModel.fromJson(i).operatorId}");
       }
     }
     loadingsecond = false;
@@ -130,28 +142,23 @@ class _ViewTaskState extends State<ViewTask> {
     setState(() {});
     return finallist;
   }
-  // List<TaskModel> assignedtasklist = [];
-  // Future<List<TaskModel>> getAssignTask() async {
-  //   // print("// Assigned Tasks");
-  //   setState(() {
-  //     loadingsecond = true; //make loading true to show progressindicator
-  //   });
-  //   Session _session = Session();
-  //   final response =
-  //       await _session.get('http://164.92.83.169/manager/assignedTask');
-  //   // print(response);
-  //
-  //   for (dynamic i in response['result']) {
-  //     // print(i);
-  //     assignedtasklist.add(TaskModel.fromJson(i));
-  //   }
-  //   // print(assignedtasklist[0]);
-  //
-  //   setState(() {
-  //     loadingsecond = false;
-  //   });
-  //   return assignedtasklist;
-  // }
+
+  List<TaskModel> nameofclient = [];
+  Future<List<TaskModel>> getAssignTask() async {
+    setState(() {
+      loadingsecond = true; //make loading true to show progressindicator
+    });
+    Session _session = Session();
+    final response = await _session.get('http://$ip/manager/assignedTask');
+
+    for (dynamic i in response['result']) {
+      nameofclient.add(TaskModel.fromJson(i));
+    }
+    setState(() {
+      loadingsecond = false;
+    });
+    return nameofclient;
+  }
 
   // List<TaskModel> inprogresstask = [];
   // int dowehavedata = 0;
@@ -366,6 +373,10 @@ class _ViewTaskState extends State<ViewTask> {
                                                         'Pending'
                                                     ? Container(
                                                         child: ClientContainer(
+                                                          Clientanme:
+                                                              '${mapClientIdName[noassignedtasklist[index].clientId]}',
+                                                          OperatorNmae:
+                                                              '${mapOperatorName[noassignedtasklist[index].operatorId]}',
                                                           Approve: () {},
                                                           Reject: () {},
                                                           who: 'manager',
@@ -475,6 +486,10 @@ class _ViewTaskState extends State<ViewTask> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: (Container(
                                               child: ClientContainer(
+                                                Clientanme:
+                                                    '${mapClientIdName[assignedlist[index].clientId]}',
+                                                OperatorNmae:
+                                                    '${mapOperatorName[assignedlist[index].operatorId]}',
                                                 fontColor: greyColor,
                                                 backgrondColor: orangeColor,
                                                 first: greyColor,
@@ -580,6 +595,10 @@ class _ViewTaskState extends State<ViewTask> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: (Container(
                                               child: ClientContainer(
+                                                Clientanme:
+                                                    '${mapClientIdName[acceptRejectList[index].clientId]}',
+                                                OperatorNmae:
+                                                    '${mapOperatorName[acceptRejectList[index].operatorId]}',
                                                 TimeLineDoc: () {},
                                                 AttachDoc: () {
                                                   Navigator.of(context).push(
@@ -699,6 +718,10 @@ class _ViewTaskState extends State<ViewTask> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Container(
                                               child: ClientContainer(
+                                            Clientanme:
+                                                '${mapClientIdName[clientApprovalPendingList[index].clientId]}',
+                                            OperatorNmae:
+                                                '${mapOperatorName[clientApprovalPendingList[index].operatorId]}',
                                             who: 'manager',
                                             fontColor: yellowColor,
                                             backgrondColor: blueColor,
@@ -807,6 +830,10 @@ class _ViewTaskState extends State<ViewTask> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Container(
                                               child: ClientContainer(
+                                            Clientanme:
+                                                '${mapClientIdName[closedTasksList[index].clientId]}',
+                                            OperatorNmae:
+                                                '${mapOperatorName[closedTasksList[index].operatorId]}',
                                             who: 'manager',
                                             fontColor: yellowColor,
                                             backgrondColor: blueColor,

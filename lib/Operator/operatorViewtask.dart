@@ -52,6 +52,21 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
   List<TaskModel> clientApprovalPending = [];
   List<TaskModel> closedTask = [];
 
+  var mapMangerName = Map<String, dynamic>();
+  getManagerName(String s) async {
+    Session _session = Session();
+    final response = await _session.get('http://$ip/operator/getManager/$s');
+    // print("Response $response");
+    mapMangerName[s] = response['manager']['name'];
+  }
+  var mapClientName = Map<String, dynamic>();
+  getClientName(String s) async {
+    Session _session = Session();
+    final response = await _session.get('http://$ip/operator/getClient/$s');
+    print("Response $response");
+    mapClientName[s] = response['client']['name'];
+  }
+
   Future<List<TaskModel>> gerInProgressTask() async {
     assignedtask.clear();
     managerApprovalPending.clear();
@@ -78,6 +93,8 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
           (TaskModel.fromJson(i).clientApproval == 'Pending' ||
               TaskModel.fromJson(i).clientApproval == 'Rejected')) {
         assignedtask1.add(TaskModel.fromJson(i));
+        await getManagerName("${TaskModel.fromJson(i).managerId}");
+        await getClientName("${TaskModel.fromJson(i).clientId}");
       }
       if (TaskModel.fromJson(i).taskStatus == 'Completed' &&
           (TaskModel.fromJson(i).managerApproval == 'Pending' ||
@@ -85,17 +102,23 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
           (TaskModel.fromJson(i).clientApproval == 'Pending' ||
               TaskModel.fromJson(i).clientApproval == 'Rejected')) {
         managerApprovalPending.add(TaskModel.fromJson(i));
+        await getManagerName("${TaskModel.fromJson(i).managerId}");
+        await getClientName("${TaskModel.fromJson(i).clientId}");
       }
       if (TaskModel.fromJson(i).taskStatus == 'Completed' &&
           TaskModel.fromJson(i).managerApproval == 'Accepted' &&
           (TaskModel.fromJson(i).clientApproval == 'Pending' ||
               TaskModel.fromJson(i).clientApproval == 'Rejected')) {
         clientApprovalPending.add(TaskModel.fromJson(i));
+        await getManagerName("${TaskModel.fromJson(i).managerId}");
+        await getClientName("${TaskModel.fromJson(i).clientId}");
       }
       if (TaskModel.fromJson(i).taskStatus == 'Closed' &&
           TaskModel.fromJson(i).managerApproval == 'Accepted' &&
           TaskModel.fromJson(i).clientApproval == 'Accepted') {
         closedTask.add(TaskModel.fromJson(i));
+        await  getManagerName("${TaskModel.fromJson(i).managerId}");
+        await getClientName("${TaskModel.fromJson(i).clientId}");
       }
     }
     // print('aaaaaa');
@@ -259,7 +282,9 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                 padding:
                                                     const EdgeInsets.all(8.0),
                                                 child: Container(
-                                                  child: ClientContainer(
+                                                  child: OpeartorContainer(
+                                                    clientName: '${mapClientName[assignedtask1[index].clientId]}',
+                                                    managerName: '${mapMangerName[assignedtask1[index].managerId]}',
                                                     Approve: () {},
                                                     Reject: () {},
                                                     TimeLineDoc: () {
@@ -330,12 +355,12 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                         },
                                                       );
                                                     },
-                                                    who: 'operator',
+                                                    who: 'operator1',
                                                     fontColor: greyColor,
                                                     backgrondColor: greenColor,
                                                     first: yellowColor,
                                                     second: blackColor,
-                                                    third: greenColor,
+                                                    third: greyColor,
                                                     forth: redColor,
                                                     fifth: redColor,
                                                     sixth: yellowColor,
@@ -357,9 +382,11 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                         '${assignedtask1[index].closeDate?.substring(0, 10)}',
                                                     clientNote:
                                                         '${assignedtask1[index].clientNote}',
-                                                    managerNote: '',
+                                                    managerNote:
+                                                        '${assignedtask1[index].managerNote}',
                                                     AssignationStatus: '',
-                                                    priority: '',
+                                                    priority:
+                                                        '${assignedtask1[index].priority}',
                                                     clientApproval: '',
                                                     taskStatus:
                                                         '${assignedtask1[index].taskStatus}',
@@ -430,7 +457,9 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                 padding:
                                                     const EdgeInsets.all(8.0),
                                                 child: Container(
-                                                  child: ClientContainer(
+                                                  child: OpeartorContainer(
+                                                    clientName: '${mapClientName[managerApprovalPending[index].clientId]}',
+                                                    managerName: '${mapMangerName[managerApprovalPending[index].managerId]}',
                                                     Approve: () {},
                                                     Reject: () {},
                                                     TimeLineDoc: () {
@@ -463,7 +492,7 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                     backgrondColor: greenColor,
                                                     first: yellowColor,
                                                     second: blackColor,
-                                                    third: greenColor,
+                                                    third: greyColor,
                                                     forth: redColor,
                                                     fifth: redColor,
                                                     sixth: yellowColor,
@@ -485,9 +514,11 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                         '${managerApprovalPending[index].closeDate?.substring(0, 10)}',
                                                     clientNote:
                                                         '${managerApprovalPending[index].clientNote}',
-                                                    managerNote: '',
+                                                    managerNote:
+                                                        '${managerApprovalPending[index].managerNote}',
                                                     AssignationStatus: '',
-                                                    priority: '',
+                                                    priority:
+                                                        '${managerApprovalPending[index].priority}',
                                                     clientApproval: '',
                                                     taskStatus:
                                                         '${managerApprovalPending[index].taskStatus}',
@@ -559,7 +590,7 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                 padding:
                                                     const EdgeInsets.all(8.0),
                                                 child: Container(
-                                                  child: ClientContainer(
+                                                  child: OpeartorContainer(
                                                     Approve: () {},
                                                     Reject: () {},
                                                     TimeLineDoc: () {
@@ -592,7 +623,7 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                     backgrondColor: greenColor,
                                                     first: yellowColor,
                                                     second: blackColor,
-                                                    third: greenColor,
+                                                    third: greyColor,
                                                     forth: redColor,
                                                     fifth: redColor,
                                                     sixth: yellowColor,
@@ -614,9 +645,11 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                         '${clientApprovalPending[index].closeDate?.substring(0, 10)}',
                                                     clientNote:
                                                         '${clientApprovalPending[index].clientNote}',
-                                                    managerNote: '',
+                                                    managerNote:
+                                                        '${clientApprovalPending[index].managerNote}',
                                                     AssignationStatus: '',
-                                                    priority: '',
+                                                    priority:
+                                                        '${clientApprovalPending[index].priority}',
                                                     clientApproval: '',
                                                     taskStatus:
                                                         '${clientApprovalPending[index].taskStatus}',
@@ -629,6 +662,8 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                               .taskStatus ==
                                                           'Pending') {}
                                                     },
+                                                    clientName: '${mapClientName[clientApprovalPending[index].clientId]}',
+                                                    managerName: '${mapMangerName[clientApprovalPending[index].managerId]}',
                                                   ),
                                                 ),
                                               );
@@ -687,7 +722,9 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                 padding:
                                                     const EdgeInsets.all(8.0),
                                                 child: Container(
-                                                  child: ClientContainer(
+                                                  child: OpeartorContainer(
+                                                    clientName: '${mapClientName[closedTask[index].clientId]}',
+                                                    managerName: '${mapMangerName[closedTask[index].managerId]}',
                                                     Approve: () {},
                                                     Reject: () {},
                                                     TimeLineDoc: () {
@@ -714,56 +751,13 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                         ),
                                                       );
                                                     },
-                                                    ChangeStatus: () {
-                                                      // print('object');
-
-                                                      showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return AlertDialog(
-                                                            title: const Text(
-                                                                "Really ?"),
-                                                            content: const Text(
-                                                                "Are sure about completed task ?"),
-                                                            actions: [
-                                                              TextButton(
-                                                                onPressed: () {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                },
-                                                                child:
-                                                                    const Text(
-                                                                        "No"),
-                                                              ),
-                                                              TextButton(
-                                                                onPressed: () {
-                                                                  UpdateStatus(
-                                                                    '${closedTask[index].taskID}',
-                                                                  );
-
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .push(MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              const home_operator()));
-                                                                },
-                                                                child:
-                                                                    const Text(
-                                                                        "Yes"),
-                                                              ),
-                                                            ],
-                                                          );
-                                                        },
-                                                      );
-                                                    },
+                                                    ChangeStatus: () {},
                                                     who: 'operator',
                                                     fontColor: greyColor,
                                                     backgrondColor: greenColor,
                                                     first: yellowColor,
                                                     second: blackColor,
-                                                    third: greenColor,
+                                                    third: greyColor,
                                                     forth: redColor,
                                                     fifth: redColor,
                                                     sixth: yellowColor,
@@ -785,9 +779,11 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                         '${closedTask[index].closeDate?.substring(0, 10)}',
                                                     clientNote:
                                                         '${closedTask[index].clientNote}',
-                                                    managerNote: '',
+                                                    managerNote:
+                                                        '${closedTask[index].managerNote}',
                                                     AssignationStatus: '',
-                                                    priority: '',
+                                                    priority:
+                                                        '${closedTask[index].priority}',
                                                     clientApproval: '',
                                                     taskStatus:
                                                         '${closedTask[index].taskStatus}',
