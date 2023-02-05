@@ -71,7 +71,9 @@ class ClientContainer extends StatefulWidget {
     required this.AttachDoc,
     required this.ChangeStatus,
     required this.Approve,
-    required this.Reject, required this.OperatorNmae, required this.Clientanme,
+    required this.Reject,
+    required this.OperatorNmae,
+    required this.Clientanme,
   }) : super(key: key);
 
   @override
@@ -79,6 +81,8 @@ class ClientContainer extends StatefulWidget {
 }
 
 class _ClientContainerState extends State<ClientContainer> {
+  bool odate = true;
+  bool cdate = true;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -106,13 +110,17 @@ class _ClientContainerState extends State<ClientContainer> {
                 child: Stack(children: [
                   Row(
                     children: <Widget>[
-                      Icon(Icons.task, size: 35,),
+                      Icon(
+                        Icons.task,
+                        size: 35,
+                      ),
                       const SizedBox(
                         width: 15,
                       ),
-                      Text( '${widget.taskName}',
+                      Text(
+                        '${widget.taskName}',
                         style: TextStyle(
-                          // #FED457
+                            // #FED457
                             fontWeight: FontWeight.w600,
                             color: widget.fontColor.withOpacity(0.9),
                             fontSize: 20),
@@ -142,17 +150,18 @@ class _ClientContainerState extends State<ClientContainer> {
                   ),
                 ),
               ),
-              widget.backgrondColor != greenColor
-              ?
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Container(
-                  child: Text(
-                    "Operator name :  ${widget.OperatorNmae}",
-                    style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
-                  ),
-                ),
-              ) : Container(),
+              (widget.priority != 'null')
+                  ? Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Container(
+                        child: Text(
+                          "Operator name :  ${widget.OperatorNmae}",
+                          style: TextStyle(
+                              color: widget.fontColor.withOpacity(0.8)),
+                        ),
+                      ),
+                    )
+                  : Container(),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Container(
@@ -162,7 +171,7 @@ class _ClientContainerState extends State<ClientContainer> {
                   ),
                 ),
               ),
-              widget.backgrondColor != greenColor
+              (widget.priority != "null")
                   ? Padding(
                       padding: const EdgeInsets.all(10),
                       child: Container(
@@ -201,8 +210,8 @@ class _ClientContainerState extends State<ClientContainer> {
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            widget.first.withOpacity(0.9),
-                            widget.first.withOpacity(0.9)
+                            widget.first.withOpacity(0.8),
+                            widget.first.withOpacity(0.8)
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -223,17 +232,8 @@ class _ClientContainerState extends State<ClientContainer> {
                             widget.who == 'operator'
                                 ? 'Done'
                                 : '${widget.taskStatus}',
-                            // widget.backgrondColor == greenColor
-                            //     ? "Request"
-                            //     : (widget.backgrondColor == orangeColor
-                            //         ? "Assigned"
-                            //         : (widget.backgrondColor == blueColor
-                            //             ? "Running"
-                            //             : "Done")),
                             style: TextStyle(
-                              color: widget.first == greyColor
-                                  ? yellowColor.withOpacity(0.9)
-                                  : greyColor.withOpacity(0.9),
+                              color: whiteColor.withOpacity(1),
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
                             ),
@@ -281,7 +281,11 @@ class _ClientContainerState extends State<ClientContainer> {
                   //   ),
                   // ),
                   GestureDetector(
+
                     onTap: () {
+                      setState(() {
+                        odate = !odate;
+                      });
                       // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
                     },
                     child: Container(
@@ -309,7 +313,7 @@ class _ClientContainerState extends State<ClientContainer> {
                         padding: EdgeInsets.only(left: 10.0, right: 10),
                         child: Center(
                           child: Text(
-                            '${widget.openDate}',
+                          odate ? "openDate" :  '${widget.openDate}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,
@@ -331,6 +335,9 @@ class _ClientContainerState extends State<ClientContainer> {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
+                      setState(() {
+                        cdate = !cdate;
+                      });
                       // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
                     },
                     child: Container(
@@ -339,8 +346,8 @@ class _ClientContainerState extends State<ClientContainer> {
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            widget.forth.withOpacity(0.9),
-                            widget.forth.withOpacity(0.9)
+                            widget.forth.withOpacity(0.7),
+                            widget.forth.withOpacity(0.7)
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -358,7 +365,7 @@ class _ClientContainerState extends State<ClientContainer> {
                         padding: EdgeInsets.only(left: 10.0, right: 10),
                         child: Center(
                           child: Text(
-                            '${widget.closeDate}',
+                            cdate ? "closeDate" : '${widget.closeDate}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,
@@ -369,46 +376,47 @@ class _ClientContainerState extends State<ClientContainer> {
                       ),
                     ),
                   ),
-             if(widget.who != 'operator')     GestureDetector(
-                    onTap: widget.assignTask,
-                    child: Container(
-                      width: 100,
-                      height: 46,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            widget.fifth.withOpacity(0.9),
-                            widget.fifth.withOpacity(0.9)
+                  if (widget.who != 'operator')
+                    GestureDetector(
+                      onTap: widget.assignTask,
+                      child: Container(
+                        width: 100,
+                        height: 46,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              widget.fifth.withOpacity(0.8),
+                              widget.fifth.withOpacity(0.8)
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              offset: Offset(5, 5),
+                              blurRadius: 10,
+                            )
                           ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
                         ),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(5, 5),
-                            blurRadius: 10,
-                          )
-                        ],
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 10.0, right: 10),
-                        child: Center(
-                          child: Text(
-                            widget.backgrondColor == greenColor
-                                ? "ASSIGN"
-                                : widget.priority,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 10.0, right: 10),
+                          child: Center(
+                            child: Text(
+                              widget.AssignationStatus == 'Pending'
+                                  ? "ASSIGN"
+                                  : widget.priority,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
                   GestureDetector(
                     onTap: widget.AttachDoc,
                     child: Container(
@@ -417,8 +425,8 @@ class _ClientContainerState extends State<ClientContainer> {
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            widget.sixth.withOpacity(0.9),
-                            widget.sixth.withOpacity(0.9)
+                            widget.sixth.withOpacity(0.8),
+                            widget.sixth.withOpacity(0.8)
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -436,11 +444,9 @@ class _ClientContainerState extends State<ClientContainer> {
                         padding: const EdgeInsets.only(left: 10.0, right: 10),
                         child: Center(
                           child: Text(
-                          'ViewDoc',
+                            'ViewDoc',
                             style: TextStyle(
-                              color: widget.sixth == greyColor
-                                  ? yellowColor.withOpacity(0.9)
-                                  : greyColor.withOpacity(0.9),
+                              color: whiteColor.withOpacity(1),
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
                             ),
@@ -454,7 +460,11 @@ class _ClientContainerState extends State<ClientContainer> {
               const SizedBox(
                 height: 15,
               ),
-              if (widget.backgrondColor == yellowColor)
+              if ((widget.managerApproval == 'Pending' ||
+                  widget.managerApproval == 'Rejected') &&
+                  (widget.clientApproval == 'Pending' ||
+                      widget.clientApproval == 'Rejected') &&
+                  widget.taskStatus == 'Completed')
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[

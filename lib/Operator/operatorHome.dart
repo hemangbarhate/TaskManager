@@ -26,7 +26,7 @@ class _home_operatorState extends State<home_operator> {
       body: tabs[_ixd],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _ixd,
-        backgroundColor: yellowColor.withOpacity(1),
+        backgroundColor: whiteColor.withOpacity(1),
         iconSize: 30,
         // backgroundColor: greyColor.withOpacity(0.8),
         items: const [

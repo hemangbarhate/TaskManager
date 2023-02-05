@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 
 import '../Admin/model/session.dart';
 import '../constant/ApI.dart';
+import '../constant/color.dart';
 import 'clientprofile.dart';
 import 'model/AttachmentModel.dart';
-
 
 class ViewLinks extends StatefulWidget {
   const ViewLinks({Key? key, required this.taskid}) : super(key: key);
@@ -43,11 +43,13 @@ class _ViewLinksState extends State<ViewLinks> {
     });
     return attachlist;
   }
+
   @override
-  void initState(){
+  void initState() {
     getattachments(widget.taskid);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,12 +58,10 @@ class _ViewLinksState extends State<ViewLinks> {
         shadowColor: Colors.white,
         title: const Center(
             child: Text(
-              "Attachments",
-              style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            )),
+          "Attachments",
+          style: TextStyle(
+              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+        )),
         elevation: 0.0,
         leading: Builder(
           builder: (BuildContext context) {
@@ -83,10 +83,8 @@ class _ViewLinksState extends State<ViewLinks> {
               padding: EdgeInsets.only(right: 18.0),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ClientProfile()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ClientProfile()));
                 },
                 child: Container(
                   height: 25,
@@ -96,44 +94,38 @@ class _ViewLinksState extends State<ViewLinks> {
               ))
         ],
       ),
-      body: loading ? Center(child: SizedBox(height:100,width:100,child: CircularProgressIndicator())) :SingleChildScrollView(
-        child: Column(
-          children: [
-            ListView.builder(
-                itemCount:
-                attachlist
-                    .length,
-                shrinkWrap:
-                true,
-                itemBuilder:
-                    (context,
-                    index) {
-                  return Container(
-                    color: Colors
-                        .black12,
-                    padding:
-                    EdgeInsets.all(8),
-                    margin:
-                    EdgeInsets.all(6),
-                    child:
-                    Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Text(attachlist[index].documentName),
-                        Text(attachlist[index].driveLink),
-                        TextButton(
-                            onPressed: () {
-                              Clipboard.setData(ClipboardData(text: attachlist[index].driveLink));
-                            },
-                            child: Text('Copy')),
-                      ],
-                    ),
-                  );
-                }),
-          ],
-        ),
-      ),
+      body: loading
+          ? MyLoading()
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  ListView.builder(
+                      itemCount: attachlist.length,
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          color: Colors.black12,
+                          padding: EdgeInsets.all(8),
+                          margin: EdgeInsets.all(6),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(attachlist[index].documentName),
+                              Text(attachlist[index].driveLink),
+                              TextButton(
+                                  onPressed: () {
+                                    Clipboard.setData(ClipboardData(
+                                        text: attachlist[index].driveLink));
+                                  },
+                                  child: Text('Copy')),
+                            ],
+                          ),
+                        );
+                      }),
+                ],
+              ),
+            ),
     );
   }
 }

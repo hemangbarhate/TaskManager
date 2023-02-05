@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:intership/Admin/model/session.dart';
@@ -7,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Auth/CommanLoginPage.dart';
 import '../constant/color.dart';
+import 'package:image_picker/image_picker.dart';
 
 var name, email, mobile, organization;
 
@@ -19,10 +24,19 @@ class ManagerProfile extends StatefulWidget {
 
 class _ManagerProfileState extends State<ManagerProfile> {
   bool load = false;
+  var profileImage;
   @override
   void initState() {
     getProfile();
+    getProfileImage();
     super.initState();
+  }
+
+  getProfileImage() async {
+    Session _session = Session();
+    profileImage = await _session
+        .getprofileImage("http://164.92.83.169/manager/profilePic");
+    setState(() {});
   }
 
   void getProfile() async {
@@ -33,7 +47,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
     final response = await _session.get(managerProfile);
     print(response);
     setState(() {
-      name =  response['data']['manager']['name'];
+      name = response['data']['manager']['name'];
       email = response['data']['manager']['email'];
       mobile = response['data']['manager']['mobile'];
       organization = response['data']['manager']['organization'];
@@ -43,10 +57,20 @@ class _ManagerProfileState extends State<ManagerProfile> {
     });
   }
 
+  late File _pickedImage;
+  String apiUrl = 'http://$ip/manager/profilePic';
+  uploadImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    _pickedImage = File("${pickedFile?.path}");
+    Session _session = Session();
+    await _session.uploadImage1(pickedFile!.path, apiUrl);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: greyColor.withOpacity(0.1),
+      backgroundColor: creamColor2.withOpacity(0.1),
       appBar: AppBar(
         backgroundColor: Colors.grey[200],
         shadowColor: Colors.white,
@@ -104,11 +128,31 @@ class _ManagerProfileState extends State<ManagerProfile> {
                   Padding(
                     padding: const EdgeInsets.only(left: 28.0),
                     child: Row(
+                      // mainAxisAlignment: MainAxisAlignment.end,
+                      // crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
                         Container(
-                            height: MediaQuery.of(context).size.height / 6,
+                            height: MediaQuery.of(context).size.height / 7,
                             width: MediaQuery.of(context).size.width / 6,
-                            child: Image.asset("assets/images/download.png")),
+                            padding: EdgeInsets.all(6),
+                            child: profileImage == null
+                                ? Image.asset("assets/images/download.png")
+                                : Image.memory(profileImage,fit: BoxFit.fill,)),
+                        Column(
+                          children: [
+                            Container(
+                              height: 35,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                // _uploadImage();
+                                uploadImage();
+                              },
+                              child: Container(
+                                  height: 50, child: Icon(Icons.edit)),
+                            ),
+                          ],
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(18.0),
                           child: Column(
@@ -147,8 +191,8 @@ class _ManagerProfileState extends State<ManagerProfile> {
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            greyColor.withOpacity(0.01),
-                            greyColor.withOpacity(0.01)
+                            creamColor2.withOpacity(0.01),
+                            creamColor2.withOpacity(0.01)
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -207,8 +251,8 @@ class _ManagerProfileState extends State<ManagerProfile> {
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            greyColor.withOpacity(0.01),
-                            greyColor.withOpacity(0.01)
+                            creamColor2.withOpacity(0.01),
+                            creamColor2.withOpacity(0.01)
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,

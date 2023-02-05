@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intership/Admin/model/session.dart';
 import 'package:intership/Operator/model/attachmodel.dart';
 import 'package:intership/Operator/model/timemodel.dart';
@@ -47,10 +48,9 @@ class _TimeDataMnagerState extends State<TimeDataMnager> {
       loadingfour = true; //make loading true to show progressindicator
     });
     Session _session = Session();
-    final response = await _session
-        .get('http://$ip/manager/getAttachments/${widget.Taskid}');
-    print("response $response");
-    print("response ${response['success'] }");
+    final response = await _session.get('http://$ip/manager/getAttachments/${widget.Taskid}');
+    print("response $response ===== >>>>>>>>  .${widget.Taskid}.");
+    // print("response ${response['success'] }");
     if(response['success'] == false)
     {
       loadingfour = false;
@@ -130,27 +130,27 @@ class _TimeDataMnagerState extends State<TimeDataMnager> {
             ),
             TEXT(
               field: 'actualCloseDate',
-              data: "${completetask[0].actualCloseDate?.substring(0,10)}",
+              data:  "${completetask[0].actualCloseDate?.substring(0,10)}" == "null" ? "Pending" : "${completetask[0].actualCloseDate?.substring(0,10)}" ,
             ),
             TEXT(
               field: 'assignationDate',
-              data: "${completetask[0].assignationDate?.substring(0,10)}",
+              data:"${completetask[0].managerApprovalDate?.substring(0,10)}" == "null" ? "Pending" :  "${completetask[0].assignationDate?.substring(0,10)}",
             ),
             TEXT(
               field: 'clientApprovalDate',
-              data: "${completetask[0].clientApprovalDate?.substring(0,10)}",
+              data:"${completetask[0].managerApprovalDate?.substring(0,10)}" == "null" ? "Pending" : "${completetask[0].clientApprovalDate?.substring(0,10)}",
             ),
             TEXT(
               field: 'clientRejection',
-              data: "${completetask[0].clientRejection?.substring(0,10)}",
+              data:"${completetask[0].managerApprovalDate?.substring(0,10)}" == "null" ? "Pending" : "${completetask[0].clientRejection?.substring(0,10)}",
             ),
             TEXT(
               field: 'managerRejectionDate',
-              data: "${completetask[0].managerRejectionDate?.substring(0,10)}",
+              data:"${completetask[0].managerApprovalDate?.substring(0,10)}" == "null" ? "Pending" : "${completetask[0].managerRejectionDate?.substring(0,10)}",
             ),
             TEXT(
               field: 'managerApprovalDate',
-              data: "${completetask[0].managerApprovalDate?.substring(0,10)}",
+              data:"${completetask[0].managerApprovalDate?.substring(0,10)}" == "null" ? "Pending" : "${completetask[0].managerApprovalDate?.substring(0,10)}",
             ),
             attachlist.isEmpty
                 ? const Center(
@@ -178,15 +178,34 @@ class _TimeDataMnagerState extends State<TimeDataMnager> {
                     shrinkWrap: true,
                     itemCount: attachlist.length,
                     itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(0.0),
-                        child: Container(
-                          child: TEXT(
-                            data: '${attachlist[index].driveLink}',
-                            field: '${attachlist[index].documentName}',
-                          ),
+                      return Container(
+                        color: Colors.black12,
+                        padding: EdgeInsets.all(8),
+                        margin: EdgeInsets.all(6),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("${attachlist[index].documentName}"),
+                            Text("${attachlist[index].driveLink}"),
+                            TextButton(
+                                onPressed: () {
+                                  Clipboard.setData(ClipboardData(
+                                      text: attachlist[index].driveLink));
+                                },
+                                child: Text('Copy')),
+                          ],
                         ),
                       );
+
+                      //   Padding(
+                      //   padding: const EdgeInsets.all(0.0),
+                      //   child: Container(
+                      //     child: TEXT(
+                      //       data: '${attachlist[index].driveLink}',
+                      //       field: '${attachlist[index].documentName}',
+                      //     ),
+                      //   ),
+                      // );
                     },
                   ),
                 ],

@@ -93,7 +93,7 @@ class _CreateDeptState extends State<CreateDept> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: greyColor.withOpacity(0.1),
+        backgroundColor: creamColor2.withOpacity(0.1),
         appBar: AppBar(
           backgroundColor: Colors.white,
           shadowColor: Colors.white,
@@ -279,14 +279,14 @@ class _CreateDeptState extends State<CreateDept> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: yellowColor.withOpacity(0.9),
+          backgroundColor: Colors.blueAccent.withOpacity(1),
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const AddDepatmentOpearator()));
           },
           child: Icon(
             Icons.add,
-            color: greyColor,
+            color: Colors.white,
             size: 30,
           ),
         ),

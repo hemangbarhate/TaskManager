@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
 import 'package:intership/Client/addlinks.dart';
 import 'package:intership/Client/clientprofile.dart';
@@ -43,16 +44,18 @@ class _ViewTaskState extends State<ViewTask> {
     // print(response);
     mapOperatorName[s] = response['operator']['name'];
   }
+
   var mapManagerName = Map<String, dynamic>();
   getmanagerName(String s) async {
     Session _session = Session();
     final response = await _session.get('http://$ip/client/getManager/$s');
-    print("ResponseNAME ${response['manager']['name']}");
+    // print("ResponseNAME ${response['manager']['name']}");
     mapManagerName[s] = response['manager']['name'];
   }
 
   var forthbuttontest;
   List<TaskModel> tasklist = [];
+  List<TaskModel> inProgress = [];
   List<TaskModel> createdTasks = [];
   List<TaskModel> assignedTasks = [];
   List<TaskModel> completedTasks = [];
@@ -65,6 +68,8 @@ class _ViewTaskState extends State<ViewTask> {
     completedTasks.clear();
     acceptRejectTasks.clear();
     closedtasks.clear();
+    inProgress.clear();
+
     setState(() {
       loading = true; //make loading true to show progressindicator
     });
@@ -73,48 +78,75 @@ class _ViewTaskState extends State<ViewTask> {
     // print(response);
 
     for (dynamic i in response['result']) {
-      // print(i);
+      print("i : $i");
+
+      // await getOperatorName('${TaskModel.fromJson(i).operatorId}');
+      // await getmanagerName('${TaskModel.fromJson(i).managerId}');
+
       tasklist.add(TaskModel.fromJson(i));
       if (TaskModel.fromJson(i).AssignationStatus == 'Pending') {
         createdTasks.add(TaskModel.fromJson(i));
       }
-      if (TaskModel.fromJson(i).managerApproval == 'Accepted' &&
-          (TaskModel.fromJson(i).clientApproval == 'Pending' ||
-              TaskModel.fromJson(i).clientApproval == 'Rejected') &&
-          TaskModel.fromJson(i).taskStatus == 'Completed') {
-        acceptRejectTasks.add(TaskModel.fromJson(i));
-        await  getOperatorName('${TaskModel.fromJson(i).operatorId}');
+      if ((TaskModel.fromJson(i).AssignationStatus == 'Assigned' ||
+                  TaskModel.fromJson(i).AssignationStatus == 'Reassinged') &&
+              (TaskModel.fromJson(i).taskStatus == 'Pending') &&
+              (TaskModel.fromJson(i).managerApproval == 'Pending' ||
+                  TaskModel.fromJson(i).managerApproval == 'Rejected') &&
+              (TaskModel.fromJson(i).clientApproval == 'Pending' ||
+                  TaskModel.fromJson(i).clientApproval ==
+                      'Rejected') //clientApproval
+          ) {
+        print("bnbvnbzxczxvcnbzxvcnz");
+        assignedTasks.add(TaskModel.fromJson(i));
+        await getOperatorName('${TaskModel.fromJson(i).operatorId}');
         await getmanagerName('${TaskModel.fromJson(i).managerId}');
       }
-      if (TaskModel.fromJson(i).managerApproval == 'Accepted' &&
-          TaskModel.fromJson(i).clientApproval == 'Accepted' &&
-          TaskModel.fromJson(i).taskStatus == 'Closed') {
-        closedtasks.add(TaskModel.fromJson(i));
-        await  getOperatorName('${TaskModel.fromJson(i).operatorId}');
+      if ((TaskModel.fromJson(i).AssignationStatus == 'Assigned' ||
+                  TaskModel.fromJson(i).AssignationStatus == 'Reassinged') &&
+              (TaskModel.fromJson(i).taskStatus == 'inProgress') &&
+              (TaskModel.fromJson(i).managerApproval == 'Pending' ||
+                  TaskModel.fromJson(i).managerApproval == 'Rejected') &&
+              (TaskModel.fromJson(i).clientApproval == 'Pending' ||
+                  TaskModel.fromJson(i).clientApproval ==
+                      'Rejected') //clientApproval
+          ) {
+        inProgress.add(TaskModel.fromJson(i));
+        await getOperatorName('${TaskModel.fromJson(i).operatorId}');
         await getmanagerName('${TaskModel.fromJson(i).managerId}');
       }
+
       if (TaskModel.fromJson(i).taskStatus == 'Completed' &&
           (TaskModel.fromJson(i).managerApproval == 'Pending' ||
               TaskModel.fromJson(i).managerApproval == 'Rejected') &&
           (TaskModel.fromJson(i).clientApproval == 'Pending' ||
               TaskModel.fromJson(i).clientApproval == 'Rejected')) {
         completedTasks.add(TaskModel.fromJson(i));
-        await  getOperatorName('${TaskModel.fromJson(i).operatorId}');
+        await getOperatorName('${TaskModel.fromJson(i).operatorId}');
         await getmanagerName('${TaskModel.fromJson(i).managerId}');
       }
-      if (TaskModel.fromJson(i).taskStatus == 'inProgress' &&
-          (TaskModel.fromJson(i).managerApproval == 'Pending' ||
-              TaskModel.fromJson(i).managerApproval == 'Rejected') &&
+
+      if (TaskModel.fromJson(i).managerApproval == 'Accepted' &&
           (TaskModel.fromJson(i).clientApproval == 'Pending' ||
-              TaskModel.fromJson(i).clientApproval == 'Rejected')) {
-        assignedTasks.add(TaskModel.fromJson(i));
-      await  getOperatorName('${TaskModel.fromJson(i).operatorId}');
+              TaskModel.fromJson(i).clientApproval == 'Rejected') &&
+          TaskModel.fromJson(i).taskStatus == 'Completed') {
+        acceptRejectTasks.add(TaskModel.fromJson(i));
+        await getOperatorName('${TaskModel.fromJson(i).operatorId}');
+        await getmanagerName('${TaskModel.fromJson(i).managerId}');
+      }
+
+      if (TaskModel.fromJson(i).managerApproval == 'Accepted' &&
+          TaskModel.fromJson(i).clientApproval == 'Accepted' &&
+          TaskModel.fromJson(i).taskStatus == 'Closed') {
+        closedtasks.add(TaskModel.fromJson(i));
+        await getOperatorName('${TaskModel.fromJson(i).operatorId}');
         await getmanagerName('${TaskModel.fromJson(i).managerId}');
       }
     }
-    loading = false;
+
     // print(acceptRejectTasks.length);
-    setState(() {});
+    setState(() {
+      loading = false;
+    });
     return tasklist;
   }
 
@@ -187,7 +219,7 @@ class _ViewTaskState extends State<ViewTask> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 5,
+        length: 6,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.white,
@@ -243,6 +275,9 @@ class _ViewTaskState extends State<ViewTask> {
                         text: 'Assigned Tasks',
                       ),
                       Tab(
+                        text: 'inProgress Tasks',
+                      ),
+                      Tab(
                         text: 'Completed Tasks',
                       ),
                       Tab(
@@ -258,16 +293,14 @@ class _ViewTaskState extends State<ViewTask> {
                     child: TabBarView(
                   children: [
                     loading
-                        ? const Center(
-                            child: SizedBox(
-                                height: 100,
-                                width: 100,
-                                child: CircularProgressIndicator()))
+                        ? MyLoading()
                         : RefreshIndicator(
                             onRefresh: () async {
                               await gettasklist();
                             },
-                            child: SingleChildScrollView(
+                            child: createdTasks.length == 0 ? Container(
+                              child: Center(child: Text("There are no tasks")),
+                            ) : SingleChildScrollView(
                               child: Column(
                                 children: <Widget>[
                                   ListView.builder(
@@ -320,14 +353,14 @@ class _ViewTaskState extends State<ViewTask> {
                                                   const EdgeInsets.all(8.0),
                                               child: Container(
                                                 child: ClientContainer(
-                                                  fontColor: greyColor,
-                                                  backgrondColor: orangeColor,
-                                                  first: greyColor,
-                                                  second: greenColor,
+                                                  fontColor: blackColor,
+                                                  backgrondColor: blueColor,
+                                                  first: yellowColor,
+                                                  second: blackColor,
                                                   third: redColor,
-                                                  forth: greenColor,
+                                                  forth: redColor,
                                                   fifth: redColor,
-                                                  sixth: greyColor,
+                                                  sixth: yellowColor,
                                                   taskName:
                                                       '${createdTasks[index].taskName}',
                                                   ProjectName:
@@ -416,21 +449,60 @@ class _ViewTaskState extends State<ViewTask> {
                                                             TextButton(
                                                               onPressed:
                                                                   () async {
-                                                                final response = await addAttachments(
-                                                                    docnamecontroller
-                                                                        .text
-                                                                        .toString(),
+                                                                if (docnamecontroller
+                                                                            .text
+                                                                            .toString()
+                                                                            .length ==
+                                                                        0 &&
                                                                     linkcontroller
-                                                                        .text
-                                                                        .toString(),
-                                                                    createdTasks[
-                                                                            index]
-                                                                        .taskID);
-                                                                print(
-                                                                    'dcccscsdc$response');
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
+                                                                            .text
+                                                                            .length ==
+                                                                        0) {
+                                                                  final snackBar =
+                                                                      SnackBar(
+                                                                    content:
+                                                                        const Text(
+                                                                            "Enter doc"),
+                                                                    backgroundColor: (Colors
+                                                                        .black
+                                                                        .withOpacity(
+                                                                            .6)),
+                                                                    action:
+                                                                        SnackBarAction(
+                                                                      label:
+                                                                          'dismiss',
+                                                                      onPressed:
+                                                                          () {},
+                                                                    ),
+                                                                  );
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                          snackBar);
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                } else {
+                                                                  final response = await addAttachments(
+                                                                      docnamecontroller
+                                                                          .text
+                                                                          .toString(),
+                                                                      linkcontroller
+                                                                          .text
+                                                                          .toString(),
+                                                                      createdTasks[
+                                                                              index]
+                                                                          .taskID);
+                                                                  docnamecontroller
+                                                                      .clear();
+                                                                  linkcontroller
+                                                                      .clear();
+                                                                  print(
+                                                                      'dcccscsdc$response');
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                }
                                                               },
                                                               child: const Text(
                                                                   "Yes"),
@@ -464,15 +536,15 @@ class _ViewTaskState extends State<ViewTask> {
                             ),
                           ),
                     loading
-                        ? const SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: CircularProgressIndicator())
+                        ? MyLoading()
                         : RefreshIndicator(
                             onRefresh: () async {
                               await gettasklist();
                             },
-                            child: SingleChildScrollView(
+                            child:
+                            assignedTasks.length == 0 ? Container(
+                              child: Center(child: Text("There are no tasks")),
+                            ) :SingleChildScrollView(
                               child: Column(
                                 children: <Widget>[
                                   ListView.builder(
@@ -480,16 +552,15 @@ class _ViewTaskState extends State<ViewTask> {
                                     shrinkWrap: true,
                                     itemCount: assignedTasks.length,
                                     itemBuilder: (context, index) {
-
                                       return Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
                                           child: CustomWithNote(
-                                            fontColor: orangeColor,
-                                            backgrondColor: blueColor,
+                                            fontColor: blackColor,
+                                            backgrondColor: whitegreyColor,
                                             first: yellowColor,
                                             second: blackColor,
-                                            third: greenColor,
+                                            third: redColor,
                                             forth: redColor,
                                             fifth: redColor,
                                             sixth: yellowColor,
@@ -530,13 +601,13 @@ class _ViewTaskState extends State<ViewTask> {
                                             addLink: () {
                                               showDialog(
                                                 context: context,
-                                                builder: (BuildContext
-                                                context) {
+                                                builder:
+                                                    (BuildContext context) {
                                                   return AlertDialog(
                                                     title: const Text(
                                                         "Add Submission Link"),
                                                     content:
-                                                    SingleChildScrollView(
+                                                        SingleChildScrollView(
                                                       child: Column(
                                                         children: [
                                                           const Text(
@@ -546,13 +617,13 @@ class _ViewTaskState extends State<ViewTask> {
                                                           ),
                                                           TextField(
                                                             controller:
-                                                            docnamecontroller,
+                                                                docnamecontroller,
                                                             decoration:
-                                                            const InputDecoration(
+                                                                const InputDecoration(
                                                               hintText:
-                                                              'Document Name',
+                                                                  'Document Name',
                                                               labelText:
-                                                              'DocName',
+                                                                  'DocName',
                                                             ),
                                                           ),
                                                           const SizedBox(
@@ -560,13 +631,12 @@ class _ViewTaskState extends State<ViewTask> {
                                                           ),
                                                           TextField(
                                                             controller:
-                                                            linkcontroller,
+                                                                linkcontroller,
                                                             decoration:
-                                                            const InputDecoration(
+                                                                const InputDecoration(
                                                               hintText:
-                                                              'Add Link',
-                                                              labelText:
-                                                              'Link',
+                                                                  'Add Link',
+                                                              labelText: 'Link',
                                                             ),
                                                           ),
                                                         ],
@@ -574,36 +644,70 @@ class _ViewTaskState extends State<ViewTask> {
                                                     ),
                                                     actions: [
                                                       TextButton(
-                                                        onPressed:
-                                                            () async {
-                                                          Navigator.of(
-                                                              context)
+                                                        onPressed: () async {
+                                                          Navigator.of(context)
                                                               .pop();
                                                         },
-                                                        child: const Text(
-                                                            "No"),
+                                                        child: const Text("No"),
                                                       ),
                                                       TextButton(
-                                                        onPressed:
-                                                            () async {
-                                                          final response = await addAttachments(
-                                                              docnamecontroller
-                                                                  .text
-                                                                  .toString(),
+                                                        onPressed: () async {
+                                                          if (docnamecontroller
+                                                                      .text
+                                                                      .toString()
+                                                                      .length ==
+                                                                  0 &&
                                                               linkcontroller
-                                                                  .text
-                                                                  .toString(),
-                                                              createdTasks[
-                                                              index]
-                                                                  .taskID);
-                                                          print(
-                                                              'dcccscsdc$response');
-                                                          Navigator.of(
-                                                              context)
-                                                              .pop();
+                                                                      .text
+                                                                      .length ==
+                                                                  0) {
+                                                            final snackBar =
+                                                                SnackBar(
+                                                              content: const Text(
+                                                                  "Enter doc"),
+                                                              backgroundColor:
+                                                                  (Colors.black
+                                                                      .withOpacity(
+                                                                          .6)),
+                                                              action:
+                                                                  SnackBarAction(
+                                                                label:
+                                                                    'dismiss',
+                                                                onPressed:
+                                                                    () {},
+                                                              ),
+                                                            );
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                                    snackBar);
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          } else {
+                                                            final response = await addAttachments(
+                                                                docnamecontroller
+                                                                    .text
+                                                                    .toString(),
+                                                                linkcontroller
+                                                                    .text
+                                                                    .toString(),
+                                                                createdTasks[
+                                                                        index]
+                                                                    .taskID);
+                                                            docnamecontroller
+                                                                .clear();
+                                                            linkcontroller
+                                                                .clear();
+                                                            print(
+                                                                'dcccscsdc$response');
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          }
                                                         },
-                                                        child: const Text(
-                                                            "Yes"),
+                                                        child:
+                                                            const Text("Yes"),
                                                       ),
                                                     ],
                                                   );
@@ -616,14 +720,19 @@ class _ViewTaskState extends State<ViewTask> {
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           ViewLinks(
-                                                              taskid: createdTasks[
-                                                              index]
-                                                                  .taskID)));
+                                                              taskid:
+                                                                  createdTasks[
+                                                                          index]
+                                                                      .taskID)));
                                             },
                                             approve: () {},
                                             reject: () {},
-                                            forthbuttontext: '${assignedTasks[index].priority}',
-                                            operatorname: '${mapOperatorName[assignedTasks[index].operatorId]}', managername: '${mapManagerName[assignedTasks[index].managerId]}',
+                                            forthbuttontext:
+                                                '${assignedTasks[index].priority}',
+                                            operatorname:
+                                                '${mapOperatorName[assignedTasks[index].operatorId]}',
+                                            managername:
+                                                '${mapManagerName[assignedTasks[index].managerId]}',
                                             // managername: '${mapManagerName[assignedTasks[index].managerId]}', operatorname: '${mapOperatorName[assignedTasks[index].operatorId]}',
                                           ),
                                         ),
@@ -635,15 +744,109 @@ class _ViewTaskState extends State<ViewTask> {
                             ),
                           ),
                     loading
-                        ? const SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: CircularProgressIndicator())
+                        ? MyLoading()
                         : RefreshIndicator(
                             onRefresh: () async {
                               await gettasklist();
                             },
-                            child: SingleChildScrollView(
+                            child:
+                            inProgress.length == 0 ? Container(
+                              child: Center(child: Text("There are no tasks")),
+                            ) :
+                            SingleChildScrollView(
+                              child: Column(
+                                children: <Widget>[
+                                  ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: inProgress.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          child: MyContainer(
+                                            fontColor: blackColor,
+                                            backgrondColor: whitegreyColor,
+                                            first: yellowColor,
+                                            second: blackColor,
+                                            third: redColor,
+                                            forth: redColor,
+                                            fifth: redColor,
+                                            sixth: yellowColor,
+                                            taskName:
+                                                '${inProgress[index].taskName}',
+                                            ProjectName:
+                                                '${inProgress[index].ProjectName}',
+                                            taskId:
+                                                '${inProgress[index].taskID}',
+                                            clientId:
+                                                '${inProgress[index].clientId}',
+                                            operatorId:
+                                                '${inProgress[index].operatorId}',
+                                            openDate:
+                                                '${inProgress[index].openDate?.substring(0, 10)}',
+                                            taskDescription:
+                                                '${inProgress[index].taskDescription}',
+                                            closeDate:
+                                                '${inProgress[index].closeDate?.substring(0, 10)}',
+                                            clientNote:
+                                                '${inProgress[index].clientNote}',
+                                            managerNote:
+                                                '${inProgress[index].managerNote}',
+                                            AssignationStatus:
+                                                '${inProgress[index].AssignationStatus}',
+                                            priority:
+                                                '${inProgress[index].priority}',
+                                            clientApproval:
+                                                '${inProgress[index].clientApproval}',
+                                            taskStatus:
+                                                '${inProgress[index].taskStatus}',
+                                            managerApproval:
+                                                '${inProgress[index].managerApproval}',
+                                            taskCategory:
+                                                '${inProgress[index].taskCategory}',
+                                            managerId:
+                                                '${inProgress[index].managerId}',
+                                            addLink: () {},
+                                            viewLink: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ViewLinks(
+                                                              taskid: inProgress[
+                                                                      index]
+                                                                  .taskID)));
+                                            },
+                                            approve: () {},
+                                            reject: () {},
+                                            forthbuttontext:
+                                                'Completed by Operator',
+                                            operatorname:
+                                                '${mapOperatorName[inProgress[index].operatorId]}',
+                                            managername:
+                                                '${mapManagerName[inProgress[index].managerId]}',
+                                            // managername: '${mapManagerName[completedTasks[index].managerId]}', operatorname: '${mapManagerName[completedTasks[index].operatorId]}',
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                    loading
+                        ? MyLoading()
+                        : RefreshIndicator(
+                            onRefresh: () async {
+                              await gettasklist();
+                            },
+                            child:
+                            completedTasks.length == 0 ? Container(
+                              child: Center(child: Text("There are no tasks")),
+                            ) :
+                            SingleChildScrollView(
                               child: Column(
                                 children: <Widget>[
                                   ListView.builder(
@@ -655,13 +858,13 @@ class _ViewTaskState extends State<ViewTask> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
                                           child: MyContainer(
-                                            fontColor: orangeColor,
-                                            backgrondColor: blueColor,
-                                            first: orangeColor,
+                                            fontColor: blackColor,
+                                            backgrondColor: whitegreyColor,
+                                            first: yellowColor,
                                             second: blackColor,
-                                            third: greenColor,
+                                            third: redColor,
                                             forth: redColor,
-                                            fifth: orangeColor,
+                                            fifth: redColor,
                                             sixth: yellowColor,
                                             taskName:
                                                 '${completedTasks[index].taskName}',
@@ -704,14 +907,19 @@ class _ViewTaskState extends State<ViewTask> {
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           ViewLinks(
-                                                              taskid: completedTasks[
-                                                              index]
-                                                                  .taskID)));
+                                                              taskid:
+                                                                  completedTasks[
+                                                                          index]
+                                                                      .taskID)));
                                             },
                                             approve: () {},
                                             reject: () {},
-                                            forthbuttontext: 'Completed by Operator',
-                                            operatorname: '${mapOperatorName[completedTasks[index].operatorId]}', managername: '${mapManagerName[completedTasks[index].managerId]}',
+                                            forthbuttontext:
+                                                'Completed by Operator',
+                                            operatorname:
+                                                '${mapOperatorName[completedTasks[index].operatorId]}',
+                                            managername:
+                                                '${mapManagerName[completedTasks[index].managerId]}',
                                             // managername: '${mapManagerName[completedTasks[index].managerId]}', operatorname: '${mapManagerName[completedTasks[index].operatorId]}',
                                           ),
                                         ),
@@ -723,15 +931,16 @@ class _ViewTaskState extends State<ViewTask> {
                             ),
                           ),
                     loading
-                        ? const SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: Center(child: CircularProgressIndicator()))
+                        ? MyLoading()
                         : RefreshIndicator(
                             onRefresh: () async {
                               await gettasklist();
                             },
-                            child: SingleChildScrollView(
+                            child:
+                            acceptRejectTasks.length == 0 ? Container(
+                              child: Center(child: Text("There are no tasks")),
+                            ) :
+                            SingleChildScrollView(
                               child: Column(
                                 children: <Widget>[
                                   ListView.builder(
@@ -743,11 +952,11 @@ class _ViewTaskState extends State<ViewTask> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
                                           child: MyContainer(
-                                            fontColor: greyColor,
-                                            backgrondColor: greenColor,
+                                            fontColor: blackColor,
+                                            backgrondColor: blueColor,
                                             first: yellowColor,
                                             second: blackColor,
-                                            third: greenColor,
+                                            third: redColor,
                                             forth: redColor,
                                             fifth: redColor,
                                             sixth: yellowColor,
@@ -792,9 +1001,10 @@ class _ViewTaskState extends State<ViewTask> {
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           ViewLinks(
-                                                              taskid: createdTasks[
-                                                              index]
-                                                                  .taskID)));
+                                                              taskid:
+                                                                  createdTasks[
+                                                                          index]
+                                                                      .taskID)));
                                             },
                                             approve: () async {
                                               await ApproveRequest(
@@ -862,8 +1072,12 @@ class _ViewTaskState extends State<ViewTask> {
                                               );
                                               // await RejectRequest(tasklist2[index].taskID,clientnotecontroller.text.toString());
                                             },
-                                            forthbuttontext: 'Approved by Manager',
-                                            operatorname: '${mapOperatorName[acceptRejectTasks[index].operatorId]}', managername: '${mapManagerName[acceptRejectTasks[index].managerId]}',
+                                            forthbuttontext:
+                                                'Approved by Manager',
+                                            operatorname:
+                                                '${mapOperatorName[acceptRejectTasks[index].operatorId]}',
+                                            managername:
+                                                '${mapManagerName[acceptRejectTasks[index].managerId]}',
                                             // managername: '${mapManagerName[acceptRejectTasks[index].managerId]}', operatorname: '${mapManagerName[acceptRejectTasks[index].operatorId]}',
                                           ),
                                         ),
@@ -875,15 +1089,16 @@ class _ViewTaskState extends State<ViewTask> {
                             ),
                           ),
                     loading
-                        ? const SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: Center(child: CircularProgressIndicator()))
+                        ? MyLoading()
                         : RefreshIndicator(
                             onRefresh: () async {
                               await gettasklist();
                             },
-                            child: SingleChildScrollView(
+                            child:
+                            closedtasks.length == 0 ? Container(
+                              child: Center(child: Text("There are no tasks")),
+                            ) :
+                            SingleChildScrollView(
                               child: Column(
                                 children: <Widget>[
                                   ListView.builder(
@@ -895,14 +1110,14 @@ class _ViewTaskState extends State<ViewTask> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
                                           child: MyContainer(
-                                            fontColor: greyColor,
-                                            backgrondColor: orangeColor,
-                                            first: greyColor,
-                                            second: greenColor,
+                                            fontColor: blackColor,
+                                            backgrondColor: whitegreyColor,
+                                            first: yellowColor,
+                                            second: blackColor,
                                             third: redColor,
-                                            forth: greenColor,
+                                            forth: redColor,
                                             fifth: redColor,
-                                            sixth: greyColor,
+                                            sixth: yellowColor,
                                             taskName:
                                                 '${closedtasks[index].taskName}',
                                             ProjectName:
@@ -944,13 +1159,18 @@ class _ViewTaskState extends State<ViewTask> {
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           ViewLinks(
-                                                              taskid: createdTasks[
-                                                              index]
-                                                                  .taskID)));
+                                                              taskid:
+                                                                  createdTasks[
+                                                                          index]
+                                                                      .taskID)));
                                             },
                                             approve: () {},
                                             reject: () {},
-                                            forthbuttontext: 'Task Completed', operatorname: '${mapOperatorName[closedtasks[index].operatorId]}', managername: '${mapManagerName[closedtasks[index].managerId]}',
+                                            forthbuttontext: 'Task Completed',
+                                            operatorname:
+                                                '${mapOperatorName[closedtasks[index].operatorId]}',
+                                            managername:
+                                                '${mapManagerName[closedtasks[index].managerId]}',
                                           ),
                                         ),
                                       );

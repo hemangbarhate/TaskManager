@@ -47,6 +47,7 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
     }
   }
 
+  List<TaskModel> inprogress = [];
   List<TaskModel> assignedtask1 = [];
   List<TaskModel> managerApprovalPending = [];
   List<TaskModel> clientApprovalPending = [];
@@ -68,7 +69,9 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
   }
 
   Future<List<TaskModel>> gerInProgressTask() async {
-    assignedtask.clear();
+
+    inprogress.clear();
+    assignedtask1.clear();
     managerApprovalPending.clear();
     clientApprovalPending.clear();
     closedTask.clear();
@@ -80,10 +83,27 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
     final response = await _session.get(operatortaskByOperatorId);
     // print(response);
     for (dynamic i in response['result']) {
-      // if (TaskModel.fromJson(i).taskStatus == 'inProgress') {
-      //   //   print(i);
-      //   assignedtask.add(TaskModel.fromJson(i));
-      // }
+
+             print("1 $i");
+
+       await getManagerName("${TaskModel.fromJson(i).managerId}");
+       await getClientName("${TaskModel.fromJson(i).clientId}");
+
+
+      if ((TaskModel.fromJson(i).AssignationStatus == 'Assigned' ||
+          TaskModel.fromJson(i).AssignationStatus == 'Reassigned') &&
+          TaskModel.fromJson(i).taskStatus == 'Pending' &&
+          (TaskModel.fromJson(i).managerApproval == 'Pending' ||
+              TaskModel.fromJson(i).managerApproval == 'Rejected') &&
+          (TaskModel.fromJson(i).clientApproval == 'Pending' ||
+              TaskModel.fromJson(i).clientApproval == 'Rejected')) {
+        inprogress.add(TaskModel.fromJson(i));
+        // await getManagerName("${TaskModel.fromJson(i).managerId}");
+        // await getClientName("${TaskModel.fromJson(i).clientId}");
+      }
+
+
+
       assignedtask.add(TaskModel.fromJson(i));
       if ((TaskModel.fromJson(i).AssignationStatus == 'Assigned' ||
               TaskModel.fromJson(i).AssignationStatus == 'Reassigned') &&
@@ -93,33 +113,44 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
           (TaskModel.fromJson(i).clientApproval == 'Pending' ||
               TaskModel.fromJson(i).clientApproval == 'Rejected')) {
         assignedtask1.add(TaskModel.fromJson(i));
-        await getManagerName("${TaskModel.fromJson(i).managerId}");
-        await getClientName("${TaskModel.fromJson(i).clientId}");
+        // await getManagerName("${TaskModel.fromJson(i).managerId}");
+        // await getClientName("${TaskModel.fromJson(i).clientId}");
       }
+
+
       if (TaskModel.fromJson(i).taskStatus == 'Completed' &&
           (TaskModel.fromJson(i).managerApproval == 'Pending' ||
               TaskModel.fromJson(i).managerApproval == 'Rejected') &&
           (TaskModel.fromJson(i).clientApproval == 'Pending' ||
               TaskModel.fromJson(i).clientApproval == 'Rejected')) {
         managerApprovalPending.add(TaskModel.fromJson(i));
-        await getManagerName("${TaskModel.fromJson(i).managerId}");
-        await getClientName("${TaskModel.fromJson(i).clientId}");
+        // await getManagerName("${TaskModel.fromJson(i).managerId}");
+        // await getClientName("${TaskModel.fromJson(i).clientId}");
       }
+
+
       if (TaskModel.fromJson(i).taskStatus == 'Completed' &&
           TaskModel.fromJson(i).managerApproval == 'Accepted' &&
           (TaskModel.fromJson(i).clientApproval == 'Pending' ||
               TaskModel.fromJson(i).clientApproval == 'Rejected')) {
         clientApprovalPending.add(TaskModel.fromJson(i));
-        await getManagerName("${TaskModel.fromJson(i).managerId}");
-        await getClientName("${TaskModel.fromJson(i).clientId}");
+        // await getManagerName("${TaskModel.fromJson(i).managerId}");
+        // await getClientName("${TaskModel.fromJson(i).clientId}");
       }
+
+
       if (TaskModel.fromJson(i).taskStatus == 'Closed' &&
           TaskModel.fromJson(i).managerApproval == 'Accepted' &&
           TaskModel.fromJson(i).clientApproval == 'Accepted') {
         closedTask.add(TaskModel.fromJson(i));
-        await  getManagerName("${TaskModel.fromJson(i).managerId}");
-        await getClientName("${TaskModel.fromJson(i).clientId}");
+        // await  getManagerName("${TaskModel.fromJson(i).managerId}");
+        // await getClientName("${TaskModel.fromJson(i).clientId}");
       }
+
+
+
+
+
     }
     // print('aaaaaa');
     // print(assignedtask.length);
@@ -158,6 +189,37 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
     });
   }
 
+
+
+  Future<dynamic> UpdateStatus2(String taskid) async {
+    try {
+      setState(() {
+        loading = true; //make loading true to show progressindicator
+      });
+
+      Session _session = Session();
+      final data = jsonEncode(<String, String>{'name': taskid});
+      final response = await _session.post(
+          // http://localhost:5000/operator/acceptTask/578a3522-92fd-4985-bef9-563fed98dfae
+          'http://$ip/operator/acceptTask/${taskid}', data);
+      print(response.toString());
+      print('status updated2 successfully');
+      loading = false;
+
+      print("responseq $response");
+      await gerInProgressTask();
+
+      setState(() {});
+      return response;
+    } catch (e) {
+      print(e.toString());
+    }
+    loading = false;
+    setState(() {
+      //make loading true to show progressindicator
+    });
+  }
+
   // http://164.92.83.169/operator/getTimeline/1a19cd55-bc76-420f-b506-d078c248bd79
   @override
   void initState() {
@@ -170,9 +232,9 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
   Widget build(BuildContext context) {
     // gerInProgressTask();
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
-        backgroundColor: greyColor.withOpacity(0.1),
+        backgroundColor: creamColor2.withOpacity(0.1),
         appBar: AppBar(
           backgroundColor: Colors.white,
           shadowColor: Colors.white,
@@ -225,6 +287,9 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                       text: 'Assigned Tasks',
                     ),
                     Tab(
+                      text: 'inProgress Tasks',
+                    ),
+                    Tab(
                       text: 'Manager Approval Pending',
                     ),
                     Tab(
@@ -239,6 +304,180 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
               Expanded(
                   child: TabBarView(
                 children: [
+                  RefreshIndicator(
+                    onRefresh: () async {
+                      await gerInProgressTask();
+                    },
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          loading
+                              ? Padding(
+                            padding: const EdgeInsets.only(top: 80.0),
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  SpinKitDoubleBounce(
+                                    color: blackColor.withOpacity(1),
+                                    size: 50.0,
+                                  ),
+                                  Text("Loading....")
+                                ],
+                              ),
+                            ),
+                          )
+                              : inprogress.isEmpty
+                              ? Container(
+                            height: 100,
+                            child: const Center(
+                              child:
+                              Text("Tasks aren't Assigned yet"),
+                            ),
+                          )
+                              : SingleChildScrollView(
+                            child: Column(
+                              children: <Widget>[
+                                ListView.builder(
+                                  physics:
+                                  const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: inprogress.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding:
+                                      const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        child: OpeartorContainer(
+                                          clientName: '${mapClientName[inprogress[index].clientId]}',
+                                          managerName: '${mapMangerName[inprogress[index].managerId]}',
+                                          Approve: () {},
+                                          Reject: () {},
+                                          TimeLineDoc: () {
+                                            Navigator.of(context)
+                                                .push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    TimeData(
+                                                      Taskid:
+                                                      '${inprogress[index].taskID}',
+                                                    ),
+                                              ),
+                                            );
+                                          },
+                                          AttachDoc: () {
+                                            Navigator.of(context)
+                                                .push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AttachData(
+                                                      Taskid:
+                                                      '${inprogress[index].taskID}',
+                                                    ),
+                                              ),
+                                            );
+                                          },
+                                          ChangeStatus: () {
+                                            // print('object');
+
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext
+                                              context) {
+                                                return AlertDialog(
+                                                  title: const Text(
+                                                      "Really ?"),
+                                                  content: const Text(
+                                                      "Do want to accept the task ?"),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(
+                                                            context)
+                                                            .pop();
+                                                      },
+                                                      child:
+                                                      const Text(
+                                                          "No"),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        UpdateStatus2(
+                                                          '${inprogress[index].taskID}',
+                                                        );
+
+                                                        Navigator.of(
+                                                            context)
+                                                            .push(MaterialPageRoute(
+                                                            builder: (context) =>
+                                                            const home_operator()));
+                                                      },
+                                                      child:
+                                                      const Text(
+                                                          "Yes"),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
+                                          who: 'operator1',
+                                          fontColor: blackColor,
+                                          backgrondColor: whitegreyColor,
+                                          first: yellowColor,
+                                          second: blackColor,
+                                          third: redColor,
+                                          forth: redColor,
+                                          fifth: redColor,
+                                          sixth: yellowColor,
+                                          taskName:
+                                          '${inprogress[index].taskName}',
+                                          ProjectName:
+                                          '${inprogress[index].ProjectName}',
+                                          taskId:
+                                          '${inprogress[index].taskID}',
+                                          clientId:
+                                          '${inprogress[index].clientId}',
+                                          // '${mapClientIdName[assignedtask[index].clientId]}',
+                                          operatorId: '',
+                                          openDate:
+                                          '${inprogress[index].openDate?.substring(0, 10)}',
+                                          taskDescription:
+                                          '${inprogress[index].taskDescription}',
+                                          closeDate:
+                                          '${inprogress[index].closeDate?.substring(0, 10)}',
+                                          clientNote:
+                                          '${inprogress[index].clientNote}',
+                                          managerNote:
+                                          '${inprogress[index].managerNote}',
+                                          AssignationStatus: '',
+                                          priority:
+                                          '${inprogress[index].priority}',
+                                          clientApproval: '',
+                                          taskStatus:
+                                          '${inprogress[index].taskStatus}',
+                                          managerApproval: '',
+                                          taskCategory: '',
+                                          managerId: '',
+                                          assignTask: () {
+                                            if (inprogress[index]
+                                                .taskStatus ==
+                                                'Pending') {}
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   RefreshIndicator(
                     onRefresh: () async {
                       await gerInProgressTask();
@@ -356,11 +595,11 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                       );
                                                     },
                                                     who: 'operator1',
-                                                    fontColor: greyColor,
-                                                    backgrondColor: greenColor,
+                                                    fontColor: blackColor,
+                                                    backgrondColor: blueColor,
                                                     first: yellowColor,
                                                     second: blackColor,
-                                                    third: greyColor,
+                                                    third: redColor,
                                                     forth: redColor,
                                                     fifth: redColor,
                                                     sixth: yellowColor,
@@ -372,7 +611,6 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                         '${assignedtask1[index].taskID}',
                                                     clientId:
                                                         '${assignedtask1[index].clientId}',
-                                                    // '${mapClientIdName[assignedtask[index].clientId]}',
                                                     operatorId: '',
                                                     openDate:
                                                         '${assignedtask1[index].openDate?.substring(0, 10)}',
@@ -488,11 +726,11 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                     },
                                                     ChangeStatus: () {},
                                                     who: 'operator',
-                                                    fontColor: greyColor,
-                                                    backgrondColor: greenColor,
+                                                    fontColor: blackColor,
+                                                    backgrondColor: blueColor,
                                                     first: yellowColor,
                                                     second: blackColor,
-                                                    third: greyColor,
+                                                    third: redColor,
                                                     forth: redColor,
                                                     fifth: redColor,
                                                     sixth: yellowColor,
@@ -619,11 +857,11 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                     },
                                                     ChangeStatus: () {},
                                                     who: 'operator',
-                                                    fontColor: greyColor,
-                                                    backgrondColor: greenColor,
+                                                    fontColor: blackColor,
+                                                    backgrondColor: whitegreyColor,
                                                     first: yellowColor,
                                                     second: blackColor,
-                                                    third: greyColor,
+                                                    third: redColor,
                                                     forth: redColor,
                                                     fifth: redColor,
                                                     sixth: yellowColor,
@@ -753,11 +991,11 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                     },
                                                     ChangeStatus: () {},
                                                     who: 'operator',
-                                                    fontColor: greyColor,
-                                                    backgrondColor: greenColor,
+                                                    fontColor: blackColor,
+                                                    backgrondColor: whitegreyColor,
                                                     first: yellowColor,
                                                     second: blackColor,
-                                                    third: greyColor,
+                                                    third: creamColor2,
                                                     forth: redColor,
                                                     fifth: redColor,
                                                     sixth: yellowColor,

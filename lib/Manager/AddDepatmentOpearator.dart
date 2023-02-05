@@ -132,7 +132,8 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: greyColor.withOpacity(0.9)),
+                        color: Colors.black.withOpacity(0.8)
+                    ),
                   ),
                 ),
               ),
@@ -180,8 +181,8 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        greyColor.withOpacity(0.7),
-                        greyColor.withOpacity(0.7)
+                        blueColor.withOpacity(1),
+                        blueColor.withOpacity(1),
                         // Colors.teal[200],
                       ],
                       begin: Alignment.topLeft,
@@ -201,7 +202,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                     child: Text(
                       '  Add Department  ',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
                       ),
@@ -224,7 +225,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: greyColor.withOpacity(0.9)),
+                        color: Colors.black.withOpacity(0.8)),
                   ),
                 ),
               ),
@@ -272,7 +273,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                                   child: Container(
                                     decoration: BoxDecoration(
                                         color: select == index
-                                            ? greyColor.withOpacity(0.2)
+                                            ? Colors.grey.withOpacity(0.8)
                                             : whiteColor.withOpacity(1),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(10))),
@@ -404,8 +405,8 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        greyColor.withOpacity(0.7),
-                        greyColor.withOpacity(0.7)
+                        blueColor.withOpacity(0.7),
+                        blueColor.withOpacity(0.7)
                         // Colors.teal[200],
                       ],
                       begin: Alignment.topLeft,
@@ -425,7 +426,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                     child: Text(
                       '  Add Operator  ',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
                       ),

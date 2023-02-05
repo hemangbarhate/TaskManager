@@ -73,7 +73,7 @@ class _ClientContainerState extends State<ClientContainer> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 25, right: 05, left: 05),
+      padding: const EdgeInsets.only(top: 25, right: 00, left: 00),
       child: Container(
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
@@ -88,7 +88,7 @@ class _ClientContainerState extends State<ClientContainer> {
         ),
         child: Padding(
           padding:
-          const EdgeInsets.only(left: 8.0, right: 5, top: 2, bottom: 15),
+          const EdgeInsets.only(left: 0.0, right: 0, top: 2, bottom: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -181,9 +181,9 @@ class _ClientContainerState extends State<ClientContainer> {
                             //             ? "Running"
                             //             : "Done")),
                             style: TextStyle(
-                              color: widget.first == greyColor
+                              color: widget.first == creamColor2
                                   ? yellowColor.withOpacity(0.9)
-                                  : greyColor.withOpacity(0.9),
+                                  : creamColor2.withOpacity(0.9),
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
                             ),
@@ -390,9 +390,9 @@ class _ClientContainerState extends State<ClientContainer> {
                           child: Text(
                             'Add Link',
                             style: TextStyle(
-                              color: widget.sixth == greyColor
+                              color: widget.sixth == creamColor2
                                   ? yellowColor.withOpacity(0.9)
-                                  : greyColor.withOpacity(0.9),
+                                  : creamColor2.withOpacity(0.9),
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
                             ),
@@ -406,7 +406,7 @@ class _ClientContainerState extends State<ClientContainer> {
               const SizedBox(
                 height: 15,
               ),
-              if (widget.backgrondColor == greenColor)
+              if (widget.backgrondColor == whitegreyColor)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[

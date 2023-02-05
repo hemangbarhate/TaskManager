@@ -160,7 +160,7 @@ class _CreateTaskState extends State<CreateTask> {
                                   child: Container(
                                     decoration: BoxDecoration(
                                         color: select == index
-                                            ? greyColor.withOpacity(0.2)
+                                            ? Colors.grey.withOpacity(0.6)
                                             : whiteColor.withOpacity(1),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(10))),
@@ -400,13 +400,8 @@ class _CreateTaskState extends State<CreateTask> {
                   child: ElevatedButton(
                       onPressed: () {
                         final isValidForm = _formKey.currentState!.validate();
-                        // TextEditingController TaskName = TextEditingController();
-                        // TextEditingController ProjectName = TextEditingController();
-                        // TextEditingController Description = TextEditingController();
-                        // TextEditingController ClientNote = TextEditingController();
-                        // TextEditingController opendate = TextEditingController();
-                        // TextEditingController clientId = TextEditingController();
-                        if (select != -1 && isValidForm) {
+                        if (isValidForm) {
+                          print("client name  : ${clientlist[select].name}");
                           createTask(
                               ProjectName.text,
                               clientlist[select].clientId,
@@ -414,7 +409,9 @@ class _CreateTaskState extends State<CreateTask> {
                               Description.text,
                               opendate.text,
                               closedate.text,
-                              closedate.text);
+                              ClientNote.text);
+                          // ProjectName, clientId, taskName,
+                        // taskDescription, openDate, closeDate, clientNote)
                           final snackBar = SnackBar(
                             content: Text("Please Refresh the page "),
                             backgroundColor: (Colors.black12),
@@ -425,13 +422,13 @@ class _CreateTaskState extends State<CreateTask> {
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                           ProjectName.clear();
-                          select = -1;
+                          select = 1;
                           TaskName.clear();
                           Description.clear();
                           opendate.clear();
                           closedate.clear();
-                          closedate.clear();
-                          Navigator.of(context).push(MaterialPageRoute(
+                          ClientNote.clear();
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(
                               builder: (context) => const home_manager()));
                           // );
                         } else {

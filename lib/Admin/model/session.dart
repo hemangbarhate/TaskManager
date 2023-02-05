@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
@@ -29,6 +30,36 @@ class Session {
 
     updateCookie(response);
     return json.decode(response.body);
+  }
+
+  Future<Uint8List> getprofileImage(String apiUrl) async {
+    final sp = await SharedPreferences.getInstance();
+    final contains = sp.containsKey('cookie');
+    final cookie;
+    if(contains){
+      final cookie = sp.getString('cookie');
+      headers['cookie'] = cookie.toString();
+    }
+    var res = await http.get(Uri.parse(apiUrl), headers: headers);
+    print("statusCode ${res.statusCode}");
+    var image = res.bodyBytes;
+    print(image.runtimeType);
+    return image;
+  }
+  Future uploadImage1(String filename,String apiUrl) async {
+    final sp = await SharedPreferences.getInstance();
+    final contains = sp.containsKey('cookie');
+    final cookie;
+    if(contains){
+      final cookie = sp.getString('cookie');
+      headers['cookie'] = cookie.toString();
+    }
+    var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+    request.files.add(await http.MultipartFile.fromPath('profilePic', filename));
+    request.headers['cookie'] = headers['cookie']!;
+    var res = await request.send();
+    res.stream.transform(utf8.decoder).listen((value) { print(value);});
+    print("res ${res.statusCode}");
   }
 
   Future post(String url, String data) async {

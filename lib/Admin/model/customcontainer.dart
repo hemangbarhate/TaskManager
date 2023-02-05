@@ -129,7 +129,7 @@ class _ClientContainerState extends State<ClientContainer> {
                       padding: const EdgeInsets.only(left: 10.0, right: 10),
                       child: Center(
                         child: Text(
-                          widget.backgrondColor == greenColor
+                          widget.backgrondColor == whitegreyColor
                               ? "Request"
                               : (widget.backgrondColor == orangeColor
                               ? "Assigned"
@@ -137,9 +137,9 @@ class _ClientContainerState extends State<ClientContainer> {
                               ? "Running"
                               : "Done")),
                           style: TextStyle(
-                            color: widget.first == greyColor
+                            color: widget.first == creamColor2
                                 ? yellowColor.withOpacity(0.9)
-                                : greyColor.withOpacity(0.9),
+                                : creamColor2.withOpacity(0.9),
                             fontSize: 13,
                             fontWeight: FontWeight.bold,
                           ),
@@ -291,7 +291,7 @@ class _ClientContainerState extends State<ClientContainer> {
                       padding: EdgeInsets.only(left: 10.0, right: 10),
                       child: Center(
                         child: Text(
-                          widget.backgrondColor == greenColor
+                          widget.backgrondColor == whitegreyColor
                               ? "ASSIGN"
                               : "urgent",
                           style: TextStyle(
@@ -330,9 +330,9 @@ class _ClientContainerState extends State<ClientContainer> {
                         child: Text(
                           'Add Link',
                           style: TextStyle(
-                            color: widget.sixth == greyColor
+                            color: widget.sixth == creamColor2
                                 ? yellowColor.withOpacity(0.9)
-                                : greyColor.withOpacity(0.9),
+                                : creamColor2.withOpacity(0.9),
                             fontSize: 13,
                             fontWeight: FontWeight.bold,
                           ),

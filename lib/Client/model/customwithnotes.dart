@@ -209,9 +209,9 @@ class _CustomWithNoteState extends State<CustomWithNote> {
                             //             ? "Running"
                             //             : "Done")),
                             style: TextStyle(
-                              color: widget.first == greyColor
+                              color: widget.first == creamColor2
                                   ? yellowColor.withOpacity(0.9)
-                                  : greyColor.withOpacity(0.9),
+                                  : creamColor2.withOpacity(0.9),
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
                             ),
@@ -418,9 +418,9 @@ class _CustomWithNoteState extends State<CustomWithNote> {
                           child: Text(
                             'Add Link',
                             style: TextStyle(
-                              color: widget.sixth == greyColor
+                              color: widget.sixth == creamColor2
                                   ? yellowColor.withOpacity(0.9)
-                                  : greyColor.withOpacity(0.9),
+                                  : creamColor2.withOpacity(0.9),
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
                             ),
@@ -434,7 +434,10 @@ class _CustomWithNoteState extends State<CustomWithNote> {
               const SizedBox(
                 height: 15,
               ),
-              if (widget.backgrondColor == greenColor)
+              if (widget.managerApproval == 'Accepted' &&
+                  (widget.clientApproval == 'Pending' ||
+                      widget.clientApproval == 'Rejected') &&
+                  widget.taskStatus == 'Completed')
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[

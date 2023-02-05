@@ -200,7 +200,7 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                         ),
                         CupertinoRadioChoice(
                             selectedColor: yellowColor.withOpacity(1),
-                            notSelectedColor: greyColor,
+                            notSelectedColor: creamColor2,
                             choices: genderMap,
                             onChange: (genderKey) {
                               setState(() {
@@ -273,25 +273,25 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                               if (mounted && response['success'] == true) {
                                 sp.setString('userType',_selectedGender);
                                 if (_selectedGender == "manager") {
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               const home_manager()));
                                 } else if (_selectedGender == "operator") {
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               const home_operator()));
                                 } else if (_selectedGender == "admin") {
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               const HomePage()));
                                 } else if (_selectedGender == "client") {
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intership/Client/home_client.dart';
 import 'package:intership/Client/viewclienttask.dart';
 import 'package:intership/constant/ApI.dart';
 import 'package:intl/intl.dart';
@@ -314,6 +315,9 @@ class _CreateTaskState extends State<CreateTask> {
                               Description.text = "";
                               ClientNote.text = "";
                               ProjectName.text = '';
+                              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                  builder: (context) => const home_client()));
+
                             });
                             final snackBar = SnackBar(
                               content: Text(response['data']),

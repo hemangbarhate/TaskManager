@@ -226,7 +226,7 @@ class _AddOperatorState extends State<AddOperator> {
                             },
                             child: Container(
                               color: select == index
-                                  ? greyColor.withOpacity(0.2)
+                                  ? creamColor2.withOpacity(0.2)
                                   : whiteColor.withOpacity(1),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),

@@ -210,9 +210,9 @@ class _MyContainerState extends State<MyContainer> {
                             //             ? "Running"
                             //             : "Done")),
                             style: TextStyle(
-                              color: widget.first == greyColor
+                              color: widget.first == creamColor2
                                   ? yellowColor.withOpacity(0.9)
-                                  : greyColor.withOpacity(0.9),
+                                  : creamColor2.withOpacity(0.9),
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
                             ),
@@ -227,7 +227,7 @@ class _MyContainerState extends State<MyContainer> {
                       // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
                     },
                     child: Container(
-                      width: 120,
+                      // width: 120,
                       height: 46,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -248,7 +248,7 @@ class _MyContainerState extends State<MyContainer> {
                         ],
                       ),
                       child:  Padding(
-                        padding: EdgeInsets.only(left: 10.0, right: 10),
+                        padding: EdgeInsets.only(left: 8.0, right: 8),
                         child: Center(
                           child: Text(
                             '${widget.openDate}',
@@ -267,7 +267,7 @@ class _MyContainerState extends State<MyContainer> {
                       // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
                     },
                     child: Container(
-                      width: 120,
+                      // width: 100,
                       height: 46,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -288,7 +288,7 @@ class _MyContainerState extends State<MyContainer> {
                         ],
                       ),
                       child: Padding(
-                        padding: EdgeInsets.only(left: 10.0, right: 10),
+                        padding: EdgeInsets.only(left: 5.0, right: 5),
                         child: Center(
                           child: Text(
                             '${widget.closeDate}',
@@ -435,7 +435,10 @@ class _MyContainerState extends State<MyContainer> {
               const SizedBox(
                 height: 15,
               ),
-              if (widget.backgrondColor == greenColor)
+              if (widget.managerApproval == 'Accepted' &&
+                  (widget.clientApproval == 'Pending' ||
+                      widget.clientApproval == 'Rejected') &&
+                  widget.taskStatus == 'Completed')
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[

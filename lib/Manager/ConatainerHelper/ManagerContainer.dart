@@ -256,9 +256,7 @@ class _OpeartorContainerState extends State<OpeartorContainer> {
                           child: Text(
                             'ViewDoc',
                             style: TextStyle(
-                              color: widget.sixth == greyColor
-                                  ? yellowColor.withOpacity(0.9)
-                                  : greyColor.withOpacity(0.9),
+                              color: whiteColor.withOpacity(1),
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
                             ),
@@ -297,7 +295,7 @@ class _OpeartorContainerState extends State<OpeartorContainer> {
                         child: Center(
                           child: Text(
                             '${widget.closeDate}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
@@ -307,14 +305,12 @@ class _OpeartorContainerState extends State<OpeartorContainer> {
                       ),
                     ),
                   ),
-
-
                 ],
               ),
               const SizedBox(
                 height: 15,
               ),
-              Row(
+              widget.taskStatus == 'Closed' || widget.taskStatus == 'Completed'  ? Container():   Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -346,13 +342,11 @@ class _OpeartorContainerState extends State<OpeartorContainer> {
                         padding: const EdgeInsets.only(left: 10.0, right: 10),
                         child: Center(
                           child: Text(
-                            widget.who == 'operator1'
-                                ? 'Done'
-                                : '${widget.priority}',
+                          widget.taskStatus == 'Pending'
+                                ? 'Accept'
+                                :  "Done" ,
                             style: TextStyle(
-                              color: widget.first == greyColor
-                                  ? yellowColor.withOpacity(0.9)
-                                  : greyColor.withOpacity(0.9),
+                              color: whiteColor.withOpacity(1),
                               fontSize: 17,
                               fontWeight: FontWeight.bold,
                             ),
