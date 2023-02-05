@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intership/Admin/Report/managerReport.dart';
 import 'package:intership/constant/ApI.dart';
 // import 'package:superadmin/constant.dart';
 import 'model/managermodel.dart';
@@ -18,6 +19,7 @@ class _ViewManagerState extends State<ViewManager> {
 
   List<Operator> managerlist = [];
   Future<List<Operator>> getManager() async {
+    managerlist.clear();
     Session _session = Session();
     final response = await _session.get(getmanagerlist);
     print(response);
@@ -74,21 +76,34 @@ class _ViewManagerState extends State<ViewManager> {
                 return ListView.builder(
                   itemCount: managerlist.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      margin: EdgeInsets.all(6),
-                      padding: EdgeInsets.all(12),
-                      color: Colors.black12,
-                      // color: Color(0xfffed456),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text('Manager Name : ${managerlist[index].name}',),
-                          SizedBox(height: 3,),
-                          Text('Email : ${managerlist[index].email}',),
-                          SizedBox(height: 3,),
-                          Text('Mobile No : ${managerlist[index].mobile}',),
+                    return GestureDetector(
+                      onTap: ()
+                      {
+                        print('${managerlist[index].name}');
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                 mnagerReport(managerID: managerlist[index].managerId,
 
-                        ],
+                                )));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.all(6),
+                        padding: EdgeInsets.all(12),
+                        color: Colors.black12,
+                        // color: Color(0xfffed456),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text('Manager Name : ${managerlist[index].name}',),
+                            SizedBox(height: 3,),
+                            Text('Email : ${managerlist[index].email}',),
+                            SizedBox(height: 3,),
+                            Text('Mobile No : ${managerlist[index].mobile}',),
+
+                          ],
+                        ),
                       ),
                     );
                   },
