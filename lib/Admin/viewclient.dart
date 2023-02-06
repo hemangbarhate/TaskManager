@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intership/Admin/Report/managerReport.dart';
 import 'package:intership/constant/ApI.dart';
 // import 'package:superadmin/constant.dart';
 import 'model/clientmodel.dart';
@@ -74,18 +75,31 @@ class _ViewClientState extends State<ViewClient> {
                 return ListView.builder(
                   itemCount: managerlist.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      margin: EdgeInsets.all(6),
-                      padding: EdgeInsets.all(12),
-                      color: Colors.black12,
-                      // color: Color(0xfffed456),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text('Operator Name : ${managerlist[index].name}'),
-                          Text('Email : ${managerlist[index].email}',),
-                          Text('Mobile No : ${managerlist[index].mobile}',),
-                        ],
+                    return GestureDetector(
+                      onTap: ()
+                      {
+                        print('${managerlist[index].name}');
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    mnagerReport(managerID: managerlist[index].clientId,
+                                      report: 'clientReports',
+                                    )));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.all(6),
+                        padding: EdgeInsets.all(12),
+                        color: Colors.black12,
+                        // color: Color(0xfffed456),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text('Operator Name : ${managerlist[index].name}'),
+                            Text('Email : ${managerlist[index].email}',),
+                            Text('Mobile No : ${managerlist[index].mobile}',),
+                          ],
+                        ),
                       ),
                     );
                   },

@@ -85,7 +85,7 @@ class _ViewManagerState extends State<ViewManager> {
                             MaterialPageRoute(
                                 builder: (context) =>
                                  mnagerReport(managerID: managerlist[index].managerId,
-
+                                   report: 'managerReports',
                                 )));
                       },
                       child: Container(

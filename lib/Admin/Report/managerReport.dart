@@ -10,7 +10,8 @@ import '../../constant/ApI.dart';
 
 class mnagerReport extends StatefulWidget {
   String managerID;
-  mnagerReport({Key? key, required this.managerID}) : super(key: key);
+  String report;
+  mnagerReport({Key? key, required this.managerID, required this.report}) : super(key: key);
 
   @override
   _mnagerReportState createState() => _mnagerReportState();
@@ -18,7 +19,7 @@ class mnagerReport extends StatefulWidget {
 
 class _mnagerReportState extends State<mnagerReport> {
   List<ReportModel> managerreportlist = [];
-  Future<dynamic> managerReportFunc(String managerId, startdate, endate) async {
+  Future<dynamic> managerReportFunc(String managerId, Report, startdate, endate) async {
     try {
       Session _session = Session();
       final data = jsonEncode(<String, String>{
@@ -26,7 +27,7 @@ class _mnagerReportState extends State<mnagerReport> {
         'endDate': endate,
       });
       final response = await _session.post(
-          'http://$ip/admin/reports/managerReports/$managerId', data);
+          'http://$ip/admin/reports/$Report/$managerId', data);
       print("Dhiraj ${response.toString()}");
       for (dynamic i in response['result']) {
         print("iii $i");
@@ -186,13 +187,16 @@ class _mnagerReportState extends State<mnagerReport> {
                           if (isValidForm) {
                             await managerReportFunc(
                                     widget.managerID,
+                                    widget.report,
                                     opendate.text.toString(),
                                     closedate.text.toString())
                                 .catchError((err) {});
                             if (true) {
+                              // closedate.clear();
+                              // opendate.clear();
                               // setState(() {
-                              //   opendate.text = "";
-                              //   closedate.text = "";
+                                opendate.text = "";
+                                closedate.text = "";
                               // });
                               final snackBar = SnackBar(
                                 content: Text("response['data']"),
