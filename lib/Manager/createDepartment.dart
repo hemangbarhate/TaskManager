@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:intership/Admin/model/session.dart';
 import 'package:intership/Manager/AddDepatmentOpearator.dart';
@@ -28,8 +30,10 @@ Map<String, dynamic> _portaInfoMap = {
 List<String> departlist = [];
 List<String> departlistID = [];
 List<String> operaortlist = [];
+List<dynamic> operaortprofilelist = [];
 
 class _CreateDeptState extends State<CreateDept> {
+  var profileImage1;
   PortalInfo portalInfo = PortalInfo.fromJson(_portaInfoMap);
   bool loadingofsecond = false;
   bool loadingofirst = false;
@@ -40,7 +44,15 @@ class _CreateDeptState extends State<CreateDept> {
     super.initState();
   }
 
-  //
+  getProfileImage(String operatorId) async {
+    Session _session = Session();
+    profileImage1 = await _session
+        .getprofileImage("http://$ip/manager/getOperatorProfilePic/$operatorId");
+    operaortprofilelist.add(profileImage1);
+    // print("aaaaa ${operaortprofilelist.length}");
+    setState(() {});
+  }
+
   getDetp() async {
     setState(() {
       loadingofirst = true; //make loading true to show progressindicator
@@ -48,9 +60,7 @@ class _CreateDeptState extends State<CreateDept> {
     Session _session = Session();
     final response =
         await _session.get('http://164.92.83.169/manager/getDepartments');
-    // print(response);
-    // print(departlist.length);
-    // dispose()
+
     for (dynamic i in response['data']['departments']) {
       // print('OK : ${i['departmentName']}');
       if (!departlist.contains(i['departmentName'])) {
@@ -74,11 +84,12 @@ class _CreateDeptState extends State<CreateDept> {
       print(i);
       final response =
           await _session.get('http://$ip/manager/getOperators/$i');
-      print("OperatorResponse $response");
       for (dynamic i in response['data']['operators']) {
-        print('OK : ${i['name']}');
         if (!operaortlist.contains(i['name'])) {
           operaortlist.add(i['name']);
+          print("object");
+          print(i['operatorId']);
+          await getProfileImage(i['operatorId']);
         }
       }
     }
@@ -115,15 +126,6 @@ class _CreateDeptState extends State<CreateDept> {
                   }),
             );
           }),
-          actions: <Widget>[
-            Padding(
-                padding: EdgeInsets.only(right: 18.0),
-                child: Container(
-                  height: 25,
-                  child: CircleAvatar(
-                      child: Image.asset("assets/images/download.png")),
-                ),)
-          ],
         ),
         body: Form(
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -205,8 +207,9 @@ class _CreateDeptState extends State<CreateDept> {
                                   child: ListTile(
                                     title: Text(departlist[index]),
                                     leading: CircleAvatar(
-                                      child: Text(''),
-                                    ),
+                                      child: Icon(Icons.shopping_bag_outlined),
+                                    )
+                                    ,
                                   ),
                                 ),
                               );
@@ -262,9 +265,14 @@ class _CreateDeptState extends State<CreateDept> {
                                         child: ListTile(
                                           title: Text(operaortlist[index]),
                                           // subtitle: Text(operaortlist[index]),
-                                          leading: CircleAvatar(
-                                            child: Text(''),
-                                          ),
+                                          leading: operaortprofilelist[index] == null
+                                              ? Image.asset("assets/images/download.png")
+                                              : CircleAvatar(
+                                            backgroundImage: MemoryImage(
+                                              operaortprofilelist[index],
+                                              // profileImage1
+                                            ),
+                                          )
                                         ),
                                       ),
                                     );

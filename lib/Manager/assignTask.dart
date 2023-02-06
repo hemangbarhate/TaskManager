@@ -22,6 +22,7 @@ enum Priority { high, medium, low }
 class _AssignTaskState extends State<AssignTask> {
   Priority? _pri = Priority.medium;
   bool loading = false;
+
   Future<dynamic> assignTask(
       String opId, String managerNote, String priorityAssigned) async {
     try {
@@ -48,6 +49,8 @@ class _AssignTaskState extends State<AssignTask> {
   }
 
   List<OperatorData> operaortlist = [];
+  var profileImage1;
+  List<dynamic> operaortprofilelist = [];
   @override
   void getDATA() async {
     // TODO: implement initState
@@ -55,9 +58,21 @@ class _AssignTaskState extends State<AssignTask> {
       loading = true;
     });
     operaortlist = await getOperator();
+
     setState(() {
       loading = false;
     });
+  }
+
+  getProfileImage(int index, String operatorId) async {
+    Session _session = Session();
+    profileImage1 = await _session
+        .getprofileImage("http://$ip/manager/getOperatorProfilePic/$operatorId");
+    operaortprofilelist.add(null);
+    operaortprofilelist[index] = profileImage1;
+    print("aaaaa ${operaortprofilelist.length}");
+    // return profileImage1;
+    // setState(() {});
   }
 
   @override
@@ -238,7 +253,9 @@ class _AssignTaskState extends State<AssignTask> {
                                 physics: NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
                                 itemCount: operaortlist.length,
-                                itemBuilder: (context, index) {
+                                itemBuilder:(context, index) {
+                                  // getProfileImage(index, operaortlist[index].operatorId);
+                                  // print('qwerty ${op}');
                                   return GestureDetector(
                                     onTap: () {
                                       setState(() {
@@ -257,6 +274,11 @@ class _AssignTaskState extends State<AssignTask> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
                                           child: ListTile(
+                                            leading: false
+                                                ? Image.asset("assets/images/download.png")
+                                                : CircleAvatar(
+                                              backgroundImage: NetworkImage('http://$ip/manager/getOperatorProfilePic/${operaortlist[index].operatorId}',) ,
+                                            ),
                                             title: Text("${operaortlist[index].name}"),
                                             subtitle:
                                                 Text("${operaortlist[index].email}"),

@@ -179,53 +179,6 @@ class _ViewTaskState extends State<ViewTask> {
     return nameofclient;
   }
 
-  // List<TaskModel> inprogresstask = [];
-  // int dowehavedata = 0;
-  // Future<List<TaskModel>> gerInProgressTask() async {
-  //   // print("// InProgressAssigned Tasks");
-  //   setState(() {
-  //     loadingthird = true; //make loading true to show progressindicator
-  //   });
-  //   Session _session = Session();
-  //   final response =
-  //       await _session.get('http://164.92.83.169/manager/inProgressTask');
-  //   // print(response);
-  //
-  //   for (dynamic i in response['result']) {
-  //     // print(i);
-  //     inprogresstask.add(TaskModel.fromJson(i));
-  //     if ('${TaskModel.fromJson(i).managerApproval}' == 'Completed' &&
-  //         '${TaskModel.fromJson(i).clientApproval}' == 'Pending') {
-  //       dowehavedata++;
-  //     }
-  //   }
-  //   // print(inprogresstask[0]);
-  //   loadingthird = false;
-  //   setState(() {});
-  //   return inprogresstask;
-  // }
-  //
-  // List<TaskModel> completetask = [];
-  // Future<List<TaskModel>> getCompleteTask() async {
-  //   // print("// Complete Tasks");
-  //   setState(() {
-  //     loadingfour = true; //make loading true to show progressindicator
-  //   });
-  //   Session _session = Session();
-  //   final response =
-  //       await _session.get('http://164.92.83.169/manager/completedTask');
-  //   // print("response $response");
-  //
-  //   for (dynamic i in response['result']) {
-  //     // print("i" + i);
-  //     completetask.add(TaskModel.fromJson(i));
-  //   }
-  //   // if(completetask.length >= 1) print(completetask[0]);
-  //   loadingfour = false;
-  //   setState(() {});
-  //   return completetask;
-  // }
-
   Future<dynamic> RejectRequest(String taskid) async {
     try {
       setState(() {

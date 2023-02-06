@@ -6,6 +6,7 @@ import 'package:intership/Manager/model/clientmodel.dart';
 List <ClientModel> clientlist = [];
 
  Future<List <ClientModel> >  getClientdata() async {
+   clientlist.clear();
   print("// client data");
   Session _session = Session();
   final response =

@@ -61,7 +61,24 @@ class _mnagerReportState extends State<mnagerReport> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Manager Report"),
+          backgroundColor: Colors.grey[200],
+          shadowColor: Colors.white,
+          title: Text("Report",
+            style: TextStyle(
+                fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),),
+          leading: Builder(builder: (BuildContext context) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+            );
+          }),
         ),
         body: Form(
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -179,225 +196,277 @@ class _mnagerReportState extends State<mnagerReport> {
                     },
                   ),
                 ),
-                SizedBox(
-                    height: 50,
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          final isValidForm = _formKey.currentState!.validate();
-                          if (isValidForm) {
-                            await managerReportFunc(
-                                    widget.managerID,
-                                    widget.report,
-                                    opendate.text.toString(),
-                                    closedate.text.toString())
-                                .catchError((err) {});
-                            if (true) {
-                              // closedate.clear();
-                              // opendate.clear();
-                              // setState(() {
-                                opendate.text = "";
-                                closedate.text = "";
-                              // });
-                              final snackBar = SnackBar(
-                                content: Text("response['data']"),
-                                backgroundColor: (Colors.black12),
-                                action: SnackBarAction(
-                                  label: 'dismiss',
-                                  onPressed: () {},
-                                ),
-                              );
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
-                              return;
-                            } else {
-                              return;
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            final isValidForm = _formKey.currentState!.validate();
+                            if (isValidForm) {
+                              await managerReportFunc(
+                                      widget.managerID,
+                                      widget.report,
+                                      opendate.text.toString(),
+                                      closedate.text.toString())
+                                  .catchError((err) {});
                             }
-                          }
-                        },
-                        child: Text('Get Report'))),
-                SizedBox(
-                  height: 40,
+                          },
+                          child: Text('Get Report'))),
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                    ),
-                    Flexible(
-                      child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Table(
-                            // border:TableBorder.symmetric(inside: BorderSide(width: 1,color: Colors.black),outside: BorderSide(width: 1,color: Colors.black),),
-                            border: TableBorder.all(),
-                            defaultColumnWidth: FixedColumnWidth(190),
-                            children: [
-                              TableRow(children: [
-                                Column(children: [
-                                  Text('TaskName',
-                                      style: TextStyle(fontSize: 17.0)),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: managerreportlist.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Column(
-                                        children: [
-                                          Text("${managerreportlist[index].taskName}")
-                                        ],
-                                      );
-                                        },
-                                  ),
-                                ]),
-                                Column(children: [
-                                  Text('OpenDate',
-                                      style: TextStyle(fontSize: 17.0)),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: managerreportlist.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Column(
-                                        children: [
-                                          Text("${managerreportlist[index].openDate?.substring(0,10)}")
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                ]),
-                                Column(children: [
-                                  Text('AssignationDate',
-                                      style: TextStyle(fontSize: 17.0)),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: managerreportlist.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Column(
-                                        children: [
-                                          Text("${managerreportlist[index].assignationDate?.substring(0,10)}")
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                ]),
-                                Column(children: [
-                                  Text('OperatorAcceptDate',
-                                      style: TextStyle(fontSize: 16.0)),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: managerreportlist.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Column(
-                                        children: [
-                                          Text("${managerreportlist[index].operatorAcceptDate?.substring(0,10)}")
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                ]),
-                                Column(children: [
-                                  Text('ActualCloseDate',
-                                      style: TextStyle(fontSize: 17.0)),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: managerreportlist.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Column(
-                                        children: [
-                                          Text("${managerreportlist[index].actualCloseDate?.substring(0,10)}")
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                ]),
-                                Column(children: [
-                                  Text('CloseDate',
-                                      style: TextStyle(fontSize: 17.0)),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: managerreportlist.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Column(
-                                        children: [
-                                          Text("${managerreportlist[index].closeDate?.substring(0,10)}")
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                ]),
-                                Column(children: [
-                                  Text('AssignationStatus',
-                                      style: TextStyle(fontSize: 17.0)),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: managerreportlist.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Column(
-                                        children: [
-                                          Text("${managerreportlist[index].AssignationStatus}")
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                ]),
-                                Column(children: [
-                                  Text('TaskStatus',
-                                      style: TextStyle(fontSize: 17.0)),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: managerreportlist.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Column(
-                                        children: [
-                                          Text("${managerreportlist[index].taskStatus}")
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                ]),
-                              ]),
-                            ],
-                          )),
-                    )
-                  ],
+                SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
+                      Flexible(
+                        child: Container(
+                          height: 300,
+                          child: Scrollbar(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: SingleChildScrollView(
+                                child: Table(
+                                  border: TableBorder.all(),
+                                  defaultColumnWidth: FixedColumnWidth(190),
+                                  children: [
+                                    TableRow(children: [
+                                      Column(children: [
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text('TaskName',
+                                              style: TextStyle(fontSize: 17.0)),
+                                        ),
+                                        Text('------------------------------------------'),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        ListView.builder(
+                                          primary: false,
+                                          shrinkWrap: true,
+                                          itemCount: managerreportlist.length,
+                                          itemBuilder:
+                                              (BuildContext context, int index) {
+                                            return Column(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(6.0),
+                                                  child: Text("${managerreportlist[index].taskName}"),
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ]),
+                                      Column(children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('OpenDate',
+                                              style: TextStyle(fontSize: 17.0)),
+                                        ),
+                                        Text('------------------------------------------'),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        ListView.builder(
+                                          primary: false,
+                                          shrinkWrap: true,
+                                          itemCount: managerreportlist.length,
+                                          itemBuilder:
+                                              (BuildContext context, int index) {
+                                            return Column(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(6.0),
+                                                  child: Text("${managerreportlist[index].openDate?.substring(0,10)}"),
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ]),
+                                      Column(children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('AssignationDate',
+                                              style: TextStyle(fontSize: 17.0)),
+                                        ),
+                                        Text('------------------------------------------'),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        ListView.builder(
+                                          primary: false,
+                                          shrinkWrap: true,
+                                          itemCount: managerreportlist.length,
+                                          itemBuilder:
+                                              (BuildContext context, int index) {
+                                            return Column(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(6.0),
+                                                  child: Text("${managerreportlist[index].assignationDate?.substring(0,10)}"),
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ]),
+                                      Column(children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('OperatorAcceptDate',
+                                              style: TextStyle(fontSize: 16.0)),
+                                        ),
+                                        Text('------------------------------------------'),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        ListView.builder(
+                                          primary: false,
+                                          shrinkWrap: true,
+                                          itemCount: managerreportlist.length,
+                                          itemBuilder:
+                                              (BuildContext context, int index) {
+                                            return Column(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(6.0),
+                                                  child: Text("${managerreportlist[index].operatorAcceptDate?.substring(0,10)}"),
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ]),
+                                      Column(children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('ActualCloseDate',
+                                              style: TextStyle(fontSize: 17.0)),
+                                        ),
+                                        Text('------------------------------------------'),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        ListView.builder(
+                                          primary: false,
+                                          shrinkWrap: true,
+                                          itemCount: managerreportlist.length,
+                                          itemBuilder:
+                                              (BuildContext context, int index) {
+                                            return Column(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(6.0),
+                                                  child: Text("${managerreportlist[index].actualCloseDate?.substring(0,10)}"),
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ]),
+                                      Column(children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('CloseDate',
+                                              style: TextStyle(fontSize: 17.0)),
+                                        ),
+                                        Text('------------------------------------------'),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        ListView.builder(
+                                          primary: false,
+                                          shrinkWrap: true,
+                                          itemCount: managerreportlist.length,
+                                          itemBuilder:
+                                              (BuildContext context, int index) {
+                                            return Column(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(6.0),
+                                                  child: Text("${managerreportlist[index].closeDate?.substring(0,10)}"),
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ]),
+                                      Column(children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('AssignationStatus',
+                                              style: TextStyle(fontSize: 17.0)),
+                                        ),
+                                        Text('------------------------------------------'),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        ListView.builder(
+                                          primary: false,
+                                          shrinkWrap: true,
+                                          itemCount: managerreportlist.length,
+                                          itemBuilder:
+                                              (BuildContext context, int index) {
+                                            return Column(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(6.0),
+                                                  child: Text("${managerreportlist[index].AssignationStatus}"),
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ]),
+                                      Column(children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('TaskStatus',
+                                              style: TextStyle(fontSize: 17.0)),
+                                        ),
+                                        Text('------------------------------------------'),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        ListView.builder(
+                                          primary: false,
+
+                                          shrinkWrap: true,
+                                          itemCount: managerreportlist.length,
+                                          itemBuilder:
+                                              (BuildContext context, int index) {
+                                            return Column(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(6.0),
+                                                  child: Text("${managerreportlist[index].taskStatus}"),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                      ]),
+                                    ]),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),

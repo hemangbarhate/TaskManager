@@ -7,6 +7,7 @@ import 'package:intership/Manager/managerHome.dart';
 import 'package:intership/Manager/managerViewtask.dart';
 import 'package:intership/Manager/model/clientmodel.dart';
 import 'package:intl/intl.dart';
+import '../Admin/constant.dart';
 import '../constant/color.dart';
 
 TextEditingController TaskName = TextEditingController();
@@ -170,7 +171,11 @@ class _CreateTaskState extends State<CreateTask> {
                                         // height: 50,
 
                                         child: ListTile(
-                                          leading: Icon(Icons.account_circle),
+                                          leading: false
+                                              ? Image.asset("assets/images/download.png")
+                                              : CircleAvatar(
+                                            backgroundImage: NetworkImage('http://$ip/manager/getClientProfilePic/${clientlist[index].clientId}',) ,
+                                          ),
                                           title:
                                               Text("${clientlist[index].name}"),
                                           subtitle: Text(

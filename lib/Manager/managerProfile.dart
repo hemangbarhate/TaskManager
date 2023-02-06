@@ -132,12 +132,16 @@ class _ManagerProfileState extends State<ManagerProfile> {
                       // crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
                         Container(
-                            height: MediaQuery.of(context).size.height / 7,
-                            width: MediaQuery.of(context).size.width / 6,
+                            height: MediaQuery.of(context).size.height / 6,
+                            width: MediaQuery.of(context).size.width / 5,
                             padding: EdgeInsets.all(6),
                             child: profileImage == null
                                 ? Image.asset("assets/images/download.png")
-                                : Image.memory(profileImage,fit: BoxFit.fill,)),
+                                : CircleAvatar(
+                                  backgroundImage: MemoryImage(
+                                  profileImage,
+                                  ),
+                                )),
                         Column(
                           children: [
                             Container(

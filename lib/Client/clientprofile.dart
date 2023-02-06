@@ -129,7 +129,11 @@ class _ClientProfileState extends State<ClientProfile> {
                             padding: EdgeInsets.all(6),
                             child: profileImage == null
                                 ? Image.asset("assets/images/download.png")
-                                : Image.memory(profileImage,fit: BoxFit.fill,)),
+                                : CircleAvatar(
+                              backgroundImage: MemoryImage(
+                                profileImage,
+                              ),
+                            )),
                         Column(
                           children: [
                             Container(

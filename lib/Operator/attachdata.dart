@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intership/Admin/model/session.dart';
 import 'package:intership/Operator/model/attachmodel.dart';
 
@@ -77,15 +78,6 @@ class _AttachDataState extends State<AttachData> {
             );
           },
         ),
-        actions: <Widget>[
-          Padding(
-              padding: const EdgeInsets.only(right: 18.0),
-              child: Container(
-                height: 25,
-                child: CircleAvatar(
-                    child: Image.asset("assets/images/download.png")),
-              ))
-        ],
       ),
       body: loadingfour
           ? const Center(child: CircularProgressIndicator())
@@ -129,13 +121,23 @@ class TEXT extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 15.0, top: 10),
-      child: Row(
+      child: Column(
         children: [
-          Text(
-            "${field} :",
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Row(
+            children: [
+              Text(
+                "${field} :",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Flexible(child: Text(" ${data}")),
+            ],
           ),
-          Text(" ${data}"),
+          TextButton(
+              onPressed: () {
+                Clipboard.setData(ClipboardData(
+                    text: data));
+              },
+              child: Text('Copy')),
         ],
       ),
     );
