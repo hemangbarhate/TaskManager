@@ -45,6 +45,10 @@ class _OperatorProfileState extends State<OperatorProfile> {
     _pickedImage = File("${pickedFile?.path}");
     Session _session = Session();
     await _session.uploadImage1(pickedFile!.path, apiUrl);
+    setState(() {
+      getProfile();
+      getProfileImage();
+    });
   }
 
 

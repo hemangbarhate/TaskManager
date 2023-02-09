@@ -88,17 +88,26 @@ class _ViewClientState extends State<ViewClient> {
                                     )));
                       },
                       child: Container(
-                        margin: EdgeInsets.all(6),
-                        padding: EdgeInsets.all(12),
                         color: Colors.black12,
-                        // color: Color(0xfffed456),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text('Operator Name : ${managerlist[index].name}'),
-                            Text('Email : ${managerlist[index].email}',),
-                            Text('Mobile No : ${managerlist[index].mobile}',),
-                          ],
+                        padding: EdgeInsets.all(12),
+                        margin: EdgeInsets.all(6),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                "http://$ip/admin/getClientProfilePic/${managerlist[index].clientId}"
+                            ),
+                          ),
+                          title: Text(
+                            managerlist[index].name,
+                          ),
+                          subtitle: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(managerlist[index].email, overflow: TextOverflow.ellipsis,),
+                              Text(managerlist[index].mobile)
+                            ],
+                          ),
                         ),
                       ),
                     );

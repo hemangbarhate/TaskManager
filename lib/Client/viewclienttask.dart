@@ -692,7 +692,7 @@ class _ViewTaskState extends State<ViewTask> {
                                                                 linkcontroller
                                                                     .text
                                                                     .toString(),
-                                                                createdTasks[
+                                                                assignedTasks[
                                                                         index]
                                                                     .taskID);
                                                             docnamecontroller
@@ -721,7 +721,7 @@ class _ViewTaskState extends State<ViewTask> {
                                                       builder: (context) =>
                                                           ViewLinks(
                                                               taskid:
-                                                                  createdTasks[
+                                                              assignedTasks[
                                                                           index]
                                                                       .taskID)));
                                             },
@@ -1002,7 +1002,7 @@ class _ViewTaskState extends State<ViewTask> {
                                                       builder: (context) =>
                                                           ViewLinks(
                                                               taskid:
-                                                                  createdTasks[
+                                                              acceptRejectTasks[
                                                                           index]
                                                                       .taskID)));
                                             },
@@ -1160,7 +1160,7 @@ class _ViewTaskState extends State<ViewTask> {
                                                       builder: (context) =>
                                                           ViewLinks(
                                                               taskid:
-                                                                  createdTasks[
+                                                              closedtasks[
                                                                           index]
                                                                       .taskID)));
                                             },

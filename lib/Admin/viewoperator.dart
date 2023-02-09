@@ -19,6 +19,7 @@ class _ViewOperatorState extends State<ViewOperator> {
 
   List<Client> managerlist = [];
   Future<List<Client>> getManager() async {
+    managerlist.clear();
     Session _session = Session();
     final response = await _session.get(getoperatorlist);
     print(response);
@@ -92,16 +93,53 @@ class _ViewOperatorState extends State<ViewOperator> {
                         padding: EdgeInsets.all(12),
                         color: Colors.black12,
                         // color: Color(0xfffed456),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text('Operator Name : ${managerlist[index].name}',),
-                            SizedBox(height: 3,),
-                            Text('Email : ${managerlist[index].email}'),
-                            SizedBox(height: 3,),
-                            Text('Mobile No : ${managerlist[index].mobile}'),
-                          ],
-                        ),
+                       child: ListTile(
+                         leading: CircleAvatar(
+                           backgroundImage: NetworkImage(
+                               "http://$ip/admin/getOperatorProfilePic/${managerlist[index].operatorId}"
+                           ),
+                         ),
+                         title: Text(
+                           managerlist[index].name,
+                         ),
+                         subtitle: Column(
+                           mainAxisAlignment: MainAxisAlignment.start,
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                           children: [
+                             Text(managerlist[index].email, overflow: TextOverflow.ellipsis,),
+                             Text(managerlist[index].mobile)
+                           ],
+                         ),
+                         trailing: IconButton(onPressed:(){
+                           showDialog(
+                             context: context,
+                             builder: (BuildContext context) {
+                               return AlertDialog(
+                                 title: const Text("Really ??"),
+                                 content: const Text(
+                                     "Do you want to Delete this Operator"),
+                                 actions: [
+                                   TextButton(
+                                     onPressed: () {
+                                       Navigator.of(context).pop();
+                                     },
+                                     child: const Text("No"),
+                                   ),
+                                   TextButton(
+                                     onPressed: () async {
+                                       Session _session = Session();
+                                       var res = await _session.get("http://$ip/admin/deleteOperator/${managerlist[index].operatorId}");
+                                       setState(() {});
+                                       Navigator.of(context).pop();
+                                     },
+                                     child: const Text("Yes"),
+                                   ),
+                                 ],
+                               );
+                             },
+                           );
+                         } , icon: Icon(Icons.delete),),
+                       ),
                       ),
                     );
                   },

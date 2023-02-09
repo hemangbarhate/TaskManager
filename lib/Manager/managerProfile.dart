@@ -35,7 +35,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
   getProfileImage() async {
     Session _session = Session();
     profileImage = await _session
-        .getprofileImage("http://164.92.83.169/manager/profilePic");
+        .getprofileImage("http://$ip/manager/profilePic");
     setState(() {});
   }
 
@@ -65,6 +65,10 @@ class _ManagerProfileState extends State<ManagerProfile> {
     _pickedImage = File("${pickedFile?.path}");
     Session _session = Session();
     await _session.uploadImage1(pickedFile!.path, apiUrl);
+    setState(() {
+      getProfile();
+      getProfileImage();
+    });
   }
 
   @override
@@ -149,7 +153,6 @@ class _ManagerProfileState extends State<ManagerProfile> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                // _uploadImage();
                                 uploadImage();
                               },
                               child: Container(

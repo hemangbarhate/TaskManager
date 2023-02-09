@@ -31,9 +31,11 @@ class _ClientProfileState extends State<ClientProfile> {
 
   getProfileImage() async {
     Session _session = Session();
-    profileImage = await _session
-        .getprofileImage("http://164.92.83.169/client/profilePic");
-    setState(() {});
+    var profileImage1 = await _session
+        .getprofileImage("http://$ip/client/profilePic");
+    setState(() {
+      profileImage = profileImage1;
+    });
   }
 
 
@@ -46,6 +48,10 @@ class _ClientProfileState extends State<ClientProfile> {
     _pickedImage = File("${pickedFile?.path}");
     Session _session = Session();
     await _session.uploadImage1(pickedFile!.path, apiUrl);
+    setState(() {
+      getProfile();
+      getProfileImage();
+    });
   }
 
 
@@ -333,7 +339,7 @@ class _ClientProfileState extends State<ClientProfile> {
                             Container(
                                 // height: 40,
                                 // width: 22,
-                                child: Icon(
+                                child: const Icon(
                               Icons.work,
                               size: 35,
                             )),

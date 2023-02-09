@@ -232,6 +232,7 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
                                 height: 25,
                               ),
                               TextFormField(
+                                obscureText: true,
                                 controller: pwdController,
                                 cursorColor: Colors.black87,
                                 style: const TextStyle(color: Colors.black),

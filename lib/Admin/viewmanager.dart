@@ -89,20 +89,26 @@ class _ViewManagerState extends State<ViewManager> {
                                 )));
                       },
                       child: Container(
-                        margin: EdgeInsets.all(6),
-                        padding: EdgeInsets.all(12),
                         color: Colors.black12,
-                        // color: Color(0xfffed456),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text('Manager Name : ${managerlist[index].name}',),
-                            SizedBox(height: 3,),
-                            Text('Email : ${managerlist[index].email}',),
-                            SizedBox(height: 3,),
-                            Text('Mobile No : ${managerlist[index].mobile}',),
-
-                          ],
+                        padding: EdgeInsets.all(12),
+                        margin: EdgeInsets.all(6),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                "http://$ip/admin/getManagerProfilePic/${managerlist[index].managerId}"
+                            ),
+                          ),
+                          title: Text(
+                            managerlist[index].name,
+                          ),
+                          subtitle: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(managerlist[index].email, overflow: TextOverflow.ellipsis,),
+                              Text(managerlist[index].mobile)
+                            ],
+                          ),
                         ),
                       ),
                     );

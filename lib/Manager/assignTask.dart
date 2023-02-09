@@ -311,8 +311,12 @@ class _AssignTaskState extends State<AssignTask> {
                     return;
                   } else {
                     managerNOTE.clear();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const home_manager()));
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                          const home_manager(),
+                        ),
+                            (route) => false);
                   }
                 } else {
                   final snackBar = SnackBar(

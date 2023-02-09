@@ -704,10 +704,6 @@ class _ViewTaskState extends State<ViewTask> {
                                             '${acceptRejectList[index].taskID}');
                                       },
                                       Reject: () async {
-                                        print("Reject");
-                                        print(
-                                          '${acceptRejectList[index].taskStatus}',
-                                        );
                                         await RejectRequest(
                                             '${acceptRejectList[index].taskID}');
                                       },

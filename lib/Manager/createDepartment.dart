@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:intership/Admin/model/session.dart';
+import 'package:intership/Admin/model/operatormodel.dart';
 import 'package:intership/Manager/AddDepatmentOpearator.dart';
 import 'package:intership/Manager/ConatainerHelper/ManagerContainer.dart';
 import 'package:intership/Manager/managerProfile.dart';
@@ -29,7 +30,8 @@ Map<String, dynamic> _portaInfoMap = {
 
 List<String> departlist = [];
 List<String> departlistID = [];
-List<String> operaortlist = [];
+List<Client> operaortlist = [];
+// List<String> opeindexlist = [];
 List<dynamic> operaortprofilelist = [];
 
 class _CreateDeptState extends State<CreateDept> {
@@ -39,6 +41,7 @@ class _CreateDeptState extends State<CreateDept> {
   bool loadingofirst = false;
   @override
   void initState() {
+    print("init state called\n\n");
     getDetp();
     getOperator();
     super.initState();
@@ -54,12 +57,15 @@ class _CreateDeptState extends State<CreateDept> {
   }
 
   getDetp() async {
+    departlistID.clear();
+    departlist.clear();
+
     setState(() {
       loadingofirst = true; //make loading true to show progressindicator
     });
     Session _session = Session();
     final response =
-        await _session.get('http://164.92.83.169/manager/getDepartments');
+        await _session.get('http://$ip/manager/getDepartments');
 
     for (dynamic i in response['data']['departments']) {
       // print('OK : ${i['departmentName']}');
@@ -75,7 +81,9 @@ class _CreateDeptState extends State<CreateDept> {
     });
   }
 
-  Future<List<String>> getOperator() async {
+  Future<List<Client>> getOperator() async {
+    operaortprofilelist.clear();
+    operaortlist.clear();
     setState(() {
       loadingofsecond = true; //make loading true to show progressindicator
     });
@@ -86,15 +94,15 @@ class _CreateDeptState extends State<CreateDept> {
           await _session.get('http://$ip/manager/getOperators/$i');
       for (dynamic i in response['data']['operators']) {
         if (!operaortlist.contains(i['name'])) {
-          operaortlist.add(i['name']);
-          print("object");
-          print(i['operatorId']);
+          operaortlist.add(Client.fromJson(i));
           await getProfileImage(i['operatorId']);
         }
       }
     }
-    loadingofsecond = false;
-    setState(() {});
+
+    setState(() {
+      loadingofsecond = false;
+    });
     return operaortlist;
   }
 
@@ -133,8 +141,7 @@ class _CreateDeptState extends State<CreateDept> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
-              // mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
                   height: 45,
@@ -263,8 +270,8 @@ class _CreateDeptState extends State<CreateDept> {
                                         ),
                                         padding: EdgeInsets.all(8.0),
                                         child: ListTile(
-                                          title: Text(operaortlist[index]),
-                                          // subtitle: Text(operaortlist[index]),
+                                          title: Text(operaortlist[index].name),
+                                          subtitle: Text(operaortlist[index].email),
                                           leading: operaortprofilelist[index] == null
                                               ? Image.asset("assets/images/download.png")
                                               : CircleAvatar(
@@ -272,7 +279,40 @@ class _CreateDeptState extends State<CreateDept> {
                                               operaortprofilelist[index],
                                               // profileImage1
                                             ),
-                                          )
+                                          ),
+                                          trailing: IconButton(onPressed: () async {
+
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: const Text("Really ??"),
+                                                  content: const Text(
+                                                      "Do you want to Delete this Operator"),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      child: const Text("No"),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () async {
+                                                        Session _session = Session();
+                                                        await _session.get("http://$ip/manager/deleteOperator/${operaortlist[index].operatorId}");
+                                                        setState(() {
+                                                          getDetp();
+                                                          getOperator();
+                                                        });
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      child: const Text("Yes"),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          }, icon: Icon(Icons.delete)),
                                         ),
                                       ),
                                     );

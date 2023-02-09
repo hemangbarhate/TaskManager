@@ -433,9 +433,13 @@ class _CreateTaskState extends State<CreateTask> {
                           opendate.clear();
                           closedate.clear();
                           ClientNote.clear();
-                          Navigator.of(context).pushReplacement(MaterialPageRoute(
-                              builder: (context) => const home_manager()));
-                          // );
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                const home_manager(),
+                              ),
+                                  (route) => false);
+                          // setState(() {});
                         } else {
                           print(clientId);
                           final snackBar = SnackBar(
