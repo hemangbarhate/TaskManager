@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intership/Manager/assignTask.dart';
 import 'package:intership/constant/color.dart';
+
+import '../../Admin/constant.dart';
+import '../../constant/ApI.dart';
 
 class OpeartorContainer extends StatefulWidget {
   final Color fontColor;
@@ -12,6 +14,7 @@ class OpeartorContainer extends StatefulWidget {
   final Color fifth;
   final Color sixth;
   final String taskId;
+  final String projectId;
   final String clientId;
   final String operatorId;
   final String managerId;
@@ -49,6 +52,7 @@ class OpeartorContainer extends StatefulWidget {
     required this.fifth,
     required this.sixth,
     required this.taskId,
+    required this.projectId,
     required this.clientId,
     required this.operatorId,
     required this.managerId,
@@ -71,7 +75,9 @@ class OpeartorContainer extends StatefulWidget {
     required this.AttachDoc,
     required this.ChangeStatus,
     required this.Approve,
-    required this.Reject, required this.clientName, required this.managerName,
+    required this.Reject,
+    required this.clientName,
+    required this.managerName,
   }) : super(key: key);
 
   @override
@@ -97,22 +103,32 @@ class _OpeartorContainerState extends State<OpeartorContainer> {
         ),
         child: Padding(
           padding:
-          const EdgeInsets.only(left: 8.0, right: 5, top: 2, bottom: 15),
+              const EdgeInsets.only(left: 8.0, right: 5, top: 2, bottom: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(6.0),
                 child: Stack(children: [
-                   Row(
+                  Row(
                     children: <Widget>[
-                      Icon(Icons.task, size: 35,),
+                      false
+                          ? Image.asset("assets/images/download.png")
+                          : Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                  '$ip/operator/getProjectIcon/${widget.projectId}',
+                                ),
+                              ),
+                            ),
                       const SizedBox(
                         width: 15,
                       ),
-                      Text( '${widget.taskName}',
+                      Text(
+                        '${widget.taskName}',
                         style: TextStyle(
-                          // #FED457
+                            // #FED457
                             fontWeight: FontWeight.w600,
                             color: widget.fontColor.withOpacity(0.9),
                             fontSize: 20),
@@ -126,7 +142,7 @@ class _OpeartorContainerState extends State<OpeartorContainer> {
                 child: Text(
                   "Project Name : ${widget.ProjectName} ",
                   style: TextStyle(
-                    // #FED457
+                      // #FED457
                       fontWeight: FontWeight.w600,
                       // color: Color(0xFED457),
                       color: widget.fontColor.withOpacity(1),
@@ -174,12 +190,10 @@ class _OpeartorContainerState extends State<OpeartorContainer> {
                 child: Container(
                   child: Text(
                     "Manager note:   ${widget.managerNote}",
-                    style: TextStyle(
-                        color: widget.fontColor.withOpacity(0.8)),
+                    style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
                   ),
                 ),
-              )
-                 ,
+              ),
               const SizedBox(
                 height: 10,
               ),
@@ -214,15 +228,15 @@ class _OpeartorContainerState extends State<OpeartorContainer> {
                       ),
                       // child: Padding(
                       //   padding: EdgeInsets.all(2),
-                        child: Center(
-                          child: Text(
-                            '${widget.openDate}',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      child: Center(
+                        child: Text(
+                          '${widget.openDate}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
                           ),
+                        ),
                         // ),
                       ),
                     ),
@@ -310,54 +324,55 @@ class _OpeartorContainerState extends State<OpeartorContainer> {
               const SizedBox(
                 height: 15,
               ),
-              widget.taskStatus == 'Closed' || widget.taskStatus == 'Completed'  ? Container():   Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: widget.ChangeStatus,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width/1.6,
-
-                      height: 50,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            widget.first.withOpacity(0.9),
-                            widget.first.withOpacity(0.9)
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(5, 5),
-                            blurRadius: 10,
-                          )
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10),
-                        child: Center(
-                          child: Text(
-                          widget.taskStatus == 'Pending'
-                                ? 'Accept'
-                                :  "Done" ,
-                            style: TextStyle(
-                              color: whiteColor.withOpacity(1),
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
+              widget.taskStatus == 'Closed' || widget.taskStatus == 'Completed'
+                  ? Container()
+                  : Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: widget.ChangeStatus,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width / 1.6,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  widget.first.withOpacity(0.9),
+                                  widget.first.withOpacity(0.9)
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  offset: Offset(5, 5),
+                                  blurRadius: 10,
+                                )
+                              ],
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10.0, right: 10),
+                              child: Center(
+                                child: Text(
+                                  widget.taskStatus == 'Pending'
+                                      ? 'Accept'
+                                      : "Done",
+                                  style: TextStyle(
+                                    color: whiteColor.withOpacity(1),
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ),
-
-                ],
-              ),
               const SizedBox(
                 height: 5,
               ),

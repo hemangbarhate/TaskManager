@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'dart:html';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:intership/Admin/homepage.dart';
-import 'package:intership/Admin/model/userstate.dart';
 import 'package:intership/Manager/managerHome.dart';
 import 'package:intership/Admin/model/session.dart';
 import 'dart:convert';
@@ -12,7 +9,6 @@ import 'package:intership/Operator/operatorHome.dart';
 import 'package:intership/constant/ApI.dart';
 import 'package:intership/constant/color.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:provider/provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -46,24 +42,9 @@ class _HomeState extends State<Home> {
   }
 
   void checkState() async {
-    // Provider.of<UserState>(context,).initSP();
-
-    // userType = await Provider.of<UserState>(context, listen: false).fetchCookieandUser();
-
-    // if (userType == "null") {
-    //   userLoggedIn = false;
-    // } else {
-    //   userLoggedIn = true;
-    // }
-
-    // setState(() {
-    //   isLoading = false;
-    // });
 
     final sp = await SharedPreferences.getInstance();
-
-    // String? userType, userToken;
-
+    
     userToken = sp.getString('cookie');
      userType = sp.getString('userType');
 

@@ -1,13 +1,13 @@
-import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
 
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:image_picker/image_picker.dart';
 import '../constant/ApI.dart';
-import 'constant.dart';
 import 'homepage.dart';
-import 'model/session.dart';
+import 'model/clientmodel.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:intership/Admin/model/session.dart';
 
 TextEditingController emailcontroller = TextEditingController();
 TextEditingController namecontroller = TextEditingController();
@@ -15,36 +15,35 @@ TextEditingController passwordcontroller = TextEditingController();
 TextEditingController mobilecontroller = TextEditingController();
 TextEditingController organizationcontroller = TextEditingController();
 
-class AddClient extends StatefulWidget {
-  const AddClient({Key? key}) : super(key: key);
-
+class EditClient extends StatefulWidget {
+  const EditClient({Key? key , required this.client}) : super(key: key);
+  final Client client;
   @override
-  State<AddClient> createState() => _AddClientState();
+  State<EditClient> createState() => _EditClientState();
 }
 
-class _AddClientState extends State<AddClient> {
+class _EditClientState extends State<EditClient> {
+
+
+
   final _formKey = GlobalKey<FormState>();
 
-  Future<dynamic> addClient(
-      String email, name, password, organization, mobile) async {
-    try {
-      Session _session = Session();
-      final data = jsonEncode(<String, String>{
-        'email': email,
-        'name': name,
-        'password': password,
-        'organization': organization,
-        'mobile': mobile
-      });
-      final response = await _session.post('$ip/admin/addClient', data);
-      print(response.toString());
-      print('Client Added successfully');
-      return response;
-    } catch (e) {
-      print(e.toString());
-    }
-  }
+  PickedFile? pickedImage;
+  late File imageFile;
+  bool load = false;
 
+  Future chooseImage() async {
+    print('bbaaaaaaaaaaaa');
+    final pickedFile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+    );
+    setState(() {
+      print('aaaaaaaaaaaaaa');
+      pickedImage = pickedFile;
+      imageFile = File(pickedImage!.path);
+      load = true;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,16 +52,16 @@ class _AddClientState extends State<AddClient> {
         shadowColor: Colors.white,
         title: Container(
             child: const Text(
-          "Add Client",
-          style: TextStyle(
-              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
-        )),
+              "Edit Client",
+              style: TextStyle(
+                  fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+            )),
         elevation: 0.0,
         leading: Builder(builder: (BuildContext context) {
           return Padding(
             padding: const EdgeInsets.only(left: 15.0),
             child: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back,
                   color: Colors.black,
                 ),
@@ -84,7 +83,7 @@ class _AddClientState extends State<AddClient> {
               ),
               TextFormField(
                 style: TextStyle(color: Colors.black),
-                controller: emailcontroller,
+                controller: emailcontroller..text = widget.client.email,
                 decoration: const InputDecoration(
                   icon: Icon(
                     Icons.email_outlined,
@@ -98,16 +97,16 @@ class _AddClientState extends State<AddClient> {
                       borderSide: BorderSide(color: Colors.black)),
                 ),
                 validator: (email) =>
-                    email != null && !EmailValidator.validate(email)
-                        ? 'Enter a valid email'
-                        : null,
+                email != null && !EmailValidator.validate(email)
+                    ? 'Enter a valid email'
+                    : null,
               ),
               const SizedBox(
                 height: 10,
               ),
               TextFormField(
                 style: TextStyle(color: Colors.black),
-                controller: namecontroller,
+                controller: namecontroller..text = widget.client.name,
                 decoration: const InputDecoration(
                   icon: Icon(
                     Icons.person,
@@ -130,9 +129,46 @@ class _AddClientState extends State<AddClient> {
               const SizedBox(
                 height: 10,
               ),
+              const SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
+                onTap: () {
+                  chooseImage();
+                },
+                child: Container(
+                  child: load == true
+                      ? Container(
+                    height: 200,
+                    width: 200,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: FileImage(imageFile),
+                        ),
+                        borderRadius: BorderRadius.circular(20)),
+                    padding: const EdgeInsets.all(15.0),
+                  )
+                      : Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      children: [
+                        Container(
+                          child: Image.asset(
+                            'assets/images/choose.png',
+                            height: 130.0,
+                            width: 130.0,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Text('Choose Image'),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               TextFormField(
                 style: TextStyle(color: Colors.black),
-                controller: passwordcontroller,
+                controller: passwordcontroller..text='Click to change',
                 decoration: const InputDecoration(
                   icon: Icon(
                     Icons.password,
@@ -145,19 +181,19 @@ class _AddClientState extends State<AddClient> {
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black)),
                 ),
-                validator: (value) {
-                  if (value != null && value.length < 6) {
-                    return 'Enter min. 6 characters';
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value != null && value.length < 6) {
+                //     return 'Enter min. 6 characters';
+                //   }
+                //   return null;
+                // },
               ),
               const SizedBox(
                 height: 10,
               ),
               TextFormField(
                 style: TextStyle(color: Colors.black),
-                controller: organizationcontroller,
+                controller: organizationcontroller..text = widget.client.organization,
                 decoration: const InputDecoration(
                   icon: Icon(
                     Icons.password,
@@ -182,7 +218,7 @@ class _AddClientState extends State<AddClient> {
               ),
               TextFormField(
                 style: TextStyle(color: Colors.black),
-                controller: mobilecontroller,
+                controller: mobilecontroller..text = widget.client.mobile,
                 decoration: const InputDecoration(
                   icon: Icon(
                     Icons.phone,
@@ -211,14 +247,26 @@ class _AddClientState extends State<AddClient> {
                   child: ElevatedButton(
                       onPressed: () async {
                         final isValidForm = _formKey.currentState!.validate();
+                        var imagePath = '';
                         if (isValidForm) {
-                          var response = await addClient(
-                                  emailcontroller.text.toString(),
-                                  namecontroller.text.toString(),
-                                  passwordcontroller.text.toString(),
-                                  organizationcontroller.text.toString(),
-                                  mobilecontroller.text.toString())
-                              .catchError((err) {});
+                          Session _session = Session();
+                          if(load == false){
+                            imagePath = '';
+                          }
+                          else{
+                            imagePath = pickedImage!.path;
+                          }
+                          var response = await _session.editData(
+                              'client',
+                              emailcontroller.text.toString(),
+                              namecontroller.text.toString(),
+                              passwordcontroller.text.toString(),
+                              mobilecontroller.text.toString(),
+                              organizationcontroller.text.toString(),
+                              'nodeptId',
+                              imagePath,
+                              '$ip/admin/editClient/${widget.client.clientId}');
+                          log('this ${response.toString()}');
                           if (response == null) {
                             return;
                           } else {

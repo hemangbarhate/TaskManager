@@ -31,17 +31,14 @@ class _ClientProfileState extends State<ClientProfile> {
 
   getProfileImage() async {
     Session _session = Session();
-    var profileImage1 = await _session
-        .getprofileImage("http://$ip/client/profilePic");
+    var profileImage1 = await _session.getprofileImage("$ip/client/profilePic");
     setState(() {
       profileImage = profileImage1;
     });
   }
 
-
-
   late File _pickedImage;
-  String apiUrl = 'http://$ip/client/profilePic';
+  String apiUrl = '$ip/client/profilePic';
   uploadImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
@@ -53,7 +50,6 @@ class _ClientProfileState extends State<ClientProfile> {
       getProfileImage();
     });
   }
-
 
   void getProfile() async {
     Session _session = Session();
@@ -136,10 +132,10 @@ class _ClientProfileState extends State<ClientProfile> {
                             child: profileImage == null
                                 ? Image.asset("assets/images/download.png")
                                 : CircleAvatar(
-                              backgroundImage: MemoryImage(
-                                profileImage,
-                              ),
-                            )),
+                                    backgroundImage: MemoryImage(
+                                      profileImage,
+                                    ),
+                                  )),
                         Column(
                           children: [
                             Container(

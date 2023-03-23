@@ -1,7 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:intership/Manager/assignTask.dart';
 import 'package:intership/constant/color.dart';
+
+import '../../Admin/constant.dart';
+import '../../constant/ApI.dart';
 
 class MyContainer extends StatefulWidget {
   final Color fontColor;
@@ -17,6 +19,7 @@ class MyContainer extends StatefulWidget {
   final String operatorname;
 
   final String clientId;
+  final String projectId;
   final String operatorId;
   final String managerId;
   final String taskName;
@@ -40,31 +43,39 @@ class MyContainer extends StatefulWidget {
 
   const MyContainer(
       {Key? key,
-        required this.fontColor,
-        required this.backgrondColor,
-        required this.first,
-        required this.second,
-        required this.third,
-        required this.forth,
-        required this.fifth,
-        required this.sixth,
-        required this.taskId,
-        required this.clientId,
-        required this.operatorId,
-        required this.managerId,
-        required this.taskName,
-        required this.taskDescription,
-        required this.openDate,
-        required this.closeDate,
-        required this.clientNote,
-        required this.managerNote,
-        required this.priority,
-        required this.AssignationStatus,
-        required this.taskStatus,
-        required this.clientApproval,
-        required this.managerApproval,
-        required this.taskCategory, required this.addLink, required this.viewLink, required this.ProjectName, required this.approve, required this.reject, required this.forthbuttontext, required this.managername, required this.operatorname
-      })
+      required this.fontColor,
+      required this.backgrondColor,
+      required this.first,
+      required this.second,
+      required this.third,
+      required this.forth,
+      required this.fifth,
+      required this.sixth,
+      required this.taskId,
+      required this.clientId,
+      required this.operatorId,
+      required this.managerId,
+      required this.taskName,
+      required this.taskDescription,
+      required this.openDate,
+      required this.closeDate,
+      required this.clientNote,
+      required this.managerNote,
+      required this.priority,
+      required this.AssignationStatus,
+      required this.taskStatus,
+      required this.clientApproval,
+      required this.managerApproval,
+      required this.taskCategory,
+      required this.addLink,
+      required this.viewLink,
+      required this.ProjectName,
+      required this.approve,
+      required this.reject,
+      required this.forthbuttontext,
+      required this.managername,
+      required this.operatorname,
+      required this.projectId})
       : super(key: key);
 
   @override
@@ -90,21 +101,37 @@ class _MyContainerState extends State<MyContainer> {
         ),
         child: Padding(
           padding:
-          const EdgeInsets.only(left: 8.0, right: 5, top: 2, bottom: 15),
+              const EdgeInsets.only(left: 8.0, right: 5, top: 2, bottom: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "${widget.taskName} ",
-                  style: TextStyle(
-                    // #FED457
-                      fontWeight: FontWeight.bold,
-                      // color: Color(0xFED457),
-                      color: widget.fontColor.withOpacity(1),
-                      fontSize: 30),
+                child: Row(
+                  children: [
+                    false
+                        ? Image.asset("assets/images/download.png")
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                '$ip/client/getProjectIcon/${widget.projectId}',
+                              ),
+                            ),
+                          ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "${widget.taskName} ",
+                      style: TextStyle(
+                          // #FED457
+                          fontWeight: FontWeight.bold,
+                          // color: Color(0xFED457),
+                          color: widget.fontColor.withOpacity(1),
+                          fontSize: 30),
+                    ),
+                  ],
                 ),
               ),
 
@@ -113,7 +140,7 @@ class _MyContainerState extends State<MyContainer> {
                 child: Text(
                   "Project Name : ${widget.ProjectName} ",
                   style: TextStyle(
-                    // #FED457
+                      // #FED457
                       fontWeight: FontWeight.bold,
                       // color: Color(0xFED457),
                       color: widget.fontColor.withOpacity(1),
@@ -221,7 +248,6 @@ class _MyContainerState extends State<MyContainer> {
                       ),
                     ),
                   ),
-
                   GestureDetector(
                     onTap: () {
                       // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
@@ -247,7 +273,7 @@ class _MyContainerState extends State<MyContainer> {
                           )
                         ],
                       ),
-                      child:  Padding(
+                      child: Padding(
                         padding: EdgeInsets.only(left: 8.0, right: 8),
                         child: Center(
                           child: Text(
@@ -353,7 +379,7 @@ class _MyContainerState extends State<MyContainer> {
                   ),
 
                   GestureDetector(
-                    onTap:  widget.viewLink,
+                    onTap: widget.viewLink,
                     child: Container(
                       width: 100,
                       height: 46,

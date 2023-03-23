@@ -56,20 +56,20 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
   var mapMangerName = Map<String, dynamic>();
   getManagerName(String s) async {
     Session _session = Session();
-    final response = await _session.get('http://$ip/operator/getManager/$s');
+    final response = await _session.get('$ip/operator/getManager/$s');
     // print("Response $response");
     mapMangerName[s] = response['manager']['name'];
   }
+
   var mapClientName = Map<String, dynamic>();
   getClientName(String s) async {
     Session _session = Session();
-    final response = await _session.get('http://$ip/operator/getClient/$s');
+    final response = await _session.get('$ip/operator/getClient/$s');
     print("Response $response");
     mapClientName[s] = response['client']['name'];
   }
 
   Future<List<TaskModel>> gerInProgressTask() async {
-
     inprogress.clear();
     assignedtask1.clear();
     managerApprovalPending.clear();
@@ -83,15 +83,13 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
     final response = await _session.get(operatortaskByOperatorId);
     // print(response);
     for (dynamic i in response['result']) {
+      print("1 $i");
 
-             print("1 $i");
-
-       await getManagerName("${TaskModel.fromJson(i).managerId}");
-       await getClientName("${TaskModel.fromJson(i).clientId}");
-
+      await getManagerName("${TaskModel.fromJson(i).managerId}");
+      await getClientName("${TaskModel.fromJson(i).clientId}");
 
       if ((TaskModel.fromJson(i).AssignationStatus == 'Assigned' ||
-          TaskModel.fromJson(i).AssignationStatus == 'Reassigned') &&
+              TaskModel.fromJson(i).AssignationStatus == 'Reassigned') &&
           TaskModel.fromJson(i).taskStatus == 'Pending' &&
           (TaskModel.fromJson(i).managerApproval == 'Pending' ||
               TaskModel.fromJson(i).managerApproval == 'Rejected') &&
@@ -101,8 +99,6 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
         // await getManagerName("${TaskModel.fromJson(i).managerId}");
         // await getClientName("${TaskModel.fromJson(i).clientId}");
       }
-
-
 
       assignedtask.add(TaskModel.fromJson(i));
       if ((TaskModel.fromJson(i).AssignationStatus == 'Assigned' ||
@@ -117,7 +113,6 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
         // await getClientName("${TaskModel.fromJson(i).clientId}");
       }
 
-
       if (TaskModel.fromJson(i).taskStatus == 'Completed' &&
           (TaskModel.fromJson(i).managerApproval == 'Pending' ||
               TaskModel.fromJson(i).managerApproval == 'Rejected') &&
@@ -128,7 +123,6 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
         // await getClientName("${TaskModel.fromJson(i).clientId}");
       }
 
-
       if (TaskModel.fromJson(i).taskStatus == 'Completed' &&
           TaskModel.fromJson(i).managerApproval == 'Accepted' &&
           (TaskModel.fromJson(i).clientApproval == 'Pending' ||
@@ -138,7 +132,6 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
         // await getClientName("${TaskModel.fromJson(i).clientId}");
       }
 
-
       if (TaskModel.fromJson(i).taskStatus == 'Closed' &&
           TaskModel.fromJson(i).managerApproval == 'Accepted' &&
           TaskModel.fromJson(i).clientApproval == 'Accepted') {
@@ -146,11 +139,6 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
         // await  getManagerName("${TaskModel.fromJson(i).managerId}");
         // await getClientName("${TaskModel.fromJson(i).clientId}");
       }
-
-
-
-
-
     }
     // print('aaaaaa');
     // print(assignedtask.length);
@@ -170,8 +158,8 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
 
       Session _session = Session();
       final data = jsonEncode(<String, String>{'name': taskid});
-      final response = await _session.post(
-          'http://$ip/operator/changeTaskStatus/${taskid}', data);
+      final response =
+          await _session.post('$ip/operator/changeTaskStatus/${taskid}', data);
       print(response.toString());
       print('status updated successfully');
       loading = false;
@@ -189,8 +177,6 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
     });
   }
 
-
-
   Future<dynamic> UpdateStatus2(String taskid) async {
     try {
       setState(() {
@@ -201,7 +187,8 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
       final data = jsonEncode(<String, String>{'name': taskid});
       final response = await _session.post(
           // http://localhost:5000/operator/acceptTask/578a3522-92fd-4985-bef9-563fed98dfae
-          'http://$ip/operator/acceptTask/${taskid}', data);
+          '$ip/operator/acceptTask/${taskid}',
+          data);
       print(response.toString());
       print('status updated2 successfully');
       loading = false;
@@ -278,25 +265,27 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                       borderRadius: BorderRadius.circular(25.0)),
                   labelColor: Colors.white,
                   unselectedLabelColor: Colors.black,
-                  tabs: const [
+                  tabs: [
                     // Assigned Task
                     // Waiting for Manager Approval
                     // Waiting for Client Approval
                     // Closed Task
                     Tab(
-                      text: 'Assigned Tasks',
+                      text: 'Assigned Tasks (${inprogress.length})',
                     ),
                     Tab(
-                      text: 'inProgress Tasks',
+                      text: 'inProgress Tasks (${assignedtask1.length})',
                     ),
                     Tab(
-                      text: 'Manager Approval Pending',
+                      text:
+                          'Manager Approval Pending (${managerApprovalPending.length})',
                     ),
                     Tab(
-                      text: 'Client Approval Pending',
+                      text:
+                          'Client Approval Pending (${clientApprovalPending.length})',
                     ),
                     Tab(
-                      text: 'Closed Tasks',
+                      text: 'Closed Tasks (${closedTask.length})',
                     )
                   ],
                 ),
@@ -313,164 +302,169 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                         children: <Widget>[
                           loading
                               ? Padding(
-                            padding: const EdgeInsets.only(top: 80.0),
-                            child: Center(
-                              child: Column(
-                                children: [
-                                  SpinKitDoubleBounce(
-                                    color: blackColor.withOpacity(1),
-                                    size: 50.0,
-                                  ),
-                                  Text("Loading....")
-                                ],
-                              ),
-                            ),
-                          )
-                              : inprogress.isEmpty
-                              ? Container(
-                            height: 100,
-                            child: const Center(
-                              child:
-                              Text("Tasks aren't Assigned yet"),
-                            ),
-                          )
-                              : SingleChildScrollView(
-                            child: Column(
-                              children: <Widget>[
-                                ListView.builder(
-                                  physics:
-                                  const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: inprogress.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding:
-                                      const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        child: OpeartorContainer(
-                                          clientName: '${mapClientName[inprogress[index].clientId]}',
-                                          managerName: '${mapMangerName[inprogress[index].managerId]}',
-                                          Approve: () {},
-                                          Reject: () {},
-                                          TimeLineDoc: () {
-                                            Navigator.of(context)
-                                                .push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    TimeData(
-                                                      Taskid:
-                                                      '${inprogress[index].taskID}',
-                                                    ),
-                                              ),
-                                            );
-                                          },
-                                          AttachDoc: () {
-                                            Navigator.of(context)
-                                                .push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AttachData(
-                                                      Taskid:
-                                                      '${inprogress[index].taskID}',
-                                                    ),
-                                              ),
-                                            );
-                                          },
-                                          ChangeStatus: () {
-                                            // print('object');
-
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext
-                                              context) {
-                                                return AlertDialog(
-                                                  title: const Text(
-                                                      "Really ?"),
-                                                  content: const Text(
-                                                      "Do want to accept the task ?"),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(
-                                                            context)
-                                                            .pop();
-                                                      },
-                                                      child:
-                                                      const Text(
-                                                          "No"),
-                                                    ),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        UpdateStatus2(
-                                                          '${inprogress[index].taskID}',
-                                                        );
-
-                                                        Navigator.of(
-                                                            context)
-                                                            .push(MaterialPageRoute(
-                                                            builder: (context) =>
-                                                            const home_operator()));
-                                                      },
-                                                      child:
-                                                      const Text(
-                                                          "Yes"),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          },
-                                          who: 'operator1',
-                                          fontColor: blackColor,
-                                          backgrondColor: whitegreyColor,
-                                          first: yellowColor,
-                                          second: blackColor,
-                                          third: redColor,
-                                          forth: redColor,
-                                          fifth: redColor,
-                                          sixth: yellowColor,
-                                          taskName:
-                                          '${inprogress[index].taskName}',
-                                          ProjectName:
-                                          '${inprogress[index].ProjectName}',
-                                          taskId:
-                                          '${inprogress[index].taskID}',
-                                          clientId:
-                                          '${inprogress[index].clientId}',
-                                          // '${mapClientIdName[assignedtask[index].clientId]}',
-                                          operatorId: '',
-                                          openDate:
-                                          '${inprogress[index].openDate?.substring(0, 10)}',
-                                          taskDescription:
-                                          '${inprogress[index].taskDescription}',
-                                          closeDate:
-                                          '${inprogress[index].closeDate?.substring(0, 10)}',
-                                          clientNote:
-                                          '${inprogress[index].clientNote}',
-                                          managerNote:
-                                          '${inprogress[index].managerNote}',
-                                          AssignationStatus: '',
-                                          priority:
-                                          '${inprogress[index].priority}',
-                                          clientApproval: '',
-                                          taskStatus:
-                                          '${inprogress[index].taskStatus}',
-                                          managerApproval: '',
-                                          taskCategory: '',
-                                          managerId: '',
-                                          assignTask: () {
-                                            if (inprogress[index]
-                                                .taskStatus ==
-                                                'Pending') {}
-                                          },
+                                  padding: const EdgeInsets.only(top: 80.0),
+                                  child: Center(
+                                    child: Column(
+                                      children: [
+                                        SpinKitDoubleBounce(
+                                          color: blackColor.withOpacity(1),
+                                          size: 50.0,
                                         ),
+                                        Text("Loading....")
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : inprogress.isEmpty
+                                  ? Container(
+                                      height: 100,
+                                      child: const Center(
+                                        child:
+                                            Text("Tasks aren't Assigned yet"),
                                       ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
+                                    )
+                                  : SingleChildScrollView(
+                                      child: Column(
+                                        children: <Widget>[
+                                          ListView.builder(
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemCount: inprogress.length,
+                                            itemBuilder: (context, index) {
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Container(
+                                                  child: OpeartorContainer(
+                                                    clientName:
+                                                        '${mapClientName[inprogress[index].clientId]}',
+                                                    managerName:
+                                                        '${mapMangerName[inprogress[index].managerId]}',
+                                                    Approve: () {},
+                                                    Reject: () {},
+                                                    TimeLineDoc: () {
+                                                      Navigator.of(context)
+                                                          .push(
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              TimeData(
+                                                            Taskid:
+                                                                '${inprogress[index].taskID}',
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    AttachDoc: () {
+                                                      Navigator.of(context)
+                                                          .push(
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              AttachData(
+                                                            Taskid:
+                                                                '${inprogress[index].taskID}',
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    ChangeStatus: () {
+                                                      // print('object');
+
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            title: const Text(
+                                                                "Really ?"),
+                                                            content: const Text(
+                                                                "Do want to accept the task ?"),
+                                                            actions: [
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                        "No"),
+                                                              ),
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  UpdateStatus2(
+                                                                    '${inprogress[index].taskID}',
+                                                                  );
+
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .push(MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              const home_operator()));
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                        "Yes"),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                    who: 'operator1',
+                                                    fontColor: blackColor,
+                                                    backgrondColor:
+                                                        whitegreyColor,
+                                                    first: yellowColor,
+                                                    second: blackColor,
+                                                    third: redColor,
+                                                    forth: redColor,
+                                                    fifth: redColor,
+                                                    sixth: yellowColor,
+                                                    taskName:
+                                                        '${inprogress[index].taskName}',
+                                                    ProjectName:
+                                                        '${inprogress[index].projectName}',
+                                                    taskId:
+                                                        '${inprogress[index].taskID}',
+                                                    projectId:
+                                                        '${inprogress[index].projectId}',
+                                                    clientId:
+                                                        '${inprogress[index].clientId}',
+                                                    // '${mapClientIdName[assignedtask[index].clientId]}',
+                                                    operatorId: '',
+                                                    openDate:
+                                                        '${inprogress[index].openDate?.substring(0, 10)}',
+                                                    taskDescription:
+                                                        '${inprogress[index].taskDescription}',
+                                                    closeDate:
+                                                        '${inprogress[index].closeDate?.substring(0, 10)}',
+                                                    clientNote:
+                                                        '${inprogress[index].clientNote}',
+                                                    managerNote:
+                                                        '${inprogress[index].managerNote}',
+                                                    AssignationStatus: '',
+                                                    priority:
+                                                        '${inprogress[index].priority}',
+                                                    clientApproval: '',
+                                                    taskStatus:
+                                                        '${inprogress[index].taskStatus}',
+                                                    managerApproval: '',
+                                                    taskCategory: '',
+                                                    managerId: '',
+                                                    assignTask: () {
+                                                      if (inprogress[index]
+                                                              .taskStatus ==
+                                                          'Pending') {}
+                                                    },
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                           const SizedBox(
                             height: 30,
                           ),
@@ -522,8 +516,10 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                     const EdgeInsets.all(8.0),
                                                 child: Container(
                                                   child: OpeartorContainer(
-                                                    clientName: '${mapClientName[assignedtask1[index].clientId]}',
-                                                    managerName: '${mapMangerName[assignedtask1[index].managerId]}',
+                                                    clientName:
+                                                        '${mapClientName[assignedtask1[index].clientId]}',
+                                                    managerName:
+                                                        '${mapMangerName[assignedtask1[index].managerId]}',
                                                     Approve: () {},
                                                     Reject: () {},
                                                     TimeLineDoc: () {
@@ -606,9 +602,11 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                     taskName:
                                                         '${assignedtask1[index].taskName}',
                                                     ProjectName:
-                                                        '${assignedtask1[index].ProjectName}',
+                                                        '${assignedtask1[index].projectName}',
                                                     taskId:
                                                         '${assignedtask1[index].taskID}',
+                                                    projectId:
+                                                        '${assignedtask1[index].projectId}',
                                                     clientId:
                                                         '${assignedtask1[index].clientId}',
                                                     operatorId: '',
@@ -696,8 +694,10 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                     const EdgeInsets.all(8.0),
                                                 child: Container(
                                                   child: OpeartorContainer(
-                                                    clientName: '${mapClientName[managerApprovalPending[index].clientId]}',
-                                                    managerName: '${mapMangerName[managerApprovalPending[index].managerId]}',
+                                                    clientName:
+                                                        '${mapClientName[managerApprovalPending[index].clientId]}',
+                                                    managerName:
+                                                        '${mapMangerName[managerApprovalPending[index].managerId]}',
                                                     Approve: () {},
                                                     Reject: () {},
                                                     TimeLineDoc: () {
@@ -737,9 +737,11 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                     taskName:
                                                         '${managerApprovalPending[index].taskName}',
                                                     ProjectName:
-                                                        '${managerApprovalPending[index].ProjectName}',
+                                                        '${managerApprovalPending[index].projectName}',
                                                     taskId:
                                                         '${managerApprovalPending[index].taskID}',
+                                                    projectId:
+                                                        '${managerApprovalPending[index].projectId}',
                                                     clientId:
                                                         '${managerApprovalPending[index].clientId}',
                                                     // '${mapClientIdName[assignedtask[index].clientId]}',
@@ -858,7 +860,8 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                     ChangeStatus: () {},
                                                     who: 'operator',
                                                     fontColor: blackColor,
-                                                    backgrondColor: whitegreyColor,
+                                                    backgrondColor:
+                                                        whitegreyColor,
                                                     first: yellowColor,
                                                     second: blackColor,
                                                     third: redColor,
@@ -868,9 +871,11 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                     taskName:
                                                         '${clientApprovalPending[index].taskName}',
                                                     ProjectName:
-                                                        '${clientApprovalPending[index].ProjectName}',
+                                                        '${clientApprovalPending[index].projectName}',
                                                     taskId:
                                                         '${clientApprovalPending[index].taskID}',
+                                                    projectId:
+                                                        '${clientApprovalPending[index].projectId}',
                                                     clientId:
                                                         '${clientApprovalPending[index].clientId}',
                                                     // '${mapClientIdName[assignedtask[index].clientId]}',
@@ -900,8 +905,10 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                               .taskStatus ==
                                                           'Pending') {}
                                                     },
-                                                    clientName: '${mapClientName[clientApprovalPending[index].clientId]}',
-                                                    managerName: '${mapMangerName[clientApprovalPending[index].managerId]}',
+                                                    clientName:
+                                                        '${mapClientName[clientApprovalPending[index].clientId]}',
+                                                    managerName:
+                                                        '${mapMangerName[clientApprovalPending[index].managerId]}',
                                                   ),
                                                 ),
                                               );
@@ -961,8 +968,10 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                     const EdgeInsets.all(8.0),
                                                 child: Container(
                                                   child: OpeartorContainer(
-                                                    clientName: '${mapClientName[closedTask[index].clientId]}',
-                                                    managerName: '${mapMangerName[closedTask[index].managerId]}',
+                                                    clientName:
+                                                        '${mapClientName[closedTask[index].clientId]}',
+                                                    managerName:
+                                                        '${mapMangerName[closedTask[index].managerId]}',
                                                     Approve: () {},
                                                     Reject: () {},
                                                     TimeLineDoc: () {
@@ -992,7 +1001,8 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                     ChangeStatus: () {},
                                                     who: 'operator',
                                                     fontColor: blackColor,
-                                                    backgrondColor: whitegreyColor,
+                                                    backgrondColor:
+                                                        whitegreyColor,
                                                     first: yellowColor,
                                                     second: blackColor,
                                                     third: creamColor2,
@@ -1002,9 +1012,11 @@ class _OperatorVIewTasksState extends State<OperatorVIewTasks> {
                                                     taskName:
                                                         '${closedTask[index].taskName}',
                                                     ProjectName:
-                                                        '${closedTask[index].ProjectName}',
+                                                        '${closedTask[index].projectName}',
                                                     taskId:
                                                         '${closedTask[index].taskID}',
+                                                    projectId:
+                                                        '${closedTask[index].projectId}',
                                                     clientId:
                                                         '${closedTask[index].clientId}',
                                                     // '${mapClientIdName[assignedtask[index].clientId]}',

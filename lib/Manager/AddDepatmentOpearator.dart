@@ -58,8 +58,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
         'mobile': mobile,
         'departmentId': departmentid
       });
-      final response =
-          await _session.post('http://$ip/manager/addOperator', data);
+      final response = await _session.post('$ip/manager/addOperator', data);
       print(response.toString());
       print('Operator Added successfully');
       return response;
@@ -72,8 +71,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
     try {
       Session _session = Session();
       final data = jsonEncode(<String, String>{'name': dept});
-      final response = await _session.post(
-          'http://164.92.83.169/manager/addDepartment', data);
+      final response = await _session.post('$ip/manager/addDepartment', data);
       print(response.toString());
       print('Department Added successfully');
       return response;
@@ -132,8 +130,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black.withOpacity(0.8)
-                    ),
+                        color: Colors.black.withOpacity(0.8)),
                   ),
                 ),
               ),
@@ -240,8 +237,8 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
             loading
                 ? Center(child: CircularProgressIndicator())
                 : Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
                       height: 250,
                       decoration: BoxDecoration(
                         border: Border.all(
@@ -283,11 +280,10 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                                         // height: 50,
 
                                         child: ListTile(
-                                          leading: Icon(Icons.add_chart ),
-                                          title:
-                                              Text("${departlist[index]}"),
+                                          leading: Icon(Icons.add_chart),
+                                          title: Text("${departlist[index]}"),
                                           // subtitle:
-                                              // Text("${clientlist[index].email}"),
+                                          // Text("${clientlist[index].email}"),
                                         ),
                                       ),
                                     ),
@@ -299,7 +295,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
                         ),
                       ),
                     ),
-                ),
+                  ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextFormField(

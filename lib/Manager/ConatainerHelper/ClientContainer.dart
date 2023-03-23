@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intership/Manager/assignTask.dart';
 import 'package:intership/constant/color.dart';
 
+import '../../Admin/constant.dart';
+import '../../constant/ApI.dart';
+
 class ClientContainer extends StatefulWidget {
   final Color fontColor;
   final Color backgrondColor;
@@ -12,6 +15,7 @@ class ClientContainer extends StatefulWidget {
   final Color fifth;
   final Color sixth;
   final String taskId;
+  final String projectId;
   final String clientId;
   final String operatorId;
   final String managerId;
@@ -74,6 +78,7 @@ class ClientContainer extends StatefulWidget {
     required this.Reject,
     required this.OperatorNmae,
     required this.Clientanme,
+    required this.projectId,
   }) : super(key: key);
 
   @override
@@ -110,10 +115,16 @@ class _ClientContainerState extends State<ClientContainer> {
                 child: Stack(children: [
                   Row(
                     children: <Widget>[
-                      Icon(
-                        Icons.task,
-                        size: 35,
-                      ),
+                      false
+                          ? Image.asset("assets/images/download.png")
+                          : Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                  '$ip/manager/getProjectIcon/${widget.projectId}',
+                                ),
+                              ),
+                            ),
                       const SizedBox(
                         width: 15,
                       ),
@@ -281,7 +292,6 @@ class _ClientContainerState extends State<ClientContainer> {
                   //   ),
                   // ),
                   GestureDetector(
-
                     onTap: () {
                       setState(() {
                         odate = !odate;
@@ -313,7 +323,7 @@ class _ClientContainerState extends State<ClientContainer> {
                         padding: EdgeInsets.only(left: 10.0, right: 10),
                         child: Center(
                           child: Text(
-                          odate ? "openDate" :  '${widget.openDate}',
+                            odate ? "openDate" : '${widget.openDate}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,
@@ -461,7 +471,7 @@ class _ClientContainerState extends State<ClientContainer> {
                 height: 15,
               ),
               if ((widget.managerApproval == 'Pending' ||
-                  widget.managerApproval == 'Rejected') &&
+                      widget.managerApproval == 'Rejected') &&
                   (widget.clientApproval == 'Pending' ||
                       widget.clientApproval == 'Rejected') &&
                   widget.taskStatus == 'Completed')

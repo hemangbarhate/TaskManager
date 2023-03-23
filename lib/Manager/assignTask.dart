@@ -67,7 +67,7 @@ class _AssignTaskState extends State<AssignTask> {
   getProfileImage(int index, String operatorId) async {
     Session _session = Session();
     profileImage1 = await _session
-        .getprofileImage("http://$ip/manager/getOperatorProfilePic/$operatorId");
+        .getprofileImage("$ip/manager/getOperatorProfilePic/$operatorId");
     operaortprofilelist.add(null);
     operaortprofilelist[index] = profileImage1;
     print("aaaaa ${operaortprofilelist.length}");
@@ -177,8 +177,7 @@ class _AssignTaskState extends State<AssignTask> {
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue.withOpacity(0.6)
-                    ),
+                        color: Colors.blue.withOpacity(0.6)),
                   ),
                 ),
                 decoration: BoxDecoration(
@@ -220,47 +219,49 @@ class _AssignTaskState extends State<AssignTask> {
               ),
             ),
             loading
-                ?  Column(
-                  children: [
-                    SpinKitDancingSquare(
-              color: Colors.grey.withOpacity(1),
-
-            ),
-                    Text("Loading...")
-                  ],
-                )
+                ? Column(
+                    children: [
+                      SpinKitDancingSquare(
+                        color: Colors.grey.withOpacity(1),
+                      ),
+                      Text("Loading...")
+                    ],
+                  )
                 : Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-              height: 250,
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey.withOpacity(1),
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-              ),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 250,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey.withOpacity(1),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Scrollbar(
                           isAlwaysShown: true, //always show scrollbar
                           thickness: 10, //width of scrollbar
-                          radius: Radius.circular(20), //corner radius of scrollbar
+                          radius:
+                              Radius.circular(20), //corner radius of scrollbar
                           scrollbarOrientation: ScrollbarOrientation.left,
                           child: SingleChildScrollView(
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0, right: 10),
+                              padding:
+                                  const EdgeInsets.only(left: 10.0, right: 10),
                               child: ListView.builder(
                                 physics: NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
                                 itemCount: operaortlist.length,
-                                itemBuilder:(context, index) {
+                                itemBuilder: (context, index) {
                                   // getProfileImage(index, operaortlist[index].operatorId);
                                   // print('qwerty ${op}');
                                   return GestureDetector(
                                     onTap: () {
                                       setState(() {
                                         select = index;
-                                        print("${operaortlist[index].operatorId} = ${operaortlist[index].email}");
+                                        print(
+                                            "${operaortlist[index].operatorId} = ${operaortlist[index].email}");
                                       });
                                     },
                                     child: Container(
@@ -275,13 +276,18 @@ class _AssignTaskState extends State<AssignTask> {
                                         child: Container(
                                           child: ListTile(
                                             leading: false
-                                                ? Image.asset("assets/images/download.png")
+                                                ? Image.asset(
+                                                    "assets/images/download.png")
                                                 : CircleAvatar(
-                                              backgroundImage: NetworkImage('http://$ip/manager/getOperatorProfilePic/${operaortlist[index].operatorId}',) ,
-                                            ),
-                                            title: Text("${operaortlist[index].name}"),
-                                            subtitle:
-                                                Text("${operaortlist[index].email}"),
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                      '$ip/manager/getOperatorProfilePic/${operaortlist[index].operatorId}',
+                                                    ),
+                                                  ),
+                                            title: Text(
+                                                "${operaortlist[index].name}"),
+                                            subtitle: Text(
+                                                "${operaortlist[index].email}"),
                                           ),
                                         ),
                                       ),
@@ -294,7 +300,7 @@ class _AssignTaskState extends State<AssignTask> {
                         ),
                       ),
                     ),
-                ),
+                  ),
             SizedBox(
               height: 25,
             ),
@@ -313,10 +319,9 @@ class _AssignTaskState extends State<AssignTask> {
                     managerNOTE.clear();
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
-                          builder: (context) =>
-                          const home_manager(),
+                          builder: (context) => const home_manager(),
                         ),
-                            (route) => false);
+                        (route) => false);
                   }
                 } else {
                   final snackBar = SnackBar(

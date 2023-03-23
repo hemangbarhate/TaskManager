@@ -1,39 +1,43 @@
 import 'package:flutter/material.dart';
 
-String ip = "164.92.83.169";
-final managerlogout = "http://$ip/manager/logout";
-final operatorlogout = 'http://$ip/operator/logout';
-final clientlogout = 'http://$ip/client/logout';
-final adminlogout = 'http://$ip/admin/logout';
+// String ip = "http://142.93.222.48";
+String ip = "https://task-manager-7gc9.onrender.com";
+final managerlogout = "$ip/manager/logout";
+final operatorlogout = '$ip/operator/logout';
+final clientlogout = '$ip/client/logout';
+final adminlogout = '$ip/admin/logout';
 
-final managerlogin = "http://$ip/manager/login";
-final operatorlogin = 'http://$ip/operator/login';
-final clientlogin = 'http://$ip/client/login';
-final adminlogin = 'http://$ip/admin/login';
+final managerlogin = "$ip/manager/login";
+final operatorlogin = '$ip/operator/login';
+final clientlogin = '$ip/client/login';
+final adminlogin = '$ip/admin/login';
 
 // MANAGER
-final managergetassignedtask = "http://$ip/manager/assignedTask";
-final manageraddOperator = 'http://$ip/manager/addOperator';
-final manageraddDepartment = 'http://$ip/manager/addDepartment';
-final managerAssigntask = 'http://$ip/manager/assignTask/';
-final managerProfile = 'http://$ip/manager/profile';
-final managerLogout = 'http://$ip/manager/logout';
+final managergetassignedtask = "$ip/manager/assignedTask";
+final manageraddOperator = '$ip/manager/addOperator';
+final manageraddDepartment = '$ip/manager/addDepartment';
+final managerAssigntask = '$ip/manager/assignTask/';
+final managerProfile = '$ip/manager/profile';
+final managerLogout = '$ip/manager/logout';
 
 //ADMIN
-final getmanagerlist = "http://$ip/admin/getManagers";
-final getoperatorlist = "http://$ip/admin/getOperators";
-final getclientlist = "http://$ip/admin/getClients";
+final getmanagerlist = "$ip/admin/getManagers";
+final getoperatorlist = "$ip/admin/getOperators";
+final getclientlist = "$ip/admin/getClients";
+final getdeactivatedmanagerlist = "$ip/admin/getDeactivatedManagers";
+final getdeactivatedoperatorlist = "$ip/admin/getDeactivatedOperators";
+final getdeactivatedclientlist = "$ip/admin/getDeactivatedClients";
 
 //Client
-final clientprofile = 'http://$ip/client/profile';
-final getcreatedtask = 'http://$ip/client/trackYourTask';
-final createtask = 'http://$ip/client/createTask';
-final gettasktimeline = 'http://$ip/client/';
-final approvetask= 'http://$ip/client/';
-final rejecttask = 'http://$ip/client/';
-final addlinks= 'http://$ip/client/attachFiles';
-final getlinks = 'http://$ip/client/getAttachments';
+final clientprofile = '$ip/client/profile';
+final getcreatedtask = '$ip/client/trackYourTask';
+final createtask = '$ip/client/createTask';
+final gettasktimeline = '$ip/client/';
+final approvetask = '$ip/client/';
+final rejecttask = '$ip/client/';
+final addlinks = '$ip/client/attachFiles';
+final getlinks = '$ip/client/getAttachments';
 
 //Operator
-final operatortaskByOperatorId = 'http://$ip/operator/taskByOperatorId';
-final operatortasktimelinebyTaskId = "http://$ip/operator/getTimeline/";
+final operatortaskByOperatorId = '$ip/operator/taskByOperatorId';
+final operatortasktimelinebyTaskId = "$ip/operator/getTimeline/";

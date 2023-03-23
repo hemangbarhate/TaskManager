@@ -34,8 +34,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
 
   getProfileImage() async {
     Session _session = Session();
-    profileImage = await _session
-        .getprofileImage("http://$ip/manager/profilePic");
+    profileImage = await _session.getprofileImage("$ip/manager/profilePic");
     setState(() {});
   }
 
@@ -58,7 +57,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
   }
 
   late File _pickedImage;
-  String apiUrl = 'http://$ip/manager/profilePic';
+  String apiUrl = '$ip/manager/profilePic';
   uploadImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
@@ -142,10 +141,10 @@ class _ManagerProfileState extends State<ManagerProfile> {
                             child: profileImage == null
                                 ? Image.asset("assets/images/download.png")
                                 : CircleAvatar(
-                                  backgroundImage: MemoryImage(
-                                  profileImage,
-                                  ),
-                                )),
+                                    backgroundImage: MemoryImage(
+                                      profileImage,
+                                    ),
+                                  )),
                         Column(
                           children: [
                             Container(

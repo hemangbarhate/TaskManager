@@ -38,7 +38,7 @@ class _OperatorProfileState extends State<OperatorProfile> {
   }
 
   late File _pickedImage;
-  String apiUrl = 'http://$ip/operator/profilePic';
+  String apiUrl = '$ip/operator/profilePic';
   uploadImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
@@ -51,14 +51,12 @@ class _OperatorProfileState extends State<OperatorProfile> {
     });
   }
 
-
-
   void getProfile() async {
     setState(() {
       load = true;
     });
     Session _session = Session();
-    final response = await _session.get('http://$ip/operator/profile');
+    final response = await _session.get('$ip/operator/profile');
     print(response);
     setState(() {
       name = response['data']['operator']['name'];
@@ -140,10 +138,10 @@ class _OperatorProfileState extends State<OperatorProfile> {
                             child: profileImage == null
                                 ? Image.asset("assets/images/download.png")
                                 : CircleAvatar(
-                              backgroundImage: MemoryImage(
-                                profileImage,
-                              ),
-                            )),
+                                    backgroundImage: MemoryImage(
+                                      profileImage,
+                                    ),
+                                  )),
                         Column(
                           children: [
                             Container(
@@ -151,7 +149,6 @@ class _OperatorProfileState extends State<OperatorProfile> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                // _uploadImage();
                                 uploadImage();
                               },
                               child: Container(

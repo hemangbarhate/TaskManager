@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:intership/Admin/addProject.dart';
 import 'package:intership/Admin/addclient.dart';
 import 'package:intership/Admin/addmanager.dart';
 import 'package:intership/Admin/addoperator.dart';
+import 'package:intership/Admin/after_homepage.dart';
 import 'package:intership/Admin/constant.dart';
+import 'package:intership/Admin/viewProject.dart';
 import 'package:intership/Admin/viewclient.dart';
 import 'package:intership/Admin/viewmanager.dart';
 import 'package:intership/Admin/viewoperator.dart';
@@ -12,6 +15,7 @@ import 'package:intership/constant/ApI.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Auth/CommanLoginPage.dart';
+import 'viewdepartment.dart';
 // import 'package:superadmin/constant.dart';
 
 class HomePage extends StatefulWidget {
@@ -77,48 +81,59 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                CustomWidget(
-                    routename: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddManager()));
-                    },
-                    size: size,
-                    imagename: 'manager',
-                    boxcolor: kpblue,
-                    boxname: 'Add Manager'),
-                CustomWidget(
-                  routename: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AddClient()));
-                  },
-                  size: size,
-                  boxcolor: kpred,
-                  boxname: 'Add Client',
-                  imagename: 'client',
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                CustomWidget(
-                    routename: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddOperator()));
-                    },
-                    size: size,
-                    imagename: 'operator',
-                    boxcolor: kpyellow,
-                    boxname: 'Add Operator'),
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //   children: [
+            //     CustomWidget(
+            //         routename: () {
+            //           Navigator.push(
+            //               context,
+            //               MaterialPageRoute(
+            //                   builder: (context) => AddManager()));
+            //         },
+            //         size: size,
+            //         imagename: 'manager',
+            //         boxcolor: kpblue,
+            //         boxname: 'Add Manager'),
+            //     CustomWidget(
+            //       routename: () {
+            //         Navigator.push(context,
+            //             MaterialPageRoute(builder: (context) => AddClient()));
+            //       },
+            //       size: size,
+            //       boxcolor: kpred,
+            //       boxname: 'Add Client',
+            //       imagename: 'client',
+            //     ),
+            //   ],
+            // ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //   children: [
+            //     CustomWidget(
+            //         routename: () {
+            //           Navigator.push(
+            //               context,
+            //               MaterialPageRoute(
+            //                   builder: (context) => AddOperator()));
+            //         },
+            //         size: size,
+            //         imagename: 'operator',
+            //         boxcolor: kpyellow,
+            //         boxname: 'Add Operator'),
+            //     CustomWidget(
+            //         routename: () {
+            //           Navigator.push(
+            //               context,
+            //               MaterialPageRoute(
+            //                   builder: (context) => AddProject()));
+            //         },
+            //         size: size,
+            //         imagename: 'addproject',
+            //         boxcolor: kpblue,
+            //         boxname: 'Add ProjectName'),
+            //   ],
+            // ),
             Container(
               margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               height: 1,
@@ -164,10 +179,50 @@ class _HomePageState extends State<HomePage> {
                     imagename: 'operator',
                     boxcolor: kpyellow,
                     boxname: 'View Operators'),
+                CustomWidget(
+                    routename: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ViewProject()));
+                    },
+                    size: size,
+                    imagename: 'addproject',
+                    boxcolor: kpblue,
+                    boxname: 'View ProjectName'),
               ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CustomWidget(
+                    routename: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ViewDepartment()));
+                    },
+                    size: size,
+                    imagename: 'client',
+                    boxcolor: kpred,
+                    boxname: 'View Departments'),
+              ],
+            ),
+            Container(
+              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              height: 1,
+              color: Colors.black,
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => AddScreen()));
+        },
+        backgroundColor: Colors.amber,
+        child: Icon(Icons.add),
       ),
     );
   }
@@ -204,7 +259,7 @@ class CustomWidget extends StatelessWidget {
                   // assets/images/bigmouth_icon.png
                   image: AssetImage('assets/images/$imagename.png'),
                   fit: BoxFit.cover),
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(25), topLeft: Radius.circular(25)),
             ),
           ),
@@ -214,7 +269,7 @@ class CustomWidget extends StatelessWidget {
             height: 25,
             decoration: BoxDecoration(
                 color: boxcolor,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(25),
                     bottomRight: Radius.circular(25))),
             child: Center(

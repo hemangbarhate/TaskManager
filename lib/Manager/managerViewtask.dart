@@ -54,7 +54,7 @@ class _ViewTaskState extends State<ViewTask> {
   var mapOperatorName = Map<String, dynamic>();
   getOperatorName(String s) async {
     Session _session = Session();
-    final response = await _session.get('http://$ip/manager/getOperator/$s');
+    final response = await _session.get('$ip/manager/getOperator/$s');
     print("Response ${response['operator']['name']}");
     mapOperatorName[s] = response['operator']['name'];
   }
@@ -97,8 +97,7 @@ class _ViewTaskState extends State<ViewTask> {
       loadingsecond = true; //make loading true to show progressindicator
     });
     Session _session = Session();
-    final response =
-        await _session.get('http://164.92.83.169/manager/getTasks');
+    final response = await _session.get('$ip/manager/getTasks');
     print(response);
 
     for (dynamic i in response['result']) {
@@ -115,9 +114,8 @@ class _ViewTaskState extends State<ViewTask> {
         await getOperatorName("${TaskModel.fromJson(i).operatorId}");
       }
 
-
       if ((TaskModel.fromJson(i).AssignationStatus == 'Assigned' ||
-          TaskModel.fromJson(i).AssignationStatus == 'Reassigned') &&
+              TaskModel.fromJson(i).AssignationStatus == 'Reassigned') &&
           (TaskModel.fromJson(i).taskStatus == 'inProgress') &&
           (TaskModel.fromJson(i).managerApproval == 'Pending' ||
               TaskModel.fromJson(i).managerApproval == 'Rejected') &&
@@ -126,8 +124,6 @@ class _ViewTaskState extends State<ViewTask> {
         inprogress.add(TaskModel.fromJson(i));
         await getOperatorName("${TaskModel.fromJson(i).operatorId}");
       }
-
-
 
       if ((TaskModel.fromJson(i).managerApproval == 'Pending' ||
               TaskModel.fromJson(i).managerApproval == 'Rejected') &&
@@ -138,7 +134,6 @@ class _ViewTaskState extends State<ViewTask> {
         await getOperatorName("${TaskModel.fromJson(i).operatorId}");
       }
 
-
       if (TaskModel.fromJson(i).managerApproval == 'Accepted' &&
           (TaskModel.fromJson(i).clientApproval == 'Pending' ||
               TaskModel.fromJson(i).clientApproval == 'Rejected') &&
@@ -146,7 +141,6 @@ class _ViewTaskState extends State<ViewTask> {
         clientApprovalPendingList.add(TaskModel.fromJson(i));
         await getOperatorName("${TaskModel.fromJson(i).operatorId}");
       }
-
 
       if (TaskModel.fromJson(i).taskStatus == 'Closed' &&
           TaskModel.fromJson(i).managerApproval == 'Accepted' &&
@@ -168,7 +162,7 @@ class _ViewTaskState extends State<ViewTask> {
       loadingsecond = true; //make loading true to show progressindicator
     });
     Session _session = Session();
-    final response = await _session.get('http://$ip/manager/assignedTask');
+    final response = await _session.get('$ip/manager/assignedTask');
 
     for (dynamic i in response['result']) {
       nameofclient.add(TaskModel.fromJson(i));
@@ -188,7 +182,7 @@ class _ViewTaskState extends State<ViewTask> {
       final data =
           jsonEncode(<String, String>{"Note": "Task Rejected by manager"});
       final response =
-          await _session.post('http://$ip/manager/rejectTask/${taskid}', data);
+          await _session.post('$ip/manager/rejectTask/${taskid}', data);
       print(response.toString());
       print('Rejected');
 
@@ -215,7 +209,7 @@ class _ViewTaskState extends State<ViewTask> {
       Session _session = Session();
       final data = jsonEncode(<String, String>{"Note": "Task Completed."});
       final response =
-          await _session.post('http://$ip/manager/approveTask/${taskid}', data);
+          await _session.post('$ip/manager/approveTask/${taskid}', data);
       print(response.toString());
       print('Accepted ${taskid}');
 
@@ -290,25 +284,25 @@ class _ViewTaskState extends State<ViewTask> {
                       borderRadius: BorderRadius.circular(25.0)),
                   labelColor: Colors.white,
                   unselectedLabelColor: Colors.black,
-                  tabs: const [
+                  tabs: [
                     Tab(
-                      text: 'Not Assigned',
+                      text: 'Not Assigned (${noassignedtasklist.length})',
                     ),
                     Tab(
-                      text: 'Assigned',
+                      text: 'Assigned (${assignedlist.length})',
                     ),
                     Tab(
-                      text: 'InProgress',
-                    ),
-
-                    Tab(
-                      text: 'Accept/Reject',
+                      text: 'InProgress (${inprogress.length})',
                     ),
                     Tab(
-                      text: 'Client Approval Pending',
+                      text: 'Accept/Reject (${acceptRejectList.length})',
                     ),
                     Tab(
-                      text: 'Closed Tasks',
+                      text:
+                          'Client Approval Pending (${clientApprovalPendingList.length})',
+                    ),
+                    Tab(
+                      text: 'Closed Tasks (${closedTasksList.length})',
                     )
                   ],
                 ),
@@ -316,14 +310,12 @@ class _ViewTaskState extends State<ViewTask> {
               Expanded(
                   child: TabBarView(
                 children: [
-
-
                   // 1 noassignedtasklist
                   loadingofirst
                       ? Center(child: CircularProgressIndicator())
                       : noassignedtasklist.length == 0
                           ? Container(
-                              child: Center(
+                              child: const Center(
                                 child: Text("there is no task "),
                               ),
                             )
@@ -360,7 +352,8 @@ class _ViewTaskState extends State<ViewTask> {
                                                           Reject: () {},
                                                           who: 'manager',
                                                           fontColor: blackColor,
-                                                          backgrondColor: blueColor,
+                                                          backgrondColor:
+                                                              blueColor,
                                                           first: yellowColor,
                                                           second: blackColor,
                                                           third: redColor,
@@ -370,9 +363,11 @@ class _ViewTaskState extends State<ViewTask> {
                                                           taskName:
                                                               '${noassignedtasklist[index].taskName}',
                                                           ProjectName:
-                                                              '${noassignedtasklist[index].ProjectName}',
+                                                              '${noassignedtasklist[index].projectName}',
                                                           taskId:
                                                               '${noassignedtasklist[index].taskID}',
+                                                          projectId:
+                                                              '${noassignedtasklist[index].projectId}',
                                                           clientId:
                                                               // '${noassignedtasklist[index].clientId}',
                                                               '${mapClientIdName[noassignedtasklist[index].clientId]}',
@@ -386,8 +381,10 @@ class _ViewTaskState extends State<ViewTask> {
                                                           clientNote:
                                                               '${noassignedtasklist[index].clientNote}',
                                                           managerNote: '',
-                                                          AssignationStatus: '${noassignedtasklist[index].AssignationStatus}',
-                                                          priority: '${noassignedtasklist[index].priority}',
+                                                          AssignationStatus:
+                                                              '${noassignedtasklist[index].AssignationStatus}',
+                                                          priority:
+                                                              '${noassignedtasklist[index].priority}',
                                                           clientApproval: '',
                                                           taskStatus:
                                                               '${noassignedtasklist[index].taskStatus}',
@@ -443,328 +440,323 @@ class _ViewTaskState extends State<ViewTask> {
                   loadingsecond
                       ? Center(child: CircularProgressIndicator())
                       : assignedlist.length == 0
-                      ? Container(
-                    child: Center(
-                      child: Text("No data"),
-                    ),
-                  )
-                      : RefreshIndicator(
-                    onRefresh: () async {
-                      await getNOtAssignTask();
-                      await gettasklist();
-                    },
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: <Widget>[
-                          ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: assignedlist.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: (Container(
-                                    child: ClientContainer(
-                                      Clientanme:
-                                      '${mapClientIdName[assignedlist[index].clientId]}',
-                                      OperatorNmae:
-                                      '${mapOperatorName[assignedlist[index].operatorId]}',
-                                      fontColor: blackColor,
-                                      backgrondColor: creamColor2,
-                                      first: yellowColor,
-                                      second: blackColor,
-                                      third: redColor,
-                                      forth: redColor,
-                                      fifth: redColor,
-                                      sixth: yellowColor,
-                                      taskName:
-                                      '${assignedlist[index].taskName}',
-                                      ProjectName:
-                                      '${assignedlist[index].ProjectName}',
-                                      taskId:
-                                      '${assignedlist[index].taskID}',
-                                      clientId:
-                                      // '${assignedtasklist[index].clientId}',
-                                      '${mapClientIdName[assignedlist[index].clientId]}',
-                                      operatorId:
-                                      '${assignedlist[index].operatorId}',
-                                      openDate:
-                                      '${assignedlist[index].openDate?.substring(0, 10)}',
-                                      taskDescription:
-                                      '${assignedlist[index].taskDescription}',
-                                      closeDate:
-                                      '${assignedlist[index].closeDate?.substring(0, 10)}',
-                                      clientNote:
-                                      '${assignedlist[index].clientNote}',
-                                      managerNote:
-                                      '${assignedlist[index].managerNote}',
-                                      AssignationStatus:
-                                      '${assignedlist[index].AssignationStatus}',
-                                      priority:
-                                      '${assignedlist[index].priority}',
-                                      clientApproval:
-                                      '${assignedlist[index].clientApproval}',
-                                      taskStatus:
-                                      '${assignedlist[index].taskStatus}',
-                                      managerApproval:
-                                      '${assignedlist[index].managerApproval}',
-                                      taskCategory:
-                                      '${assignedlist[index].taskCategory}',
-                                      managerId:
-                                      '${assignedlist[index].managerId}',
-                                      assignTask: () {
-                                        // if (assignedlist[index]
-                                        //     .taskStatus ==
-                                        //     'Pending') {
-                                        //   Navigator.of(context).push(
-                                        //     MaterialPageRoute(
-                                        //       builder: (context) =>
-                                        //           AssignTask(
-                                        //             taskId:
-                                        //             '${assignedlist[index].taskID}',
-                                        //           ),
-                                        //     ),
-                                        //   );
-                                        // }
+                          ? Container(
+                              child: Center(
+                                child: Text("No data"),
+                              ),
+                            )
+                          : RefreshIndicator(
+                              onRefresh: () async {
+                                await getNOtAssignTask();
+                                await gettasklist();
+                              },
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: <Widget>[
+                                    ListView.builder(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: assignedlist.length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: (Container(
+                                              child: ClientContainer(
+                                                Clientanme:
+                                                    '${mapClientIdName[assignedlist[index].clientId]}',
+                                                OperatorNmae:
+                                                    '${mapOperatorName[assignedlist[index].operatorId]}',
+                                                fontColor: blackColor,
+                                                backgrondColor: creamColor2,
+                                                first: yellowColor,
+                                                second: blackColor,
+                                                third: redColor,
+                                                forth: redColor,
+                                                fifth: redColor,
+                                                sixth: yellowColor,
+                                                taskName:
+                                                    '${assignedlist[index].taskName}',
+                                                ProjectName:
+                                                    '${assignedlist[index].projectName}',
+                                                taskId:
+                                                    '${assignedlist[index].taskID}',
+                                                projectId:
+                                                    '${assignedlist[index].projectId}',
+                                                clientId:
+                                                    // '${assignedtasklist[index].clientId}',
+                                                    '${mapClientIdName[assignedlist[index].clientId]}',
+                                                operatorId:
+                                                    '${assignedlist[index].operatorId}',
+                                                openDate:
+                                                    '${assignedlist[index].openDate?.substring(0, 10)}',
+                                                taskDescription:
+                                                    '${assignedlist[index].taskDescription}',
+                                                closeDate:
+                                                    '${assignedlist[index].closeDate?.substring(0, 10)}',
+                                                clientNote:
+                                                    '${assignedlist[index].clientNote}',
+                                                managerNote:
+                                                    '${assignedlist[index].managerNote}',
+                                                AssignationStatus:
+                                                    '${assignedlist[index].AssignationStatus}',
+                                                priority:
+                                                    '${assignedlist[index].priority}',
+                                                clientApproval:
+                                                    '${assignedlist[index].clientApproval}',
+                                                taskStatus:
+                                                    '${assignedlist[index].taskStatus}',
+                                                managerApproval:
+                                                    '${assignedlist[index].managerApproval}',
+                                                taskCategory:
+                                                    '${assignedlist[index].taskCategory}',
+                                                managerId:
+                                                    '${assignedlist[index].managerId}',
+                                                assignTask: () {
+                                                  // if (assignedlist[index]
+                                                  //     .taskStatus ==
+                                                  //     'Pending') {
+                                                  //   Navigator.of(context).push(
+                                                  //     MaterialPageRoute(
+                                                  //       builder: (context) =>
+                                                  //           AssignTask(
+                                                  //             taskId:
+                                                  //             '${assignedlist[index].taskID}',
+                                                  //           ),
+                                                  //     ),
+                                                  //   );
+                                                  // }
+                                                },
+                                                who: 'manager',
+                                                TimeLineDoc: () {},
+                                                AttachDoc: () {
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          TimeDataMnager(
+                                                        Taskid:
+                                                            '${assignedlist[index].taskID}',
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                ChangeStatus: () {},
+                                                Approve: () {},
+                                                Reject: () {},
+                                              ),
+                                            )));
                                       },
-                                      who: 'manager',
-                                      TimeLineDoc: () {},
-                                      AttachDoc: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                TimeDataMnager(
-                                                  Taskid:
-                                                  '${assignedlist[index].taskID}',
-                                                ),
-                                          ),
-                                        );
-                                      },
-                                      ChangeStatus: () {},
-                                      Approve: () {},
-                                      Reject: () {},
                                     ),
-                                  )));
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-
+                                  ],
+                                ),
+                              ),
+                            ),
 
                   // 2 inprogress
                   loadingsecond
                       ? Center(child: CircularProgressIndicator())
                       : inprogress.length == 0
-                      ? Container(
-                    child: Center(
-                      child: Text("No data"),
-                    ),
-                  )
-                      : RefreshIndicator(
-                    onRefresh: () async {
-                      await getNOtAssignTask();
-                      await gettasklist();
-                    },
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: <Widget>[
-                          ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: inprogress.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: (Container(
-                                    child: ClientContainer(
-                                      Clientanme:
-                                      '${mapClientIdName[inprogress[index].clientId]}',
-                                      OperatorNmae:
-                                      '${mapOperatorName[inprogress[index].operatorId]}',
-                                      fontColor: blackColor,
-                                      backgrondColor: creamColor2,
-                                      first: yellowColor,
-                                      second: blackColor,
-                                      third: redColor,
-                                      forth: redColor,
-                                      fifth: redColor,
-                                      sixth: yellowColor,
-                                      taskName:
-                                      '${inprogress[index].taskName}',
-                                      ProjectName:
-                                      '${inprogress[index].ProjectName}',
-                                      taskId:
-                                      '${inprogress[index].taskID}',
-                                      clientId:
-                                      // '${assignedtasklist[index].clientId}',
-                                      '${mapClientIdName[inprogress[index].clientId]}',
-                                      operatorId:
-                                      '${inprogress[index].operatorId}',
-                                      openDate:
-                                      '${inprogress[index].openDate?.substring(0, 10)}',
-                                      taskDescription:
-                                      '${inprogress[index].taskDescription}',
-                                      closeDate:
-                                      '${inprogress[index].closeDate?.substring(0, 10)}',
-                                      clientNote:
-                                      '${inprogress[index].clientNote}',
-                                      managerNote:
-                                      '${inprogress[index].managerNote}',
-                                      AssignationStatus:
-                                      '${inprogress[index].AssignationStatus}',
-                                      priority:
-                                      '${inprogress[index].priority}',
-                                      clientApproval:
-                                      '${inprogress[index].clientApproval}',
-                                      taskStatus:
-                                      '${inprogress[index].taskStatus}',
-                                      managerApproval:
-                                      '${inprogress[index].managerApproval}',
-                                      taskCategory:
-                                      '${inprogress[index].taskCategory}',
-                                      managerId:
-                                      '${inprogress[index].managerId}',
-                                      assignTask: () {
+                          ? Container(
+                              child: Center(
+                                child: Text("No data"),
+                              ),
+                            )
+                          : RefreshIndicator(
+                              onRefresh: () async {
+                                await getNOtAssignTask();
+                                await gettasklist();
+                              },
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: <Widget>[
+                                    ListView.builder(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: inprogress.length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: (Container(
+                                              child: ClientContainer(
+                                                Clientanme:
+                                                    '${mapClientIdName[inprogress[index].clientId]}',
+                                                OperatorNmae:
+                                                    '${mapOperatorName[inprogress[index].operatorId]}',
+                                                fontColor: blackColor,
+                                                backgrondColor: creamColor2,
+                                                first: yellowColor,
+                                                second: blackColor,
+                                                third: redColor,
+                                                forth: redColor,
+                                                fifth: redColor,
+                                                sixth: yellowColor,
+                                                taskName:
+                                                    '${inprogress[index].taskName}',
+                                                ProjectName:
+                                                    '${inprogress[index].projectName}',
+                                                taskId:
+                                                    '${inprogress[index].taskID}',
+                                                projectId:
+                                                    '${inprogress[index].projectId}',
+                                                clientId:
+                                                    // '${assignedtasklist[index].clientId}',
+                                                    '${mapClientIdName[inprogress[index].clientId]}',
+                                                operatorId:
+                                                    '${inprogress[index].operatorId}',
+                                                openDate:
+                                                    '${inprogress[index].openDate?.substring(0, 10)}',
+                                                taskDescription:
+                                                    '${inprogress[index].taskDescription}',
+                                                closeDate:
+                                                    '${inprogress[index].closeDate?.substring(0, 10)}',
+                                                clientNote:
+                                                    '${inprogress[index].clientNote}',
+                                                managerNote:
+                                                    '${inprogress[index].managerNote}',
+                                                AssignationStatus:
+                                                    '${inprogress[index].AssignationStatus}',
+                                                priority:
+                                                    '${inprogress[index].priority}',
+                                                clientApproval:
+                                                    '${inprogress[index].clientApproval}',
+                                                taskStatus:
+                                                    '${inprogress[index].taskStatus}',
+                                                managerApproval:
+                                                    '${inprogress[index].managerApproval}',
+                                                taskCategory:
+                                                    '${inprogress[index].taskCategory}',
+                                                managerId:
+                                                    '${inprogress[index].managerId}',
+                                                assignTask: () {},
+                                                who: 'manager',
+                                                TimeLineDoc: () {},
+                                                AttachDoc: () {
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          TimeDataMnager(
+                                                        Taskid:
+                                                            '${inprogress[index].taskID}',
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                ChangeStatus: () {},
+                                                Approve: () {},
+                                                Reject: () {},
+                                              ),
+                                            )));
                                       },
-                                      who: 'manager',
-                                      TimeLineDoc: () {},
-                                      AttachDoc: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                TimeDataMnager(
-                                                  Taskid:
-                                                  '${inprogress[index].taskID}',
-                                                ),
-                                          ),
-                                        );
-                                      },
-                                      ChangeStatus: () {},
-                                      Approve: () {},
-                                      Reject: () {},
                                     ),
-                                  )));
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-
+                                  ],
+                                ),
+                              ),
+                            ),
 
                   // 4
                   loadingsecond
                       ? Center(child: CircularProgressIndicator())
                       : acceptRejectList.length == 0
-                      ? Center(
-                    child: Text("No data"),
-                  )
-                      : RefreshIndicator(
-                    onRefresh: () async {
-                      await getNOtAssignTask();
-                      await gettasklist();
-                    },
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: <Widget>[
-                          ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: acceptRejectList.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: (Container(
-                                    child: ClientContainer(
-                                      Clientanme:
-                                      '${mapClientIdName[acceptRejectList[index].clientId]}',
-                                      OperatorNmae:
-                                      '${mapOperatorName[acceptRejectList[index].operatorId]}',
-                                      TimeLineDoc: () {},
-                                      AttachDoc: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                TimeDataMnager(
-                                                  Taskid:
-                                                  '${acceptRejectList[index].taskID}',
-                                                ),
-                                          ),
-                                        );
-                                      },
-                                      ChangeStatus: () {},
-                                      Approve: () async {
-                                        print("Aprrove");
+                          ? Center(
+                              child: Text("No data"),
+                            )
+                          : RefreshIndicator(
+                              onRefresh: () async {
+                                await getNOtAssignTask();
+                                await gettasklist();
+                              },
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: <Widget>[
+                                    ListView.builder(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: acceptRejectList.length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: (Container(
+                                              child: ClientContainer(
+                                                Clientanme:
+                                                    '${mapClientIdName[acceptRejectList[index].clientId]}',
+                                                OperatorNmae:
+                                                    '${mapOperatorName[acceptRejectList[index].operatorId]}',
+                                                TimeLineDoc: () {},
+                                                AttachDoc: () {
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          TimeDataMnager(
+                                                        Taskid:
+                                                            '${acceptRejectList[index].taskID}',
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                ChangeStatus: () {},
+                                                Approve: () async {
+                                                  print("Aprrove");
 
-                                        await ApproveRequest(
-                                            '${acceptRejectList[index].taskID}');
-                                      },
-                                      Reject: () async {
-                                        await RejectRequest(
-                                            '${acceptRejectList[index].taskID}');
-                                      },
-                                      who: 'manager',
-                                      fontColor: blackColor,
-                                      backgrondColor:
-                                      blueColor ,
-                                      first: yellowColor,
-                                      second: blackColor,
-                                      third: redColor,
-                                      forth: redColor,
-                                      fifth: redColor,
-                                      sixth: yellowColor,
-                                      taskName:
-                                      '${acceptRejectList[index].taskName}',
-                                      ProjectName:
-                                      '${acceptRejectList[index].ProjectName}',
-                                      taskId:
-                                      '${acceptRejectList[index].taskID}',
-                                      clientId:
-                                      '${mapClientIdName[acceptRejectList[index].clientId]}',
-                                      operatorId:
-                                      '${acceptRejectList[index].operatorId}',
-                                      openDate:
-                                      '${acceptRejectList[index].openDate?.substring(0, 10)}',
-                                      taskDescription:
-                                      '${acceptRejectList[index].taskDescription}',
-                                      closeDate:
-                                      '${acceptRejectList[index].closeDate?.substring(0, 10)}',
-                                      clientNote:
-                                      '${acceptRejectList[index].clientNote}',
-                                      managerNote:
-                                      '${acceptRejectList[index].managerNote}',
-                                      AssignationStatus:
-                                      '${acceptRejectList[index].AssignationStatus}',
-                                      priority:
-                                      '${acceptRejectList[index].priority}',
-                                      clientApproval:
-                                      '${acceptRejectList[index].clientApproval}',
-                                      taskStatus:
-                                      '${acceptRejectList[index].taskStatus}',
-                                      managerApproval:
-                                      '${acceptRejectList[index].managerApproval}',
-                                      taskCategory:
-                                      '${acceptRejectList[index].taskCategory}',
-                                      managerId:
-                                      '${acceptRejectList[index].managerId}',
-                                      assignTask: () {
-
+                                                  await ApproveRequest(
+                                                      '${acceptRejectList[index].taskID}');
+                                                },
+                                                Reject: () async {
+                                                  await RejectRequest(
+                                                      '${acceptRejectList[index].taskID}');
+                                                },
+                                                who: 'manager',
+                                                fontColor: blackColor,
+                                                backgrondColor: blueColor,
+                                                first: yellowColor,
+                                                second: blackColor,
+                                                third: redColor,
+                                                forth: redColor,
+                                                fifth: redColor,
+                                                sixth: yellowColor,
+                                                taskName:
+                                                    '${acceptRejectList[index].taskName}',
+                                                ProjectName:
+                                                    '${acceptRejectList[index].projectName}',
+                                                taskId:
+                                                    '${acceptRejectList[index].taskID}',
+                                                projectId:
+                                                    '${acceptRejectList[index].projectId}',
+                                                clientId:
+                                                    '${mapClientIdName[acceptRejectList[index].clientId]}',
+                                                operatorId:
+                                                    '${acceptRejectList[index].operatorId}',
+                                                openDate:
+                                                    '${acceptRejectList[index].openDate?.substring(0, 10)}',
+                                                taskDescription:
+                                                    '${acceptRejectList[index].taskDescription}',
+                                                closeDate:
+                                                    '${acceptRejectList[index].closeDate?.substring(0, 10)}',
+                                                clientNote:
+                                                    '${acceptRejectList[index].clientNote}',
+                                                managerNote:
+                                                    '${acceptRejectList[index].managerNote}',
+                                                AssignationStatus:
+                                                    '${acceptRejectList[index].AssignationStatus}',
+                                                priority:
+                                                    '${acceptRejectList[index].priority}',
+                                                clientApproval:
+                                                    '${acceptRejectList[index].clientApproval}',
+                                                taskStatus:
+                                                    '${acceptRejectList[index].taskStatus}',
+                                                managerApproval:
+                                                    '${acceptRejectList[index].managerApproval}',
+                                                taskCategory:
+                                                    '${acceptRejectList[index].taskCategory}',
+                                                managerId:
+                                                    '${acceptRejectList[index].managerId}',
+                                                assignTask: () {},
+                                              ),
+                                            )));
                                       },
                                     ),
-                                  )));
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-
-
+                                  ],
+                                ),
+                              ),
+                            ),
 
                   // 5 clientApprovalPendingList
                   loadingsecond
@@ -798,21 +790,22 @@ class _ViewTaskState extends State<ViewTask> {
                                             OperatorNmae:
                                                 '${mapOperatorName[clientApprovalPendingList[index].operatorId]}',
                                             who: 'manager',
-                                                fontColor: blackColor,
-                                                backgrondColor:
-                                                whitegreyColor ,
-                                                first: yellowColor,
-                                                second: blackColor,
-                                                third: redColor,
-                                                forth: redColor,
-                                                fifth: redColor,
-                                                sixth: yellowColor,
+                                            fontColor: blackColor,
+                                            backgrondColor: whitegreyColor,
+                                            first: yellowColor,
+                                            second: blackColor,
+                                            third: redColor,
+                                            forth: redColor,
+                                            fifth: redColor,
+                                            sixth: yellowColor,
                                             taskName:
                                                 '${clientApprovalPendingList[index].taskName}',
                                             ProjectName:
-                                                '${clientApprovalPendingList[index].ProjectName}',
+                                                '${clientApprovalPendingList[index].projectName}',
                                             taskId:
                                                 '${clientApprovalPendingList[index].taskID}',
+                                            projectId:
+                                                '${clientApprovalPendingList[index].projectId}',
                                             clientId:
                                                 '${mapClientIdName[clientApprovalPendingList[index].clientId]}',
                                             // '${inprogresstask[index].clientId}',
@@ -882,8 +875,6 @@ class _ViewTaskState extends State<ViewTask> {
                               ),
                             ),
 
-
-
                   // 6 closedTasksList
                   loadingsecond
                       ? Center(child: CircularProgressIndicator())
@@ -926,9 +917,11 @@ class _ViewTaskState extends State<ViewTask> {
                                             taskName:
                                                 '${closedTasksList[index].taskName}',
                                             ProjectName:
-                                                '${closedTasksList[index].ProjectName}',
+                                                '${closedTasksList[index].projectName}',
                                             taskId:
                                                 '${closedTasksList[index].taskID}',
+                                            projectId:
+                                                '${closedTasksList[index].projectId}',
                                             clientId:
                                                 '${mapClientIdName[closedTasksList[index].clientId]}',
                                             // '${inprogresstask[index].clientId}',
@@ -1001,29 +994,17 @@ class _ViewTaskState extends State<ViewTask> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          // foregroundColor: Colors.blueAccent,
-          backgroundColor: Colors.blueAccent.withOpacity(1),
+        floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            // getData().then((response) {
-            //     if (response['success']) {
-            //       print("The request was successful. Do something with the data here");
-            //       print(response);
-            //     } else {
-            //       print("// There was an error. Display the error message to the user.");
-            //       print(response['error']);
-            //     }
-            //
-            // });
-
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) => CreateTask()));
           },
-          child: Icon(
-            Icons.add,
-            color: Colors.white,
-            size: 30,
+          label: Text(
+            'CreateTask',
+            style: TextStyle(fontSize: 12),
           ),
+          icon: Icon(Icons.add),
+          backgroundColor: Colors.amber,
         ),
       ),
     );

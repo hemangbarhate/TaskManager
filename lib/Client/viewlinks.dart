@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Admin/model/session.dart';
 import '../constant/ApI.dart';
@@ -44,6 +46,31 @@ class _ViewLinksState extends State<ViewLinks> {
     return attachlist;
   }
 
+  TextEditingController linkcontroller = TextEditingController();
+  TextEditingController docnamecontroller = TextEditingController();
+  TextEditingController clientnotecontroller = TextEditingController();
+  Future<dynamic> addAttachments(String docName, drivelink, taskid) async {
+    try {
+      List<Map<String, String>> encodelist = [
+        {'documentName': docName, 'driveLink': drivelink}
+      ];
+      Session _session = Session();
+      final data = jsonEncode(
+          <String, List<Map<String, String>>>{'documentsList': encodelist});
+      final response = await _session.post('$addlinks/$taskid', data);
+      return response;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+
+  // Future<void> _launchUrl(String url) async {
+  //   final Uri _url = Uri.parse('https://flutter.dev');
+  //   if (!await launchUrl(_url)) {
+  //     throw Exception('Could not launch $_url');
+  //   }
+  // }
   @override
   void initState() {
     getattachments(widget.taskid);
@@ -112,13 +139,22 @@ class _ViewLinksState extends State<ViewLinks> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(attachlist[index].documentName),
-                              Text(attachlist[index].driveLink),
-                              TextButton(
-                                  onPressed: () {
-                                    Clipboard.setData(ClipboardData(
-                                        text: attachlist[index].driveLink));
-                                  },
-                                  child: Text('Copy')),
+                              Text(attachlist[index].driveLink,softWrap: false,),
+                              Row(
+                                children: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Clipboard.setData(ClipboardData(
+                                            text: attachlist[index].driveLink));
+                                      },
+                                      child: Text('Copy')),
+                                  TextButton(
+                                      onPressed: () {
+                                        launch(attachlist[index].driveLink);
+                                      },
+                                      child: Text('Open')),
+                                ],
+                              ),
                             ],
                           ),
                         );
@@ -126,66 +162,129 @@ class _ViewLinksState extends State<ViewLinks> {
                 ],
               ),
             ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder:
+                (BuildContext context) {
+              return AlertDialog(
+                title: const Text(
+                    "Add Submission Link"),
+                content:
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const Text(
+                          'Multiple Links Can be added'),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      TextField(
+                        controller:
+                        docnamecontroller,
+                        decoration:
+                        const InputDecoration(
+                          hintText:
+                          'Document Name',
+                          labelText:
+                          'DocName',
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      TextField(
+                        controller:
+                        linkcontroller,
+                        decoration:
+                        const InputDecoration(
+                          hintText:
+                          'Add Link',
+                          labelText: 'Link',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () async {
+                      Navigator.of(context)
+                          .pop();
+                    },
+                    child: const Text("No"),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      if (docnamecontroller
+                          .text
+                          .toString()
+                          .length ==
+                          0 &&
+                          linkcontroller
+                              .text
+                              .length ==
+                              0) {
+                        final snackBar =
+                        SnackBar(
+                          content: const Text(
+                              "Enter doc"),
+                          backgroundColor:
+                          (Colors.black
+                              .withOpacity(
+                              .6)),
+                          action:
+                          SnackBarAction(
+                            label:
+                            'dismiss',
+                            onPressed:
+                                () {},
+                          ),
+                        );
+                        ScaffoldMessenger
+                            .of(context)
+                            .showSnackBar(
+                            snackBar);
+                        Navigator.of(
+                            context)
+                            .pop();
+                      } else {
+                        final response = await addAttachments(
+                            docnamecontroller
+                                .text
+                                .toString(),
+                            linkcontroller
+                                .text
+                                .toString(),
+                            widget.taskid);
+                        docnamecontroller
+                            .clear();
+                        linkcontroller
+                            .clear();
+                        print(
+                            'dcccscsdc$response');
+                        Navigator.of(
+                            context)
+                            .pop();
+                        setState(() {
+                          attachlist.clear();
+                          getattachments(widget.taskid);
+                        });
+                      }
+                    },
+                    child:
+                    const Text("Yes"),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        label: Text('Add Links'),
+        icon: Icon(Icons.add),
+        backgroundColor: Colors.amber,
+      ),
     );
   }
 }
-
-// showDialog(
-//   context: context,
-//   builder:
-//       (BuildContext context) {
-//     return AlertDialog(
-//       title: const Text(
-//           "Attachment List"),
-//       content: SizedBox(
-//         width: 250,
-//         child:
-//             SingleChildScrollView(
-//           child: ListView.builder(
-//                   itemCount:
-//                       attachlist
-//                           .length,
-//                   shrinkWrap:
-//                       true,
-//                   itemBuilder:
-//                       (context,
-//                           index) {
-//                     return Container(
-//                       color: Colors
-//                           .black12,
-//                       padding:
-//                           EdgeInsets.all(8),
-//                       margin:
-//                           EdgeInsets.all(6),
-//                       child:
-//                           Column(
-//                         crossAxisAlignment:
-//                             CrossAxisAlignment.start,
-//                         children: [
-//                           Text(attachlist[index].documentName),
-//                           Text(attachlist[index].driveLink),
-//                           TextButton(
-//                               onPressed: () {
-//                                 Clipboard.setData(ClipboardData(text: attachlist[index].driveLink));
-//                               },
-//                               child: Text('Copy')),
-//                         ],
-//                       ),
-//                     );
-//                   }),
-//         ),
-//       ),
-//       actions: [
-//         TextButton(
-//           onPressed: () {
-//             Navigator.of(
-//                     context)
-//                 .pop();
-//           },
-//           child: const Text(
-//               "Ok"),
-//         ),
-//       ],
-//     );
-//   },
-// );

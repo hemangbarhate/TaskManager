@@ -27,7 +27,7 @@ class _mnagerReportState extends State<mnagerReport> {
         'endDate': endate,
       });
       final response = await _session.post(
-          'http://$ip/admin/reports/$Report/$managerId', data);
+          '$ip/admin/reports/$Report/$managerId', data);
       print("Dhiraj ${response.toString()}");
       for (dynamic i in response['result']) {
         print("iii $i");

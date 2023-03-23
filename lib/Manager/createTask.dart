@@ -1,17 +1,18 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:intership/Admin/model/projectnamemodel.dart';
 import 'package:intership/Admin/model/session.dart';
 import 'package:intership/Manager/ApiCall/clientData.dart';
 import 'package:intership/Manager/managerHome.dart';
-import 'package:intership/Manager/managerViewtask.dart';
 import 'package:intership/Manager/model/clientmodel.dart';
 import 'package:intl/intl.dart';
-import '../Admin/constant.dart';
+import '../constant/ApI.dart';
 import '../constant/color.dart';
 
 TextEditingController TaskName = TextEditingController();
-TextEditingController ProjectName = TextEditingController();
+TextEditingController Projectidcontroller = TextEditingController();
 TextEditingController Description = TextEditingController();
 TextEditingController ClientNote = TextEditingController();
 TextEditingController opendate = TextEditingController();
@@ -34,12 +35,13 @@ class _CreateTaskState extends State<CreateTask> {
   // "clientNote" : "Task Created."
   bool loading = false;
   int select = 1;
+  int selectnew = 0;
   Future<dynamic> createTask(String ProjectName, clientId, taskName,
       taskDescription, openDate, closeDate, clientNote) async {
     try {
       Session _session = Session();
       final data = jsonEncode(<String, String>{
-        "ProjectName": ProjectName,
+        "projectId": ProjectName,
         "clientId": clientId,
         "taskName": taskName,
         "taskDescription": taskDescription,
@@ -47,10 +49,9 @@ class _CreateTaskState extends State<CreateTask> {
         "closeDate": closeDate,
         "clientNote": clientNote
       });
-      final response =
-          await _session.post('http://164.92.83.169/manager/createTask', data);
+      final response = await _session.post('$ip/manager/createTask', data);
       print(response.toString());
-      print('tasks is Added successfully');
+      print('qwerty ${response.toString()}');
       return response;
     } catch (e) {
       print(e.toString());
@@ -64,19 +65,38 @@ class _CreateTaskState extends State<CreateTask> {
       loading = true;
     });
     clientlist = await getClientdata();
+    log('${clientlist.length}');
     setState(() {
       loading = false;
     });
   }
 
+  List<ProjectName> activeProject = [];
+  Future<List<ProjectName>> getactiveProjectName() async {
+    activeProject.clear();
+
+    Session _session = Session();
+    final response = await _session.get('$ip/manager/getProjects');
+    print(response);
+
+    for (dynamic i in response['data']) {
+      activeProject.add(ProjectName.fromJson(i));
+    }
+    setState(() {
+      activeProject;
+    });
+    return activeProject;
+  }
+
   @override
   void initState() {
     getclient();
+    getactiveProjectName();
     super.initState();
   }
 
   TextEditingController TaskName = TextEditingController();
-  TextEditingController ProjectName = TextEditingController();
+  TextEditingController Projectidcontroller = TextEditingController();
   TextEditingController Description = TextEditingController();
   TextEditingController ClientNote = TextEditingController();
   TextEditingController opendate = TextEditingController();
@@ -121,7 +141,7 @@ class _CreateTaskState extends State<CreateTask> {
                   // height: 10,
                   ),
               Container(
-                child: Text(""
+                child: const Text(""
                     "Select Client"),
               ),
               const SizedBox(
@@ -163,8 +183,7 @@ class _CreateTaskState extends State<CreateTask> {
                                         color: select == index
                                             ? Colors.grey.withOpacity(0.6)
                                             : whiteColor.withOpacity(1),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10))),
+                                        borderRadius: BorderRadius.all(Radius.circular(10))),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Container(
@@ -172,10 +191,13 @@ class _CreateTaskState extends State<CreateTask> {
 
                                         child: ListTile(
                                           leading: false
-                                              ? Image.asset("assets/images/download.png")
+                                              ? Image.asset(
+                                                  "assets/images/download.png")
                                               : CircleAvatar(
-                                            backgroundImage: NetworkImage('http://$ip/manager/getClientProfilePic/${clientlist[index].clientId}',) ,
-                                          ),
+                                                  backgroundImage: NetworkImage(
+                                                    '$ip/manager/getClientProfilePic/${clientlist[index].clientId}',
+                                                  ),
+                                                ),
                                           title:
                                               Text("${clientlist[index].name}"),
                                           subtitle: Text(
@@ -219,28 +241,101 @@ class _CreateTaskState extends State<CreateTask> {
               const SizedBox(
                 height: 10,
               ),
-              TextFormField(
-                style: TextStyle(color: Colors.black),
-                controller: ProjectName,
-                decoration: const InputDecoration(
-                  icon: Icon(
-                    Icons.work,
-                    color: Colors.black,
-                  ),
-                  hintText: 'Enter project name',
-                  hintStyle: TextStyle(color: Colors.black),
-                  labelText: 'ProjectName',
-                  labelStyle: TextStyle(color: Colors.black),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black)),
-                ),
-                validator: (value) {
-                  if (value != null && value.length < 1) {
-                    return 'This field cant be null';
-                  }
-                  return null;
-                },
+              // TextFormField(
+              //   style: TextStyle(color: Colors.black),
+              //   controller: ProjectName,
+              //   decoration: const InputDecoration(
+              //     icon: Icon(
+              //       Icons.work,
+              //       color: Colors.black,
+              //     ),
+              //     hintText: 'Enter project name',
+              //     hintStyle: TextStyle(color: Colors.black),
+              //     labelText: 'ProjectName',
+              //     labelStyle: TextStyle(color: Colors.black),
+              //     border: OutlineInputBorder(
+              //         borderSide: BorderSide(color: Colors.black)),
+              //   ),
+              //   validator: (value) {
+              //     if (value != null && value.length < 1) {
+              //       return 'This field cant be null';
+              //     }
+              //     return null;
+              //   },
+              // ),
+              Container(
+                child: Text(""
+                    "Select ProjectName"),
               ),
+              const SizedBox(
+                height: 10,
+              ),
+              loading
+                  ? Center(child: CircularProgressIndicator())
+                  : Container(
+                      height: 250,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: blueColor.withOpacity(0.6),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Scrollbar(
+                          // scrollController != null,
+                          isAlwaysShown: true, //always show scrollbar
+                          thickness: 10, //width of scrollbar
+                          radius:
+                              Radius.circular(20), //corner radius of scrollbar
+                          scrollbarOrientation: ScrollbarOrientation.right,
+                          child: SingleChildScrollView(
+                            child: ListView.builder(
+                              // controller: ScrollController(),
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: activeProject.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      selectnew = index;
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: selectnew == index
+                                            ? Colors.grey.withOpacity(0.6)
+                                            : whiteColor.withOpacity(1),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        // height: 50,
+
+                                        child: ListTile(
+                                          leading: false
+                                              ? Image.asset(
+                                                  "assets/images/download.png")
+                                              : CircleAvatar(
+                                                  backgroundImage: NetworkImage(
+                                                    '$ip/client/getProjectIcon/${activeProject[index].projectId}',
+                                                  ),
+                                                ),
+                                          title: Text(
+                                              "${activeProject[index].projectName}"),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
               const SizedBox(
                 height: 10,
               ),
@@ -408,7 +503,7 @@ class _CreateTaskState extends State<CreateTask> {
                         if (isValidForm) {
                           print("client name  : ${clientlist[select].name}");
                           createTask(
-                              ProjectName.text,
+                              activeProject[selectnew].projectId,
                               clientlist[select].clientId,
                               TaskName.text,
                               Description.text,
@@ -416,7 +511,7 @@ class _CreateTaskState extends State<CreateTask> {
                               closedate.text,
                               ClientNote.text);
                           // ProjectName, clientId, taskName,
-                        // taskDescription, openDate, closeDate, clientNote)
+                          // taskDescription, openDate, closeDate, clientNote)
                           final snackBar = SnackBar(
                             content: Text("Please Refresh the page "),
                             backgroundColor: (Colors.black12),
@@ -426,7 +521,7 @@ class _CreateTaskState extends State<CreateTask> {
                             ),
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          ProjectName.clear();
+                          Projectidcontroller.clear();
                           select = 1;
                           TaskName.clear();
                           Description.clear();
@@ -435,10 +530,9 @@ class _CreateTaskState extends State<CreateTask> {
                           ClientNote.clear();
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
-                                builder: (context) =>
-                                const home_manager(),
+                                builder: (context) => const home_manager(),
                               ),
-                                  (route) => false);
+                              (route) => false);
                           // setState(() {});
                         } else {
                           print(clientId);

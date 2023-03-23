@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
+import '../constant/ApI.dart';
 import '../constant/color.dart';
 import 'constant.dart';
+import 'homepage.dart';
 import 'model/session.dart';
 
 
@@ -30,7 +33,7 @@ class _AddOperatorState extends State<AddOperator> {
       Session _session = Session();
       final data = jsonEncode(<String, String>{'email': email,'name': name ,'password': password,'mobile': mobile,'departmentId': departmentid});
       print(data);
-      final response = await _session.post('http://$ip/admin/addOperator', data);
+      final response = await _session.post('$ip/admin/addOperator', data);
       print(response.toString());
       print('Operator Added successfully');
       return response;
@@ -50,7 +53,7 @@ class _AddOperatorState extends State<AddOperator> {
     });
     Session _session = Session();
     final response =
-    await _session.get('http://164.92.83.169/admin/getDepartments');
+    await _session.get('$ip/admin/getDepartments');
     for (dynamic i in response['data']['departments']) {
       if (!departlist.contains(i['departmentName'])) {
         departlist.add(i['departmentName']);
@@ -58,9 +61,6 @@ class _AddOperatorState extends State<AddOperator> {
         deptmap[i['departmentName']]=i['departmentId'];
       }
     }
-    print(departlist);
-    print(departlistID);
-    print(deptmap);
     setState(() {
       loading = false;
     });
@@ -88,7 +88,7 @@ class _AddOperatorState extends State<AddOperator> {
           return Padding(
             padding: const EdgeInsets.only(left: 15.0),
             child: IconButton(
-                icon: Icon(Icons.arrow_back,color: Colors.black,),
+                icon: const Icon(Icons.arrow_back,color: Colors.black,),
                 onPressed: () {
                   Navigator.of(context).pop();
                 }),
@@ -226,7 +226,7 @@ class _AddOperatorState extends State<AddOperator> {
                             },
                             child: Container(
                               color: select == index
-                                  ? creamColor2.withOpacity(0.2)
+                                  ? Colors.grey.withOpacity(0.2)
                                   : whiteColor.withOpacity(1),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -285,8 +285,17 @@ class _AddOperatorState extends State<AddOperator> {
                           ).catchError((err) {});
                           if (response == null) {
                             return;
-                          }else {
-                            Navigator.of(context).pop();
+                          } else {
+                            if(response['success']==false){
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(content: Text(response['error'])));
+                            }
+                            else{
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(content: Text(response['data'])));
+                            }
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                builder: (context) => const HomePage()));
                           }
                         }
                       }, child: Text('Add operator'))),

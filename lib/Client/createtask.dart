@@ -6,8 +6,10 @@ import 'package:intership/Client/viewclienttask.dart';
 import 'package:intership/constant/ApI.dart';
 import 'package:intl/intl.dart';
 
-import '../Admin/constant.dart';
+import '../Admin/model/projectnamemodel.dart';
+import '../Admin/model/projectnamemodel.dart';
 import '../Admin/model/session.dart';
+import '../constant/color.dart';
 
 TextEditingController opendate = TextEditingController();
 TextEditingController closedate = TextEditingController();
@@ -20,14 +22,17 @@ class CreateTask extends StatefulWidget {
 }
 
 class _CreateTaskState extends State<CreateTask> {
+  bool loading = false;
+  int select = 0;
   TextEditingController TaskName = TextEditingController();
-  TextEditingController ProjectName = TextEditingController();
+  TextEditingController Projectidcontroller = TextEditingController();
   TextEditingController Description = TextEditingController();
   TextEditingController ClientNote = TextEditingController();
   @override
   void initState() {
     opendate.text = ""; //set the initial value of text field
     closedate.text = "";
+    getactiveProjectName();
     super.initState();
   }
 
@@ -38,7 +43,7 @@ class _CreateTaskState extends State<CreateTask> {
     try {
       Session _session = Session();
       final data = jsonEncode(<String, String>{
-        "ProjectName": projectname,
+        "projectId": projectname,
         "taskName": taskname,
         "taskDescription": taskdesc,
         "openDate": opendate,
@@ -52,6 +57,23 @@ class _CreateTaskState extends State<CreateTask> {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  List<ProjectName> activeProject = [];
+  Future<List<ProjectName>> getactiveProjectName() async {
+    activeProject.clear();
+
+    Session _session = Session();
+    final response = await _session.get('$ip/client/getProjects');
+    print(response);
+
+    for (dynamic i in response['data']) {
+      activeProject.add(ProjectName.fromJson(i));
+    }
+    setState(() {
+      activeProject;
+    });
+    return activeProject;
   }
 
   @override
@@ -90,28 +112,103 @@ class _CreateTaskState extends State<CreateTask> {
               const SizedBox(
                 height: 25,
               ),
-              TextFormField(
-                style: TextStyle(color: Colors.black),
-                controller: ProjectName,
-                decoration: const InputDecoration(
-                  icon: Icon(
-                    Icons.create_new_folder,
-                    color: Colors.black,
-                  ),
-                  hintText: 'Enter Project Name',
-                  hintStyle: TextStyle(color: Colors.black),
-                  labelText: 'ProjectName',
-                  labelStyle: TextStyle(color: Colors.black),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black)),
-                ),
-                validator: (value) {
-                  if (value != null && value.length < 1) {
-                    return 'This field cant be null';
-                  }
-                  return null;
-                },
+              // TextFormField(
+              //   style: TextStyle(color: Colors.black),
+              //   controller: ProjectName,
+              //   decoration: const InputDecoration(
+              //     icon: Icon(
+              //       Icons.create_new_folder,
+              //       color: Colors.black,
+              //     ),
+              //     hintText: 'Enter Project Name',
+              //     hintStyle: TextStyle(color: Colors.black),
+              //     labelText: 'ProjectName',
+              //     labelStyle: TextStyle(color: Colors.black),
+              //     border: OutlineInputBorder(
+              //         borderSide: BorderSide(color: Colors.black)),
+              //   ),
+              //   validator: (value) {
+              //     if (value != null && value.length < 1) {
+              //       return 'This field cant be null';
+              //     }
+              //     return null;
+              //   },
+              // ),
+              Container(
+                child: Text(""
+                    "Select ProjectName"),
               ),
+              const SizedBox(
+                height: 10,
+              ),
+              loading
+                  ? Center(child: CircularProgressIndicator())
+                  : Container(
+                      height: 250,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: blueColor.withOpacity(0.6),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Scrollbar(
+                          // scrollController != null,
+                          isAlwaysShown: true, //always show scrollbar
+                          thickness: 10, //width of scrollbar
+                          radius:
+                              Radius.circular(20), //corner radius of scrollbar
+                          scrollbarOrientation: ScrollbarOrientation.right,
+                          child: SingleChildScrollView(
+                            child: ListView.builder(
+                              // controller: ScrollController(),
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: activeProject.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      select = index;
+                                      Projectidcontroller.text =
+                                          activeProject[index].projectId;
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: select == index
+                                            ? Colors.grey.withOpacity(0.6)
+                                            : whiteColor.withOpacity(1),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        // height: 50,
+
+                                        child: ListTile(
+                                          leading: false
+                                              ? Image.asset(
+                                                  "assets/images/download.png")
+                                              : CircleAvatar(
+                                                  backgroundImage: NetworkImage(
+                                                    '$ip/client/getProjectIcon/${activeProject[index].projectId}',
+                                                  ),
+                                                ),
+                                          title: Text(
+                                              "${activeProject[index].projectName}"),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
               const SizedBox(
                 height: 10,
               ),
@@ -300,7 +397,7 @@ class _CreateTaskState extends State<CreateTask> {
                         final isValidForm = _formKey.currentState!.validate();
                         if (isValidForm) {
                           var response = await createTask(
-                                  ProjectName.text.toString(),
+                                  Projectidcontroller.text.toString(),
                                   TaskName.text.toString(),
                                   Description.text.toString(),
                                   opendate.text.toString(),
@@ -311,13 +408,14 @@ class _CreateTaskState extends State<CreateTask> {
                             setState(() {
                               opendate.text = "";
                               closedate.text = "";
-                              ProjectName.text = "";
+                              Projectidcontroller.text = "";
                               Description.text = "";
                               ClientNote.text = "";
-                              ProjectName.text = '';
-                              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                  builder: (context) => const home_client()));
-
+                              Projectidcontroller.text = '';
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const home_client()));
                             });
                             final snackBar = SnackBar(
                               content: Text(response['data']),

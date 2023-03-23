@@ -23,12 +23,12 @@
 //     try {
 //       Session _session = Session();
 //       final data = jsonEncode(<String, String>{'email': email, 'password': password});
-//       final response = await _session.post('http://$ip/admin/login', data);
+//       final response = await _session.post('$ip/admin/login', data);
 //       print(_session.cookies);
 //       print(response);
 //       return response;
 //       // Response response = await http.post(
-//       //   Uri.parse('http://$ip/admin/login'),
+//       //   Uri.parse('$ip/admin/login'),
 //       //   headers: <String, String>{
 //       //     'Content-Type': 'application/json; charset=UTF-8',
 //       //   },
