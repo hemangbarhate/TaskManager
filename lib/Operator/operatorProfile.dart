@@ -32,8 +32,7 @@ class _OperatorProfileState extends State<OperatorProfile> {
 
   getProfileImage() async {
     Session _session = Session();
-    profileImage = await _session
-        .getprofileImage("http://164.92.83.169/operator/profilePic");
+    profileImage = await _session.getprofileImage("$ip/operator/profilePic");
     setState(() {});
   }
 

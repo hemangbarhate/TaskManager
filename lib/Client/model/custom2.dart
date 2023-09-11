@@ -135,18 +135,18 @@ class _MyContainerState extends State<MyContainer> {
                 ),
               ),
 
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Project Name : ${widget.ProjectName} ",
-                  style: TextStyle(
-                      // #FED457
-                      fontWeight: FontWeight.bold,
-                      // color: Color(0xFED457),
-                      color: widget.fontColor.withOpacity(1),
-                      fontSize: 17),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: Text(
+              //     "Project Name : ${widget.ProjectName} ",
+              //     style: TextStyle(
+              //         // #FED457
+              //         fontWeight: FontWeight.bold,
+              //         // color: Color(0xFED457),
+              //         color: widget.fontColor.withOpacity(1),
+              //         fontSize: 17),
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.all(7),
                 child: Container(

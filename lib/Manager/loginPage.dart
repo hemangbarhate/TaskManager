@@ -8,6 +8,8 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../constant/ApI.dart';
+
 class ManagerLoginPage extends StatefulWidget {
   @override
   State<ManagerLoginPage> createState() => _ManagerLoginPageState();
@@ -16,7 +18,7 @@ class ManagerLoginPage extends StatefulWidget {
 class _ManagerLoginPageState extends State<ManagerLoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController pwdController = TextEditingController();
-  final loginEndpoint = 'http://164.92.83.169/manager/login';
+  final loginEndpoint = '$ip/manager/login';
 
   Future<dynamic> login(String email, String password) async {
     try {

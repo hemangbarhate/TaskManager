@@ -1,17 +1,20 @@
 
 
- import 'package:intership/Admin/model/session.dart';
+ import 'dart:developer';
+
+import 'package:intership/Admin/model/session.dart';
 import 'package:intership/Manager/model/clientmodel.dart';
+
+import '../../constant/ApI.dart';
 
 List <ClientModel> clientlist = [];
 
- Future<List <ClientModel> >  getClientdata() async {
-   clientlist.clear();
-  print("// client data");
+ Future<List <ClientModel> >  getClientdata() async {clientlist.clear();
+  log("// client data");
   Session _session = Session();
   final response =
-  await _session.get('http://164.92.83.169/manager/getClients');
-  print("response $response");
+  await _session.get('$ip/manager/getClients');
+  log("response $response");
 
     for (dynamic i in response['data']) {
       print("i");

@@ -124,27 +124,27 @@ class _ClientContainerState extends State<ClientContainer> {
                       "${widget.taskName} ",
                       style: TextStyle(
                           // #FED457
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.normal,
                           // color: Color(0xFED457),
                           color: widget.fontColor.withOpacity(1),
-                          fontSize: 30),
+                          fontSize: 28 ),
                     ),
                   ],
                 ),
               ),
 
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Project Name : ${widget.ProjectName} ",
-                  style: TextStyle(
-                      // #FED457
-                      fontWeight: FontWeight.bold,
-                      // color: Color(0xFED457),
-                      color: widget.fontColor.withOpacity(1),
-                      fontSize: 17),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: Text(
+              //     "Project Name : ${widget.ProjectName} ",
+              //     style: TextStyle(
+              //         // #FED457
+              //         fontWeight: FontWeight.bold,
+              //         // color: Color(0xFED457),
+              //         color: widget.fontColor.withOpacity(1),
+              //         fontSize: 17),
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.all(7),
                 child: Container(

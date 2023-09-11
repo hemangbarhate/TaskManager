@@ -38,8 +38,8 @@ class _AssignTaskState extends State<AssignTask> {
       );
       print(
           "Operatorid ${opId} && managerNote ${managerNote} && priorityAssigned $priorityAssigned taskId ${widget.taskId}");
-      final response = await _session.post(
-          'http://164.92.83.169/manager/assignTask/${widget.taskId}', data);
+      final response =
+          await _session.post('$ip/manager/assignTask/${widget.taskId}', data);
       print(response.toString());
       print('Task Assigned successfully');
       return response;

@@ -50,11 +50,11 @@ class _CreateTaskState extends State<CreateTask> {
         "clientNote": clientNote
       });
       final response = await _session.post('$ip/manager/createTask', data);
-      print(response.toString());
-      print('qwerty ${response.toString()}');
+      log(response.toString());
+      log('qwerty ${response.toString()}');
       return response;
     } catch (e) {
-      print(e.toString());
+      log(e.toString());
     }
   }
 

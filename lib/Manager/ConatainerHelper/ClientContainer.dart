@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intership/Manager/assignTask.dart';
 import 'package:intership/constant/color.dart';
@@ -92,311 +94,247 @@ class _ClientContainerState extends State<ClientContainer> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 25, right: 05, left: 05),
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [
-            widget.backgrondColor.withOpacity(1),
-            widget.backgrondColor.withOpacity(1),
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-          border: Border.all(
-            color: const Color(0x282019).withOpacity(0.2),
+      child: GestureDetector(
+        onTap: (){
+          log(widget.clientId);
+        },
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              widget.backgrondColor.withOpacity(1),
+              widget.backgrondColor.withOpacity(1),
+            ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+            border: Border.all(
+              color: const Color(0x282019).withOpacity(0.2),
+            ),
+            borderRadius: BorderRadius.circular(10),
           ),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding:
-              const EdgeInsets.only(left: 8.0, right: 5, top: 2, bottom: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: Stack(children: [
-                  Row(
-                    children: <Widget>[
-                      false
-                          ? Image.asset("assets/images/download.png")
-                          : Padding(
-                              padding: const EdgeInsets.all(6.0),
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                  '$ip/manager/getProjectIcon/${widget.projectId}',
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 8.0, right: 5, top: 2, bottom: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Stack(children: [
+                    Row(
+                      children: <Widget>[
+                        false
+                            ? Image.asset("assets/images/download.png")
+                            : Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                    '$ip/manager/getProjectIcon/${widget.projectId}',
+                                  ),
                                 ),
                               ),
-                            ),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      Text(
-                        '${widget.taskName}',
-                        style: TextStyle(
-                            // #FED457
-                            fontWeight: FontWeight.w600,
-                            color: widget.fontColor.withOpacity(0.9),
-                            fontSize: 20),
-                      ),
-                    ],
-                  ),
-                ]),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Project Name : ${widget.ProjectName} ",
-                  style: TextStyle(
-                      // #FED457
-                      fontWeight: FontWeight.w600,
-                      // color: Color(0xFED457),
-                      color: widget.fontColor.withOpacity(1),
-                      fontSize: 15),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Container(
-                  child: Text(
-                    "Client name :  ${widget.Clientanme}",
-                    style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
-                  ),
-                ),
-              ),
-              (widget.priority != 'null')
-                  ? Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Container(
-                        child: Text(
-                          "Operator name :  ${widget.OperatorNmae}",
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Text(
+                          '${widget.taskName}',
                           style: TextStyle(
-                              color: widget.fontColor.withOpacity(0.8)),
+                              // #FED457
+                              fontWeight: FontWeight.w600,
+                              color: widget.fontColor.withOpacity(0.9),
+                              fontSize: 20),
                         ),
-                      ),
-                    )
-                  : Container(),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Container(
-                  child: Text(
-                    "Client note :   ${widget.clientNote}",
-                    style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
+                        const SizedBox(
+                          width: 25,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: CircleAvatar(
+
+                            backgroundImage: NetworkImage(
+                              '$ip/manager/getClientProfilePic/${widget.clientId}',
+                            ),
+                          ),
+                        ),
+                        (widget.priority != 'null')
+                            ? Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: CircleAvatar(
+
+                            backgroundImage: NetworkImage(
+                              '$ip/manager/getOperatorProfilePic/${widget.operatorId}',
+                            ),
+                          ),
+                        )
+                            : Container(),
+                      ],
+                    ),
+                  ]),
+                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Text(
+                //     "Project Name : ${widget.ProjectName} ",
+                //     style: TextStyle(
+                //         // #FED457
+                //         fontWeight: FontWeight.w600,
+                //         // color: Color(0xFED457),
+                //         color: widget.fontColor.withOpacity(1),
+                //         fontSize: 15),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(10),
+                //   child: Container(
+                //     child: Text(
+                //       "Client name :  ${widget.Clientanme}",
+                //       style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
+                //     ),
+                //   ),
+                // ),
+                // (widget.priority != 'null')
+                //     ? Padding(
+                //         padding: const EdgeInsets.all(7),
+                //         child: Container(
+                //           child: Text(
+                //             "Operator name :  ${widget.OperatorNmae}",
+                //             style: TextStyle(
+                //                 color: widget.fontColor.withOpacity(0.8)),
+                //           ),
+                //         ),
+                //       )
+                //     : Container(),
+                Padding(
+                  padding: const EdgeInsets.all(7),
+                  child: Container(
+                    child: Text(
+                      "Client note :   ${widget.clientNote}",
+                      style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
+                    ),
                   ),
                 ),
-              ),
-              (widget.priority != "null")
-                  ? Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Container(
-                        child: Text(
-                          "Manager note:   ${widget.managerNote}",
-                          style: TextStyle(
-                              color: widget.fontColor.withOpacity(0.8)),
+                (widget.priority != "null")
+                    ? Padding(
+                        padding: const EdgeInsets.all(7),
+                        child: Container(
+                          child: Text(
+                            "Manager note:   ${widget.managerNote}",
+                            style: TextStyle(
+                                color: widget.fontColor.withOpacity(0.8)),
+                          ),
                         ),
-                      ),
-                    )
-                  : Container(),
-              const SizedBox(
-                height: 0,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Container(
-                  child: Text(
-                    "Description :   ${widget.taskDescription}",
-                    style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
+                      )
+                    : Container(),
+                const SizedBox(
+                  height: 0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(7),
+                  child: Container(
+                    child: Text(
+                      "Description :   ${widget.taskDescription}",
+                      style: TextStyle(color: widget.fontColor.withOpacity(0.8)),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: widget.ChangeStatus,
-                    child: Container(
-                      width: 100,
-                      height: 46,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            widget.first.withOpacity(0.8),
-                            widget.first.withOpacity(0.8)
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(5, 5),
-                            blurRadius: 10,
-                          )
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10),
-                        child: Center(
-                          child: Text(
-                            widget.who == 'operator'
-                                ? 'Done'
-                                : '${widget.taskStatus}',
-                            style: TextStyle(
-                              color: whiteColor.withOpacity(1),
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  // GestureDetector(
-                  //   onTap: widget.TimeLineDoc,
-                  //   child: Container(
-                  //     width: 100,
-                  //     height: 46,
-                  //     decoration: BoxDecoration(
-                  //       gradient: LinearGradient(
-                  //         colors: [
-                  //           widget.second.withOpacity(0.7),
-                  //           widget.second.withOpacity(0.7)
-                  //         ],
-                  //         begin: Alignment.topLeft,
-                  //         end: Alignment.bottomRight,
-                  //       ),
-                  //       borderRadius: BorderRadius.circular(20),
-                  //       boxShadow: const [
-                  //         BoxShadow(
-                  //           color: Colors.black12,
-                  //           offset: Offset(5, 5),
-                  //           blurRadius: 10,
-                  //         )
-                  //       ],
-                  //     ),
-                  //     child: Padding(
-                  //       padding: EdgeInsets.only(left: 10.0, right: 10),
-                  //       child: Center(
-                  //         child: Text(
-                  //           widget.who == 'operator' ? 'Open' : 'TimeLine',
-                  //           style: TextStyle(
-                  //             color: Colors.white,
-                  //             fontSize: 15,
-                  //             fontWeight: FontWeight.bold,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        odate = !odate;
-                      });
-                      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
-                    },
-                    child: Container(
-                      width: 120,
-                      height: 46,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            widget.third.withOpacity(0.7),
-                            widget.third.withOpacity(0.7)
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(5, 5),
-                            blurRadius: 10,
-                          )
-                        ],
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 10.0, right: 10),
-                        child: Center(
-                          child: Text(
-                            odate ? "openDate" : '${widget.openDate}',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        cdate = !cdate;
-                      });
-                      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
-                    },
-                    child: Container(
-                      width: 120,
-                      height: 46,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            widget.forth.withOpacity(0.7),
-                            widget.forth.withOpacity(0.7)
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(5, 5),
-                            blurRadius: 10,
-                          )
-                        ],
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 10.0, right: 10),
-                        child: Center(
-                          child: Text(
-                            cdate ? "closeDate" : '${widget.closeDate}',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (widget.who != 'operator')
+                const SizedBox(
+                  height: 7,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
                     GestureDetector(
-                      onTap: widget.assignTask,
+                      onTap: widget.ChangeStatus,
                       child: Container(
                         width: 100,
                         height: 46,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              widget.fifth.withOpacity(0.8),
-                              widget.fifth.withOpacity(0.8)
+                              widget.first.withOpacity(0.8),
+                              widget.first.withOpacity(0.8)
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              offset: Offset(5, 5),
+                              blurRadius: 10,
+                            )
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10.0, right: 10),
+                          child: Center(
+                            child: Text(
+                              widget.who == 'operator'
+                                  ? 'Done'
+                                  : '${widget.taskStatus}',
+                              style: TextStyle(
+                                color: whiteColor.withOpacity(1),
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    // GestureDetector(
+                    //   onTap: widget.TimeLineDoc,
+                    //   child: Container(
+                    //     width: 100,
+                    //     height: 46,
+                    //     decoration: BoxDecoration(
+                    //       gradient: LinearGradient(
+                    //         colors: [
+                    //           widget.second.withOpacity(0.7),
+                    //           widget.second.withOpacity(0.7)
+                    //         ],
+                    //         begin: Alignment.topLeft,
+                    //         end: Alignment.bottomRight,
+                    //       ),
+                    //       borderRadius: BorderRadius.circular(20),
+                    //       boxShadow: const [
+                    //         BoxShadow(
+                    //           color: Colors.black12,
+                    //           offset: Offset(5, 5),
+                    //           blurRadius: 10,
+                    //         )
+                    //       ],
+                    //     ),
+                    //     child: Padding(
+                    //       padding: EdgeInsets.only(left: 10.0, right: 10),
+                    //       child: Center(
+                    //         child: Text(
+                    //           widget.who == 'operator' ? 'Open' : 'TimeLine',
+                    //           style: TextStyle(
+                    //             color: Colors.white,
+                    //             fontSize: 15,
+                    //             fontWeight: FontWeight.bold,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          odate = !odate;
+                        });
+                        // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
+                      },
+                      child: Container(
+                        width: 120,
+                        height: 46,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              widget.third.withOpacity(0.7),
+                              widget.third.withOpacity(0.7)
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -414,9 +352,7 @@ class _ClientContainerState extends State<ClientContainer> {
                           padding: EdgeInsets.only(left: 10.0, right: 10),
                           child: Center(
                             child: Text(
-                              widget.AssignationStatus == 'Pending'
-                                  ? "ASSIGN"
-                                  : widget.priority,
+                              odate ? "openDate" : '${widget.openDate}',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 13,
@@ -427,67 +363,30 @@ class _ClientContainerState extends State<ClientContainer> {
                         ),
                       ),
                     ),
-                  GestureDetector(
-                    onTap: widget.AttachDoc,
-                    child: Container(
-                      width: 100,
-                      height: 46,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            widget.sixth.withOpacity(0.8),
-                            widget.sixth.withOpacity(0.8)
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(5, 5),
-                            blurRadius: 10,
-                          )
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10),
-                        child: Center(
-                          child: Text(
-                            'ViewDoc',
-                            style: TextStyle(
-                              color: whiteColor.withOpacity(1),
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              if ((widget.managerApproval == 'Pending' ||
-                      widget.managerApproval == 'Rejected') &&
-                  (widget.clientApproval == 'Pending' ||
-                      widget.clientApproval == 'Rejected') &&
-                  widget.taskStatus == 'Completed')
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     GestureDetector(
-                      onTap: widget.Approve,
+                      onTap: () {
+                        setState(() {
+                          cdate = !cdate;
+                        });
+                        // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AssignTask()));
+                      },
                       child: Container(
-                        width: 130,
-                        height: 60,
+                        width: 120,
+                        height: 46,
                         decoration: BoxDecoration(
-                          gradient: const LinearGradient(
+                          gradient: LinearGradient(
                             colors: [
-                              Colors.green,
-                              Colors.greenAccent,
+                              widget.forth.withOpacity(0.7),
+                              widget.forth.withOpacity(0.7)
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -502,12 +401,12 @@ class _ClientContainerState extends State<ClientContainer> {
                           ],
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 10.0, right: 10),
+                          padding: EdgeInsets.only(left: 10.0, right: 10),
                           child: Center(
                             child: Text(
-                              'APPROVE',
+                              cdate ? "closeDate" : '${widget.closeDate}',
                               style: TextStyle(
-                                color: whiteColor.withOpacity(1),
+                                color: Colors.white,
                                 fontSize: 13,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -516,16 +415,57 @@ class _ClientContainerState extends State<ClientContainer> {
                         ),
                       ),
                     ),
+                    if (widget.who != 'operator')
+                      GestureDetector(
+                        onTap: widget.assignTask,
+                        child: Container(
+                          width: 100,
+                          height: 46,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                widget.fifth.withOpacity(0.8),
+                                widget.fifth.withOpacity(0.8)
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                offset: Offset(5, 5),
+                                blurRadius: 10,
+                              )
+                            ],
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 10.0, right: 10),
+                            child: Center(
+                              child: Text(
+                                widget.AssignationStatus == 'Pending'
+                                    ? "ASSIGN"
+                                    : widget.priority,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     GestureDetector(
-                      onTap: widget.Reject,
+                      onTap: widget.AttachDoc,
                       child: Container(
-                        width: 130,
-                        height: 60,
+                        width: 100,
+                        height: 46,
                         decoration: BoxDecoration(
-                          gradient: const LinearGradient(
+                          gradient: LinearGradient(
                             colors: [
-                              Colors.red,
-                              Colors.red,
+                              widget.sixth.withOpacity(0.8),
+                              widget.sixth.withOpacity(0.8)
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -543,7 +483,7 @@ class _ClientContainerState extends State<ClientContainer> {
                           padding: const EdgeInsets.only(left: 10.0, right: 10),
                           child: Center(
                             child: Text(
-                              'Reject',
+                              'ViewDoc',
                               style: TextStyle(
                                 color: whiteColor.withOpacity(1),
                                 fontSize: 13,
@@ -555,8 +495,98 @@ class _ClientContainerState extends State<ClientContainer> {
                       ),
                     ),
                   ],
-                )
-            ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                if ((widget.managerApproval == 'Pending' ||
+                        widget.managerApproval == 'Rejected') &&
+                    (widget.clientApproval == 'Pending' ||
+                        widget.clientApproval == 'Rejected') &&
+                    widget.taskStatus == 'Completed')
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: widget.Approve,
+                        child: Container(
+                          width: 130,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                Colors.green,
+                                Colors.greenAccent,
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                offset: Offset(5, 5),
+                                blurRadius: 10,
+                              )
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10.0, right: 10),
+                            child: Center(
+                              child: Text(
+                                'APPROVE',
+                                style: TextStyle(
+                                  color: whiteColor.withOpacity(1),
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: widget.Reject,
+                        child: Container(
+                          width: 130,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                Colors.red,
+                                Colors.red,
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                offset: Offset(5, 5),
+                                blurRadius: 10,
+                              )
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10.0, right: 10),
+                            child: Center(
+                              child: Text(
+                                'Reject',
+                                style: TextStyle(
+                                  color: whiteColor.withOpacity(1),
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+              ],
+            ),
           ),
         ),
       ),

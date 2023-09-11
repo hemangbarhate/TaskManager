@@ -135,7 +135,7 @@ class _CreateTaskState extends State<CreateTask> {
               //   },
               // ),
               Container(
-                child: Text(""
+                child: const Text(
                     "Select ProjectName"),
               ),
               const SizedBox(
@@ -253,12 +253,12 @@ class _CreateTaskState extends State<CreateTask> {
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black)),
                 ),
-                validator: (value) {
-                  if (value != null && value.length < 1) {
-                    return 'This field cant be null';
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value != null && value.length < 1) {
+                //     return 'This field cant be null';
+                //   }
+                //   return null;
+                // },
               ),
               const SizedBox(
                 height: 10,
@@ -278,19 +278,19 @@ class _CreateTaskState extends State<CreateTask> {
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black)),
                 ),
-                validator: (value) {
-                  if (value != null && value.length < 3) {
-                    return 'Enter Low/Medium/Urgent';
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value != null && value.length < 3) {
+                //     return 'Enter Low/Medium/Urgent';
+                //   }
+                //   return null;
+                // },
               ),
               const SizedBox(
                 height: 10,
               ),
               TextFormField(
                 style: TextStyle(color: Colors.black),
-                controller: opendate,
+                controller: opendate..text = DateFormat('yyyy-MM-dd').format(DateTime.now()),
                 decoration: const InputDecoration(
                   icon: Icon(
                     Icons.calendar_today,

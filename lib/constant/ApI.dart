@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 
-// String ip = "http://142.93.222.48";
-String ip = "https://task-manager-7gc9.onrender.com";
+
+String ip = "http://142.93.222.48";
+// String ip = "https://task-manager-7gc9.onrender.com";
 final managerlogout = "$ip/manager/logout";
 final operatorlogout = '$ip/operator/logout';
 final clientlogout = '$ip/client/logout';

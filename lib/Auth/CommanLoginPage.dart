@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intership/Admin/homepage.dart';
@@ -107,8 +109,9 @@ class _CommanLoginPageState extends State<CommanLoginPage> {
       final data =
           jsonEncode(<String, String>{'email': email, 'password': password});
       final response = await _session.post(api, data);
+
       print(_session.cookies);
-      print(response.toString());
+      log(response.toString());
       setState(() {
         loading = false;
       });

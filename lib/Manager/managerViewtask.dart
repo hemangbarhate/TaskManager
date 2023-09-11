@@ -1,16 +1,13 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intership/Manager/ApiCall/clientData.dart';
-import 'package:intership/Manager/ConatainerHelper/ManagerContainer.dart';
 import 'package:intership/Manager/assignTask.dart';
 import 'package:intership/Manager/createTask.dart';
-import 'package:intership/Manager/managerProfile.dart';
 import 'package:intership/Manager/model/TASKMODEL.dart';
 import 'package:intership/Manager/model/clientmodel.dart';
 import 'package:intership/Manager/timedatamnager.dart';
-import 'package:intership/Operator/timedata.dart';
 import 'package:intership/constant/color.dart';
 import 'package:intership/Manager/ConatainerHelper/ClientContainer.dart';
 import 'package:intership/Admin/model/session.dart';
@@ -68,7 +65,7 @@ class _ViewTaskState extends State<ViewTask> {
     });
     Session _session = Session();
     final response =
-        await _session.get('http://164.92.83.169/manager/notassignedTask');
+        await _session.get('$ip/manager/notassignedTask');
     print("response $response");
 
     for (dynamic i in response['result']) {
@@ -369,8 +366,8 @@ class _ViewTaskState extends State<ViewTask> {
                                                           projectId:
                                                               '${noassignedtasklist[index].projectId}',
                                                           clientId:
-                                                              // '${noassignedtasklist[index].clientId}',
-                                                              '${mapClientIdName[noassignedtasklist[index].clientId]}',
+                                                              '${noassignedtasklist[index].clientId}',
+                                                              // '${mapClientIdName[noassignedtasklist[index].clientId]}',
                                                           operatorId: '',
                                                           openDate:
                                                               '${noassignedtasklist[index].openDate?.substring(0, 10)}',
@@ -483,8 +480,8 @@ class _ViewTaskState extends State<ViewTask> {
                                                 projectId:
                                                     '${assignedlist[index].projectId}',
                                                 clientId:
-                                                    // '${assignedtasklist[index].clientId}',
-                                                    '${mapClientIdName[assignedlist[index].clientId]}',
+                                                    '${assignedlist[index].clientId}',
+                                                    // '${mapClientIdName[assignedlist[index].clientId]}',
                                                 operatorId:
                                                     '${assignedlist[index].operatorId}',
                                                 openDate:
@@ -556,7 +553,7 @@ class _ViewTaskState extends State<ViewTask> {
                       ? Center(child: CircularProgressIndicator())
                       : inprogress.length == 0
                           ? Container(
-                              child: Center(
+                              child: const Center(
                                 child: Text("No data"),
                               ),
                             )
@@ -598,8 +595,8 @@ class _ViewTaskState extends State<ViewTask> {
                                                 projectId:
                                                     '${inprogress[index].projectId}',
                                                 clientId:
-                                                    // '${assignedtasklist[index].clientId}',
-                                                    '${mapClientIdName[inprogress[index].clientId]}',
+                                                    '${inprogress[index].clientId}',
+                                                    // '${mapClientIdName[inprogress[index].clientId]}',
                                                 operatorId:
                                                     '${inprogress[index].operatorId}',
                                                 openDate:
@@ -687,7 +684,7 @@ class _ViewTaskState extends State<ViewTask> {
                                                       builder: (context) =>
                                                           TimeDataMnager(
                                                         Taskid:
-                                                            '${acceptRejectList[index].taskID}',
+                                                            acceptRejectList[index].taskID,
                                                       ),
                                                     ),
                                                   );
@@ -697,11 +694,11 @@ class _ViewTaskState extends State<ViewTask> {
                                                   print("Aprrove");
 
                                                   await ApproveRequest(
-                                                      '${acceptRejectList[index].taskID}');
+                                                      acceptRejectList[index].taskID);
                                                 },
                                                 Reject: () async {
                                                   await RejectRequest(
-                                                      '${acceptRejectList[index].taskID}');
+                                                      acceptRejectList[index].taskID);
                                                 },
                                                 who: 'manager',
                                                 fontColor: blackColor,
@@ -721,7 +718,8 @@ class _ViewTaskState extends State<ViewTask> {
                                                 projectId:
                                                     '${acceptRejectList[index].projectId}',
                                                 clientId:
-                                                    '${mapClientIdName[acceptRejectList[index].clientId]}',
+                                                '${acceptRejectList[index].clientId}',
+                                                    // '${mapClientIdName[acceptRejectList[index].clientId]}',
                                                 operatorId:
                                                     '${acceptRejectList[index].operatorId}',
                                                 openDate:
@@ -807,8 +805,8 @@ class _ViewTaskState extends State<ViewTask> {
                                             projectId:
                                                 '${clientApprovalPendingList[index].projectId}',
                                             clientId:
-                                                '${mapClientIdName[clientApprovalPendingList[index].clientId]}',
-                                            // '${inprogresstask[index].clientId}',
+                                                // '${mapClientIdName[clientApprovalPendingList[index].clientId]}',
+                                            '${clientApprovalPendingList[index].clientId}',
                                             operatorId:
                                                 '${clientApprovalPendingList[index].operatorId}',
                                             openDate:
@@ -923,8 +921,8 @@ class _ViewTaskState extends State<ViewTask> {
                                             projectId:
                                                 '${closedTasksList[index].projectId}',
                                             clientId:
-                                                '${mapClientIdName[closedTasksList[index].clientId]}',
-                                            // '${inprogresstask[index].clientId}',
+                                                // '${mapClientIdName[closedTasksList[index].clientId]}',
+                                            '${closedTasksList[index].clientId}',
                                             operatorId:
                                                 '${closedTasksList[index].operatorId}',
                                             openDate:

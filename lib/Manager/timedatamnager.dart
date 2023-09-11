@@ -125,60 +125,60 @@ class _TimeDataMnagerState extends State<TimeDataMnager> {
           : SingleChildScrollView(
               child: Column(
                 children: [
-                  Text(
-                    "Time Line of Task",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                  TEXT(
-                    field: 'closeDate',
-                    data: "${completetask[0].closeDate?.substring(0, 10)}",
-                  ),
-                  TEXT(
-                    field: 'openDate',
-                    data: "${completetask[0].openDate?.substring(0, 10)}",
-                  ),
-                  TEXT(
-                    field: 'actualCloseDate',
-                    data: "${completetask[0].actualCloseDate?.substring(0, 10)}" ==
-                            "null"
-                        ? "Pending"
-                        : "${completetask[0].actualCloseDate?.substring(0, 10)}",
-                  ),
-                  TEXT(
-                    field: 'assignationDate',
-                    data: "${completetask[0].managerApprovalDate?.substring(0, 10)}" ==
-                            "null"
-                        ? "Pending"
-                        : "${completetask[0].assignationDate?.substring(0, 10)}",
-                  ),
-                  TEXT(
-                    field: 'clientApprovalDate',
-                    data: "${completetask[0].managerApprovalDate?.substring(0, 10)}" ==
-                            "null"
-                        ? "Pending"
-                        : "${completetask[0].clientApprovalDate?.substring(0, 10)}",
-                  ),
-                  TEXT(
-                    field: 'clientRejection',
-                    data: "${completetask[0].managerApprovalDate?.substring(0, 10)}" ==
-                            "null"
-                        ? "Pending"
-                        : "${completetask[0].clientRejection?.substring(0, 10)}",
-                  ),
-                  TEXT(
-                    field: 'managerRejectionDate',
-                    data: "${completetask[0].managerApprovalDate?.substring(0, 10)}" ==
-                            "null"
-                        ? "Pending"
-                        : "${completetask[0].managerRejectionDate?.substring(0, 10)}",
-                  ),
-                  TEXT(
-                    field: 'managerApprovalDate',
-                    data: "${completetask[0].managerApprovalDate?.substring(0, 10)}" ==
-                            "null"
-                        ? "Pending"
-                        : "${completetask[0].managerApprovalDate?.substring(0, 10)}",
-                  ),
+                  // Text(
+                  //   "Time Line of Task",
+                  //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  // ),
+                  // TEXT(
+                  //   field: 'closeDate',
+                  //   data: "${completetask[0].closeDate?.substring(0, 10)}",
+                  // ),
+                  // TEXT(
+                  //   field: 'openDate',
+                  //   data: "${completetask[0].openDate?.substring(0, 10)}",
+                  // ),
+                  // TEXT(
+                  //   field: 'actualCloseDate',
+                  //   data: "${completetask[0].actualCloseDate?.substring(0, 10)}" ==
+                  //           "null"
+                  //       ? "Pending"
+                  //       : "${completetask[0].actualCloseDate?.substring(0, 10)}",
+                  // ),
+                  // TEXT(
+                  //   field: 'assignationDate',
+                  //   data: "${completetask[0].managerApprovalDate?.substring(0, 10)}" ==
+                  //           "null"
+                  //       ? "Pending"
+                  //       : "${completetask[0].assignationDate?.substring(0, 10)}",
+                  // ),
+                  // TEXT(
+                  //   field: 'clientApprovalDate',
+                  //   data: "${completetask[0].managerApprovalDate?.substring(0, 10)}" ==
+                  //           "null"
+                  //       ? "Pending"
+                  //       : "${completetask[0].clientApprovalDate?.substring(0, 10)}",
+                  // ),
+                  // TEXT(
+                  //   field: 'clientRejection',
+                  //   data: "${completetask[0].managerApprovalDate?.substring(0, 10)}" ==
+                  //           "null"
+                  //       ? "Pending"
+                  //       : "${completetask[0].clientRejection?.substring(0, 10)}",
+                  // ),
+                  // TEXT(
+                  //   field: 'managerRejectionDate',
+                  //   data: "${completetask[0].managerApprovalDate?.substring(0, 10)}" ==
+                  //           "null"
+                  //       ? "Pending"
+                  //       : "${completetask[0].managerRejectionDate?.substring(0, 10)}",
+                  // ),
+                  // TEXT(
+                  //   field: 'managerApprovalDate',
+                  //   data: "${completetask[0].managerApprovalDate?.substring(0, 10)}" ==
+                  //           "null"
+                  //       ? "Pending"
+                  //       : "${completetask[0].managerApprovalDate?.substring(0, 10)}",
+                  // ),
                   attachlist.isEmpty
                       ? const Center(
                           child: Padding(
@@ -194,8 +194,8 @@ class _TimeDataMnagerState extends State<TimeDataMnager> {
                       : SingleChildScrollView(
                           child: Column(
                             children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(
+                              const Padding(
+                                padding: EdgeInsets.only(
                                     top: 30.0, bottom: 30),
                                 child: Text(
                                   "Attached Links of Task",
@@ -230,8 +230,8 @@ class _TimeDataMnagerState extends State<TimeDataMnager> {
                                                   Clipboard.setData(
                                                       ClipboardData(
                                                           text:
-                                                              attachlist[index]
-                                                                  .driveLink));
+                                                              '${attachlist[index]
+                                                                  .driveLink}'));
                                                 },
                                                 child: Text('Copy')),
                                             TextButton(

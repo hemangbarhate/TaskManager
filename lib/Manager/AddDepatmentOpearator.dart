@@ -33,8 +33,7 @@ class _AddDepatmentOpearatorState extends State<AddDepatmentOpearator> {
       loading = true;
     });
     Session _session = Session();
-    final response =
-        await _session.get('http://164.92.83.169/manager/getDepartments');
+    final response = await _session.get('$ip/manager/getDepartments');
     for (dynamic i in response['data']['departments']) {
       if (!departlist.contains(i['departmentName'])) {
         departlist.add(i['departmentName']);
